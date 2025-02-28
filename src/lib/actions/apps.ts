@@ -107,21 +107,33 @@ export async function createApp(formData: any) {
 }
 
 export async function updateApp(id: string, values: any, iconFile?: File, imageFiles?: File[]) {
-  const session = await auth();
-  const userId = session?.userId;
-  
-  if (!userId) {
-    throw new Error("Unauthorized");
-  }
+  const { userId } = auth();
+  if (!userId) throw new Error("Unauthorized");
 
   try {
     await connectDB();
+    
+    // Get user profile and check pro status
+    const { success, user } = await getUserProfile();
+    if (!success || !user) throw new Error("Failed to get user profile");
     
     const app = await App?.findById(id);
     if (!app) throw new Error("App not found");
     if (app.userId !== userId) throw new Error("Unauthorized");
     
-    // Handle iconFile upload
+    // Check description length
+    const maxLength = user.isPro 
+      ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH 
+      : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH;
+      
+    if (values.description.length > maxLength) {
+      return { 
+        success: false, 
+        error: `Description exceeds the maximum length of ${maxLength} characters for your account type.`
+      };
+    }
+
+    // Handle file uploads and updates
     let iconUrl = values.iconUrl;
     if (iconFile) {
       const iconBuffer = await iconFile.arrayBuffer();
@@ -129,7 +141,6 @@ export async function updateApp(id: string, values: any, iconFile?: File, imageF
       iconUrl = `data:${iconFile.type};base64,${iconBase64}`;
     }
     
-    // Handle imageFiles upload
     let imageUrls = values.imageUrls || [];
     if (imageFiles && imageFiles.length > 0) {
       for (const file of imageFiles) {
@@ -159,10 +170,14 @@ export async function updateApp(id: string, values: any, iconFile?: File, imageF
     revalidatePath('/');
     revalidatePath('/dashboard');
     revalidatePath(`/apps/${id}`);
-    return JSON.parse(JSON.stringify(updated));
+    
+    return { 
+      success: true, 
+      app: JSON.parse(JSON.stringify(updated))
+    };
   } catch (error) {
     console.error("Error updating app:", error);
-    throw error;
+    return { success: false, error: (error as Error).message };
   }
 }
 

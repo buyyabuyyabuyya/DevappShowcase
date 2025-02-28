@@ -25,25 +25,10 @@ import {
 import { updateApp } from "@/lib/actions/apps";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
-import { appTypes, categories } from "@/lib/constants";
+import { appTypes, categories, APP_LIMITS } from "@/lib/constants";
 import { UploadCloud, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-
-const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  description: z.string().min(10).max(500),
-  appType: z.enum(appTypes.map(t => t.value) as [string, ...string[]]),
-  category: z.enum(categories.map(c => c.value) as [string, ...string[]]),
-  repoUrl: z.string().url().optional().or(z.literal("")),
-  liveUrl: z.string().url(),
-  iconUrl: z.string().url().optional().or(z.literal("")),
-  imageUrls: z.array(z.string().url()).optional(),
-  youtubeUrl: z.string().url().optional().or(z.literal("")),
-  apiEndpoint: z.string().url().optional(),
-  apiDocs: z.string().url().optional(),
-  apiType: z.enum(['rest', 'graphql', 'soap', 'grpc']).optional(),
-});
 
 interface EditAppFormProps {
   app: any;
@@ -58,6 +43,37 @@ export function EditAppForm({ app }: EditAppFormProps) {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>(app.imageUrls || []);
   const [existingImages, setExistingImages] = useState<string[]>(app.imageUrls || []);
+  const [isProUser, setIsProUser] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    async function checkUserStatus() {
+      const response = await fetch('/api/user-status');
+      const data = await response.json();
+      setIsProUser(data.isPro);
+    }
+    checkUserStatus();
+  }, []);
+
+  const formSchema = z.object({
+    name: z.string().min(2).max(50),
+    description: z.string()
+      .min(10, "Description must be at least 10 characters")
+      .max(
+        isProUser ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH,
+        `Description cannot exceed ${isProUser ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH} characters`
+      ),
+    appType: z.enum(appTypes.map(t => t.value) as [string, ...string[]]),
+    category: z.enum(categories.map(c => c.value) as [string, ...string[]]),
+    repoUrl: z.string().url().optional().or(z.literal("")),
+    liveUrl: z.string().url(),
+    iconUrl: z.string().url().optional().or(z.literal("")),
+    imageUrls: z.array(z.string().url()).optional(),
+    youtubeUrl: z.string().url().optional().or(z.literal("")),
+    apiEndpoint: z.string().url().optional(),
+    apiDocs: z.string().url().optional(),
+    apiType: z.enum(['rest', 'graphql', 'soap', 'grpc']).optional(),
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -126,14 +142,18 @@ export function EditAppForm({ app }: EditAppFormProps) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // Combine existing images with form values
+      setIsSubmitting(true);
       const updatedValues = {
         ...values,
         imageUrls: existingImages,
       };
       
-      await updateApp(app._id, updatedValues, iconFile || undefined, imageFiles.length ? imageFiles : undefined);
+      const response = await updateApp(app._id, updatedValues, iconFile || undefined, imageFiles.length ? imageFiles : undefined);
       
+      if (!response.success) {
+        throw new Error(response.error);
+      }
+
       toast({
         title: "Success",
         description: "Your app has been updated successfully.",
@@ -141,10 +161,14 @@ export function EditAppForm({ app }: EditAppFormProps) {
       router.push(`/apps/${app._id}`);
       router.refresh();
     } catch (error) {
+      console.error("Update error:", error);
       toast({
         title: "Error",
         description: "Failed to update application. Please try again.",
+        variant: "destructive"
       });
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -462,7 +486,9 @@ export function EditAppForm({ app }: EditAppFormProps) {
           >
             Cancel
           </Button>
-          <Button type="submit" className="flex-1">Update Application</Button>
+          <Button type="submit" disabled={isSubmitting} className="flex-1">
+            {isSubmitting ? "Updating..." : "Update Application"}
+          </Button>
         </div>
       </form>
     </Form>
