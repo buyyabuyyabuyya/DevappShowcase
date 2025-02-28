@@ -9,6 +9,7 @@ export default authMiddleware({
     "/api/apps(.*)",
     "/_next(.*)",
     "/favicon.ico",
+    "/ads.txt",
   ],
 });
 
