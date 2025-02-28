@@ -26,7 +26,7 @@ import { updateApp } from "@/lib/actions/apps";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { appTypes, categories, APP_LIMITS } from "@/lib/constants";
-import { UploadCloud, X } from "lucide-react";
+import { Loader2, UploadCloud, X } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 
@@ -87,9 +87,9 @@ export function EditAppForm({ app }: EditAppFormProps) {
       iconUrl: app.iconUrl || "",
       youtubeUrl: app.youtubeUrl || "",
       imageUrls: app.imageUrls || [],
-      apiEndpoint: app.apiEndpoint || "",
-      apiDocs: app.apiDocs || "",
-      apiType: app.apiType || "rest",
+      apiEndpoint: app.apiEndpoint,
+      apiDocs: app.apiDocs,
+      apiType: app.apiType,
     },
   });
 
@@ -143,28 +143,33 @@ export function EditAppForm({ app }: EditAppFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsSubmitting(true);
+      console.log("Submitting update...", values); // Debug log
+
       const updatedValues = {
         ...values,
         imageUrls: existingImages,
       };
       
       const response = await updateApp(app._id, updatedValues, iconFile || undefined, imageFiles.length ? imageFiles : undefined);
+      console.log("Update response:", response); // Debug log
       
       if (!response.success) {
-        throw new Error(response.error);
+        throw new Error(response.error || "Failed to update application");
       }
 
       toast({
         title: "Success",
         description: "Your app has been updated successfully.",
       });
-      router.push(`/apps/${app._id}`);
+
+      // Force a router refresh and navigation
       router.refresh();
+      router.push('/dashboard');
     } catch (error) {
       console.error("Update error:", error);
       toast({
         title: "Error",
-        description: "Failed to update application. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to update application. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -486,8 +491,19 @@ export function EditAppForm({ app }: EditAppFormProps) {
           >
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting} className="flex-1">
-            {isSubmitting ? "Updating..." : "Update Application"}
+          <Button 
+            type="submit" 
+            disabled={isSubmitting} 
+            className="flex-1"
+          >
+            {isSubmitting ? (
+              <>
+                Updating...
+                <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+              </>
+            ) : (
+              "Update Application"
+            )}
           </Button>
         </div>
       </form>
