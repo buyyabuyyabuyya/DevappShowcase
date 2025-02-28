@@ -143,15 +143,33 @@ export function EditAppForm({ app }: EditAppFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsSubmitting(true);
-      console.log("Submitting update...", values); // Debug log
+      console.log("Submitting update...", values);
+
+      // Convert files to base64 before sending
+      let iconBase64: string | undefined;
+      let imageBase64Array: string[] = [];
+
+      if (iconFile) {
+        const buffer = await iconFile.arrayBuffer();
+        iconBase64 = `data:${iconFile.type};base64,${Buffer.from(buffer).toString('base64')}`;
+      }
+
+      if (imageFiles.length > 0) {
+        for (const file of imageFiles) {
+          const buffer = await file.arrayBuffer();
+          const base64 = `data:${file.type};base64,${Buffer.from(buffer).toString('base64')}`;
+          imageBase64Array.push(base64);
+        }
+      }
 
       const updatedValues = {
         ...values,
-        imageUrls: existingImages,
+        imageUrls: [...existingImages, ...imageBase64Array],
+        iconUrl: iconBase64 || app.iconUrl,
       };
       
-      const response = await updateApp(app._id, updatedValues, iconFile || undefined, imageFiles.length ? imageFiles : undefined);
-      console.log("Update response:", response); // Debug log
+      const response = await updateApp(app._id, updatedValues);
+      console.log("Update response:", response);
       
       if (!response.success) {
         throw new Error(response.error || "Failed to update application");
@@ -162,7 +180,6 @@ export function EditAppForm({ app }: EditAppFormProps) {
         description: "Your app has been updated successfully.",
       });
 
-      // Force a router refresh and navigation
       router.refresh();
       router.push('/dashboard');
     } catch (error) {

@@ -9,6 +9,8 @@ import { User } from "@/models/User";
 import { APP_LIMITS } from "@/lib/constants";
 import { getUserProfile } from "./users";
 
+
+
 export async function getApps(params?: { type?: string; sort?: string }) {
   try {
     await connectDB();
@@ -106,7 +108,7 @@ export async function createApp(formData: any) {
   }
 }
 
-export async function updateApp(id: string, values: any, iconFile?: File, imageFiles?: File[]) {
+export async function updateApp(id: string, values: any) {
   const { userId } = auth();
   if (!userId) throw new Error("Unauthorized");
 
@@ -133,23 +135,6 @@ export async function updateApp(id: string, values: any, iconFile?: File, imageF
       };
     }
 
-    // Handle file uploads and updates
-    let iconUrl = values.iconUrl;
-    if (iconFile) {
-      const iconBuffer = await iconFile.arrayBuffer();
-      const iconBase64 = Buffer.from(iconBuffer).toString('base64');
-      iconUrl = `data:${iconFile.type};base64,${iconBase64}`;
-    }
-    
-    let imageUrls = values.imageUrls || [];
-    if (imageFiles && imageFiles.length > 0) {
-      for (const file of imageFiles) {
-        const buffer = await file.arrayBuffer();
-        const base64 = Buffer.from(buffer).toString('base64');
-        imageUrls.push(`data:${file.type};base64,${base64}`);
-      }
-    }
-    
     const updated = await App?.findByIdAndUpdate(
       id,
       {
@@ -160,9 +145,12 @@ export async function updateApp(id: string, values: any, iconFile?: File, imageF
         pricing: values.pricing,
         repoUrl: values.repoUrl,
         liveUrl: values.liveUrl,
-        iconUrl: iconUrl,
-        imageUrls: imageUrls,
+        iconUrl: values.iconUrl,
+        imageUrls: values.imageUrls,
         youtubeUrl: values.youtubeUrl,
+        apiType: values.apiType,
+        apiEndpoint: values.apiEndpoint,
+        apiDocs: values.apiDocs,
       },
       { new: true }
     );
