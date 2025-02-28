@@ -32,6 +32,9 @@ import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
 import { APP_LIMITS } from "@/lib/constants";
 import { PromoteAppSection } from "@/components/dashboard/promote-app-section";
+import { useToast } from "@/components/ui/use-toast";
+import { getUserProfile } from "@/lib/actions/users";
+import Link from "next/link";
 
 const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -46,8 +49,8 @@ export function ListAppForm() {
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isProUser, setIsProUser] = useState(false);
+  const { toast } = useToast();
 
-  // Move the formSchema inside the component function
   const formSchema = z.object({
     name: z.string().min(2).max(50),
     description: z.string()
@@ -89,7 +92,6 @@ export function ListAppForm() {
     }
   });
 
-  // Add form state watcher
   useEffect(() => {
     console.log('Form state:', {
       isDirty: form.formState.isDirty,
@@ -99,20 +101,12 @@ export function ListAppForm() {
   }, [form.formState]);
 
   useEffect(() => {
-    async function getUserStatus() {
-      try {
-        const response = await fetch('/api/user-status');
-        if (!response.ok) throw new Error('Failed to fetch user status');
-        const data = await response.json();
-        setIsProUser(data.isPro);
-      } catch (error) {
-        console.error('Failed to fetch user status:', error);
-        // Default to free user if we can't fetch the status
-        setIsProUser(false);
-      }
+    async function checkUserStatus() {
+      const response = await fetch('/api/user-status');
+      const data = await response.json();
+      setIsProUser(data.isPro);
     }
-    
-    getUserStatus();
+    checkUserStatus();
   }, []);
 
   async function convertFileToBase64(file: File): Promise<string> {
@@ -202,7 +196,6 @@ export function ListAppForm() {
     try {
       setIsSubmitting(true);
       
-      // If appType is 'api' but no apiType is selected, set it to 'rest' as default
       const formData = {
         ...values,
         apiType: values.appType === 'api' ? (values.apiType || 'rest') : undefined,
@@ -210,8 +203,24 @@ export function ListAppForm() {
         apiDocs: values.appType === 'api' ? values.apiDocs : undefined,
       };
       
-      const result = await createApp(formData);
-      console.log('Create app result:', result);
+      const response = await createApp(formData);
+      
+      if (!response.success) {
+        if (response.error === 'MAX_APPS_REACHED') {
+          toast({
+            title: "Free Plan Limit Reached",
+            description: "Upgrade to Pro to post unlimited apps",
+            variant: "destructive",
+            action: (
+              <Button asChild variant="outline">
+                <Link href="/settings">Upgrade to Pro</Link>
+              </Button>
+            ),
+          });
+          return;
+        }
+        throw new Error(response.error);
+      }
       
       toast({
         title: "Success",

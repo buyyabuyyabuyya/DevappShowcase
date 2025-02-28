@@ -7,6 +7,7 @@ import { auth } from "@clerk/nextjs/server";
 import mongoose from "mongoose";
 import { User } from "@/models/User";
 import { APP_LIMITS } from "@/lib/constants";
+import { getUserProfile } from "./users";
 
 export async function getApps(params?: { type?: string; sort?: string }) {
   try {
@@ -41,19 +42,20 @@ export async function createApp(formData: any) {
   try {
     await connectDB();
     
-    // Check user's app count limit
-    const userProfile = await User.findOne({ clerkId: userId });
-    if (!userProfile) throw new Error("User not found");
+    // Get user profile and check pro status
+    const { success, user } = await getUserProfile();
+    if (!success || !user) throw new Error("Failed to get user profile");
     
+    // Check app limit
     const appCount = await App?.countDocuments({ userId }) ?? 0;
-    
-    // Check if user has reached their app limit
-    if (!userProfile.isPro && appCount >= APP_LIMITS.FREE_USER.MAX_APPS) {
-      throw new Error(`Free users can only create ${APP_LIMITS.FREE_USER.MAX_APPS} apps. Upgrade to Pro for unlimited apps.`);
+    const maxApps = user.isPro ? APP_LIMITS.PRO_USER.MAX_APPS : APP_LIMITS.FREE_USER.MAX_APPS;
+
+    if (appCount >= maxApps) {
+      return { success: false, error: 'MAX_APPS_REACHED' };
     }
     
     // Check description length
-    const maxLength = userProfile.isPro 
+    const maxLength = user.isPro 
       ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH 
       : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH;
       
@@ -89,8 +91,8 @@ export async function createApp(formData: any) {
     const app = await App?.create(appData);
     
     // Update user's app count
-    userProfile.appCount += 1;
-    await userProfile.save();
+    user.appCount += 1;
+    await user.save();
     
     revalidatePath('/');
     revalidatePath('/dashboard');
