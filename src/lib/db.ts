@@ -2,7 +2,6 @@ import mongoose, { Connection } from 'mongoose';
 
 // const MONGODB_URI = process.env.MONGODB_URI;
 
-const MONGODB_URI = "mongodb+srv://buyya:ayyub32659@devapp-showcase.nb5cf.mongodb.net/?retryWrites=true&w=majority&appName=DevApp-Showcase";
 
 
 if (!MONGODB_URI) {
