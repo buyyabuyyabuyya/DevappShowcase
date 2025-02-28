@@ -96,7 +96,10 @@ export async function createApp(formData: any) {
     
     revalidatePath('/');
     revalidatePath('/dashboard');
-    return JSON.parse(JSON.stringify(app));
+    return { 
+      success: true, 
+      app: JSON.parse(JSON.stringify(app))
+    };
   } catch (error) {
     console.error("Error creating app:", error);
     throw error;
