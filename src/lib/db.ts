@@ -1,8 +1,6 @@
 import mongoose, { Connection } from 'mongoose';
 
-// const MONGODB_URI = process.env.MONGODB_URI;
-
-
+const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
   console.log('Available env vars:', process.env); // Remove this in production
