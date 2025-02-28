@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import './globals.css'
+import Script from "next/script";
 
 export default async function RootLayout({
   children,
@@ -16,6 +17,14 @@ export default async function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
+        <head>
+          <Script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7633648357076933"
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        </head>
         <body suppressHydrationWarning>
           <ThemeProvider
             attribute="class"
