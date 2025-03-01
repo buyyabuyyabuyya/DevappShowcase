@@ -3,33 +3,64 @@
 import mongoose from 'mongoose';
 
 const appSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  description: { type: String, required: true },
+  name: {
+    type: String,
+    required: [true, "Please provide a name for your app"],
+    maxlength: [60, "Name cannot be more than 60 characters"],
+  },
+  description: {
+    type: String,
+    required: [true, "Please provide a description"],
+  },
   appType: { 
     type: String, 
     required: true,
     enum: ['web', 'mobile', 'desktop', 'api', 'ai', 'extension'],
     default: 'web'
   },
-  category: { type: String, required: true },
+  category: {
+    type: String,
+    required: [true, "Please select a category"],
+  },
   pricing: { 
     type: String, 
     required: true,
     enum: ['free', 'paid', 'freemium'],
     default: 'free'
   },
+  pricingModel: {
+    type: String,
+    required: [true, "Please select a pricing model"],
+    enum: ["free", "freemium", "paid", "subscription", "other"],
+  },
   repoUrl: { type: String },
   liveUrl: { type: String, required: true },
   iconUrl: { type: String },
   imageUrls: [{ type: String }],
   youtubeUrl: { type: String },
-  userId: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now },
+  userId: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
   likes: {
     count: { type: Number, default: 0 },
     users: [String] // Array of userIds who liked the app
   },
-  isPromoted: { type: Boolean, default: false },
+  isPromoted: {
+    type: Boolean,
+    default: false,
+  },
+  promotedAt: {
+    type: Date,
+  },
   ratings: {
     idea: {
       total: { type: Number, default: 0 },

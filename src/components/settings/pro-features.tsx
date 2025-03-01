@@ -1,22 +1,42 @@
 import { APP_LIMITS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
+import { CheckIcon } from "lucide-react";
 import Link from "next/link";
+
+const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
 
 export function ProFeatures({ isPro }: { isPro: boolean }) {
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-medium">Your Plan: {isPro ? 'Pro' : 'Free'}</h3>
-      <div className="space-y-2">
-        <p>
-          Apps Limit: {isPro ? '∞' : APP_LIMITS.FREE_USER.MAX_APPS}
-        </p>
-        <p>
-          Description Length: {isPro ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH} characters
-        </p>
-      </div>
+    <div className="rounded-lg border p-6 mt-6">
+      <h3 className="text-lg font-medium mb-2">
+        {isPro ? "Pro Plan Active" : "Upgrade to Pro"}
+      </h3>
+      <p className="text-sm text-muted-foreground mb-4">
+        {isPro
+          ? "You currently have access to all premium features."
+          : "Unlock premium features to showcase your apps better."}
+      </p>
+      <ul className="space-y-2 mb-6">
+        <li className="flex items-center text-sm">
+          <CheckIcon className="h-4 w-4 mr-2 text-green-500" />
+          Unlimited app submissions
+        </li>
+        <li className="flex items-center text-sm">
+          <CheckIcon className="h-4 w-4 mr-2 text-green-500" />
+          Featured placement in showcase
+        </li>
+        <li className="flex items-center text-sm">
+          <CheckIcon className="h-4 w-4 mr-2 text-green-500" />
+          Priority support
+        </li>
+        <li className="flex items-center text-sm">
+          <CheckIcon className="h-4 w-4 mr-2 text-green-500" />
+          Advanced analytics
+        </li>
+      </ul>
       {!isPro && (
-        <Button asChild>
-          <Link href="/settings/upgrade">Upgrade to Pro</Link>
+        <Button className="w-full" asChild>
+          <Link href={STRIPE_URL}>Upgrade to Pro</Link>
         </Button>
       )}
     </div>

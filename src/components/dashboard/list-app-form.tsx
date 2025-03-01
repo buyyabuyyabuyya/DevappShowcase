@@ -75,6 +75,7 @@ export function ListAppForm() {
     apiEndpoint: z.string().url().optional().or(z.literal("")),
     apiDocs: z.string().url().optional().or(z.literal("")),
     apiType: z.enum(['rest', 'graphql', 'soap', 'grpc']).optional(),
+    pricingModel: z.enum(['free', 'freemium', 'paid', 'subscription', 'other'] as const),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -89,6 +90,7 @@ export function ListAppForm() {
       imageUrls: [],
       isPromoted: false,
       pricing: 'free',
+      pricingModel: 'free',
     }
   });
 
