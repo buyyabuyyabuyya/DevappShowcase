@@ -154,7 +154,7 @@ export async function updateApp(id: string, values: any) {
       },
       { new: true }
     );
-    
+    //revalidate the page
     revalidatePath('/');
     revalidatePath('/dashboard');
     revalidatePath(`/apps/${id}`);
