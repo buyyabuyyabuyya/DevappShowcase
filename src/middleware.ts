@@ -8,12 +8,15 @@ export default authMiddleware({
     "/sign-up",
     "/api/apps(.*)",
     "/api/webhook/clerk",
+    "/api/webhooks/stripe",
+    "/api/user-status",
     "/_next(.*)",
     "/favicon.ico",
     "/ads.txt",
   ],
   ignoredRoutes: [
-    "/api/webhook/clerk"
+    "/api/webhook/clerk",
+    "/api/webhooks/stripe"
   ]
 });
 

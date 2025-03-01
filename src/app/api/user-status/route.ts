@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { getUserProfile, getUserStatus } from "@/lib/actions/users";
+import { getUserStatus } from "@/lib/actions/users";
 
 export async function GET() {
   const { userId } = auth();
@@ -11,8 +11,9 @@ export async function GET() {
 
   try {
     const status = await getUserStatus();
-    return Response.json(status); 
+    return NextResponse.json(status); 
   } catch (error) {
-    return Response.json({ isPro: false }, { status: 500 });
+    return NextResponse.json({ isPro: false }, { status: 500 });
   }
 } 
+
