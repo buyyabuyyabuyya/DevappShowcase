@@ -16,33 +16,133 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 export async function getUserProfile() {
   try {
     const { userId } = auth();
-    if (!userId) throw new Error("Unauthorized");
+    if (!userId) return { success: false, error: "Unauthorized" };
 
     await connectDB();
+    const user = await User.findOne({ clerkId: userId });
     
-    // Find or create user
-    let userProfile = await User.findOne({ clerkId: userId });
+    if (!user) return { success: false, error: "User not found" };
     
-    if (!userProfile) {
-      const clerkUser = await currentUser();
-      
-      if (!clerkUser) throw new Error("User not found");
-      
-      userProfile = await User.create({
-        clerkId: userId,
-        email: clerkUser.emailAddresses[0]?.emailAddress,
-        firstName: clerkUser.firstName,
-        lastName: clerkUser.lastName,
-        imageUrl: clerkUser.imageUrl,
-        isPro: false,
-        appCount: 0
-      });
-    }
-    
-    return { success: true, user: userProfile };
+    return { 
+      success: true, 
+      user: JSON.parse(JSON.stringify(user)) 
+    };
   } catch (error) {
     console.error("Error fetching user profile:", error);
     return { success: false, error: "Failed to fetch user profile" };
+  }
+}
+
+export async function createUser(userData: any) {
+  try {
+    await connectDB();
+    
+    // Check if user already exists
+    const existingUser = await User.findOne({ clerkId: userData.clerkId });
+    if (existingUser) {
+      // User already exists, update instead
+      return await updateUser(userData.clerkId, userData);
+    }
+    
+    // Create new user
+    const newUser = await User.create({
+      clerkId: userData.clerkId,
+      email: userData.email,
+      firstName: userData.first_name,
+      lastName: userData.last_name,
+      imageUrl: userData.image_url,
+      isPro: false,
+      appCount: 0
+    });
+    
+    return { success: true, user: JSON.parse(JSON.stringify(newUser)) };
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return { success: false, error: "Failed to create user" };
+  }
+}
+
+export async function updateUser(clerkId: string, userData: any) {
+  try {
+    await connectDB();
+    
+    const user = await User.findOne({ clerkId });
+    if (!user) {
+      return { success: false, error: "User not found" };
+    }
+    
+    // Update user fields
+    user.email = userData.email || user.email;
+    user.firstName = userData.first_name || userData.firstName || user.firstName;
+    user.lastName = userData.last_name || userData.lastName || user.lastName;
+    user.imageUrl = userData.image_url || userData.imageUrl || user.imageUrl;
+    user.updatedAt = new Date();
+    
+    await user.save();
+    
+    revalidatePath('/dashboard');
+    revalidatePath('/settings');
+    
+    return { success: true, user: JSON.parse(JSON.stringify(user)) };
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return { success: false, error: "Failed to update user" };
+  }
+}
+
+export async function deleteUser(clerkId: string) {
+  try {
+    await connectDB();
+    
+    // Find and delete the user
+    const result = await User.deleteOne({ clerkId });
+    
+    if (result.deletedCount === 0) {
+      return { success: false, error: "User not found" };
+    }
+    
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return { success: false, error: "Failed to delete user" };
+  }
+}
+
+export async function upgradeToProPlan(clerkId: string) {
+  try {
+    await connectDB();
+    
+    const user = await User.findOne({ clerkId });
+    if (!user) {
+      return { success: false, error: "User not found" };
+    }
+    
+    user.isPro = true;
+    user.updatedAt = new Date();
+    await user.save();
+    
+    revalidatePath('/dashboard');
+    revalidatePath('/settings');
+    
+    return { success: true, user: JSON.parse(JSON.stringify(user)) };
+  } catch (error) {
+    console.error("Error upgrading user:", error);
+    return { success: false, error: "Failed to upgrade user" };
+  }
+}
+
+export async function getUserStatus() {
+  try {
+    const { userId } = auth();
+    if (!userId) return { isPro: false };
+
+    await connectDB();
+    const user = await User.findOne({ clerkId: userId });
+    
+    return { isPro: user?.isPro || false };
+  } catch (error) {
+    console.error("Error fetching user status:", error);
+    return { isPro: false };
   }
 }
 

@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { getUserProfile } from "@/lib/actions/users";
+import { getUserProfile, getUserStatus } from "@/lib/actions/users";
 
 export async function GET() {
   const { userId } = auth();
@@ -10,21 +10,9 @@ export async function GET() {
   }
 
   try {
-    // This will create the user if they don't exist
-    const { success, user, error } = await getUserProfile();
-    
-    if (!success || !user) {
-      throw new Error(error || "Failed to get user profile");
-    }
-    
-    return NextResponse.json({
-      isPro: user.isPro
-    });
+    const status = await getUserStatus();
+    return Response.json(status); 
   } catch (error) {
-    console.error('Error fetching user status:', error);
-    return NextResponse.json(
-      { error: "Failed to fetch user status" },
-      { status: 500 }
-    );
+    return Response.json({ isPro: false }, { status: 500 });
   }
 } 

@@ -7,12 +7,16 @@ export default authMiddleware({
     "/sign-in(.*)",
     "/sign-up",
     "/api/apps(.*)",
+    "/api/webhook/clerk",
     "/_next(.*)",
     "/favicon.ico",
     "/ads.txt",
   ],
+  ignoredRoutes: [
+    "/api/webhook/clerk"
+  ]
 });
 
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };
