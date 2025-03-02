@@ -38,7 +38,7 @@ export async function createApp(formData: any) {
   
   const { userId } = auth();
   if (!userId) {
-    throw new Error("Unauthorized");
+    return { success: false, error: "Unauthorized" };
   }
 
   try {
@@ -46,7 +46,9 @@ export async function createApp(formData: any) {
     
     // Get user profile and check pro status
     const { success, user } = await getUserProfile();
-    if (!success || !user) throw new Error("Failed to get user profile");
+    if (!success || !user) {
+      return { success: false, error: "Failed to get user profile" };
+    }
     
     // Check app limit
     const appCount = await App?.countDocuments({ userId }) ?? 0;
@@ -61,8 +63,11 @@ export async function createApp(formData: any) {
       ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH 
       : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH;
       
-    if (formData.description.length > maxLength) {
-      throw new Error(`Description exceeds the maximum length of ${maxLength} characters for your account type.`);
+    if (formData.description && formData.description.length > maxLength) {
+      return { 
+        success: false, 
+        error: `Description exceeds the maximum length of ${maxLength} characters for your account type.`
+      };
     }
     
     const appData = {
@@ -104,7 +109,10 @@ export async function createApp(formData: any) {
     };
   } catch (error) {
     console.error("Error creating app:", error);
-    throw error;
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : "Unknown error creating app" 
+    };
   }
 }
 

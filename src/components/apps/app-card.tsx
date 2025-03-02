@@ -6,6 +6,9 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 
+// Stripe URL for Pro upgrade
+const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
+
 interface AppCardProps {
   app: {
     _id: string;
@@ -14,6 +17,7 @@ interface AppCardProps {
     appType: string;
     category: string;
     iconUrl?: string;
+    pricingModel?: string; // Added pricing model
     likes: {
       count: number;
       users: string[];
@@ -42,7 +46,7 @@ export function AppCard({ app }: AppCardProps) {
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground line-clamp-2">{app.description}</p>
-        <div className="flex gap-2 mt-2">
+        <div className="flex flex-wrap gap-2 mt-2">
           <span className={`text-xs px-2 py-1 rounded ${
             app.appType === 'api' 
               ? 'bg-blue-100 text-blue-700' 
@@ -53,6 +57,11 @@ export function AppCard({ app }: AppCardProps) {
           <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
             {app.category}
           </span>
+          {app.pricingModel && (
+            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded capitalize">
+              {app.pricingModel}
+            </span>
+          )}
         </div>
       </CardContent>
       <CardFooter className="flex justify-between">

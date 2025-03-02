@@ -2,11 +2,16 @@
 
 import { Check, X } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface PromoFeature {
   feature: string;
   included: boolean;
 }
+
+// Use the direct Stripe URL
+const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
 
 const promoFeatures: PromoFeature[] = [
   { feature: "Featured placement on homepage", included: true },
@@ -45,12 +50,9 @@ export function PromoteAppSection() {
       </ul>
 
       <div className="pt-4">
-        <button
-          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md transition-colors"
-          onClick={() => {/* Add promotion handling */}}
-        >
-          Promote App
-        </button>
+        <Button className="w-full" asChild>
+          <Link href={STRIPE_URL}>Promote App</Link>
+        </Button>
       </div>
     </Card>
   );

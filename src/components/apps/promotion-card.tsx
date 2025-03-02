@@ -8,6 +8,10 @@ import { PRO_SUBSCRIPTION } from "@/lib/constants";
 import { upgradeToProUser, promoteApp } from "@/lib/actions/users";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+// Direct Stripe URL
+const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
 
 interface PromotionCardProps {
   appId: string;
@@ -138,9 +142,11 @@ export function PromotionCard({ appId, isProUser, isAppPromoted }: PromotionCard
             </Button>
           )
         ) : (
-          <Button onClick={handleUpgradeClick} disabled={isLoading}>
-            <Sparkles className="h-4 w-4 mr-2" />
-            {isLoading ? "Processing..." : `Upgrade to Pro - $${PRO_SUBSCRIPTION.MONTHLY_PRICE}/month`}
+          <Button asChild>
+            <Link href={STRIPE_URL}>
+              <Sparkles className="h-4 w-4 mr-2" />
+              Upgrade to Pro - ${PRO_SUBSCRIPTION.MONTHLY_PRICE}/month
+            </Link>
           </Button>
         )}
       </CardFooter>
