@@ -22,7 +22,7 @@ export function AppCategorySection({
   return (
     <div className="mb-8">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-medium">
+        <h3 className="text-xl font-medium flex items-center">
           {title}
           <span className="text-muted-foreground ml-2 text-sm">
             ({apps.length})

@@ -5,6 +5,17 @@ import { Button } from "@/components/ui/button";
 import { AppFilters } from "@/components/apps/app-filters";
 import { getApps } from "@/lib/actions/apps";
 import { AppCategorySection } from "@/components/apps/app-category-section";
+import { cn } from "@/lib/utils";
+
+// App type colors for visual distinction
+const appTypeColors: Record<string, string> = {
+  website: "bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800",
+  mobile: "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800",
+  desktop: "bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800",
+  api: "bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800",
+  ai: "bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-800",
+  extension: "bg-cyan-50 dark:bg-cyan-950/30 border-cyan-200 dark:border-cyan-800"
+};
 
 export default async function Home() {
   const { userId } = auth();
@@ -28,7 +39,7 @@ export default async function Home() {
 
   return (
     <main className="container mx-auto px-4 py-8">
-      <div className="space-y-8">
+      <div className="space-y-12">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-6">DevApp Showcase</h1>
           <p className="text-lg text-muted-foreground mb-8">
@@ -50,8 +61,22 @@ export default async function Home() {
         <AppFilters />
         
         {appTypes.map(type => (
-          <div key={type} className="mb-12">
-            <h2 className="text-2xl font-semibold capitalize mb-4">{type} Apps</h2>
+          <div 
+            key={type} 
+            className={cn(
+              "mb-16 pt-6 pb-8 px-6 rounded-lg border", 
+              appTypeColors[type]
+            )}
+          >
+            <div className="flex items-center mb-6">
+              <h2 className="text-3xl font-bold capitalize">
+                {type} 
+                <span className="text-muted-foreground ml-2 text-lg font-normal">
+                  Apps
+                </span>
+              </h2>
+              <div className="ml-3 h-1 w-full rounded-full bg-muted"></div>
+            </div>
             
             {organizedApps[type].promoted.length > 0 && (
               <AppCategorySection 
@@ -68,6 +93,13 @@ export default async function Home() {
                 apps={organizedApps[type].regular}
                 viewAllHref={`/apps?type=${type}`}
               />
+            )}
+            
+            {organizedApps[type].promoted.length === 0 && 
+             organizedApps[type].regular.length === 0 && (
+              <div className="text-center py-10 text-muted-foreground">
+                No {type} apps available yet
+              </div>
             )}
           </div>
         ))}
