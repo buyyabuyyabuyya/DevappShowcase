@@ -15,8 +15,8 @@ const appSchema = new mongoose.Schema({
   appType: { 
     type: String, 
     required: true,
-    enum: ['web', 'mobile', 'desktop', 'api', 'ai', 'extension'],
-    default: 'web'
+    enum: ['website', 'mobile', 'desktop', 'api', 'ai', 'extension'],
+    default: 'website'
   },
   category: {
     type: String,
