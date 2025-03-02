@@ -20,16 +20,21 @@ export async function getApps(params?: { type?: string; sort?: string }) {
       : {};
     
     const sortOption = params?.sort === 'likes' 
-      ? { likes: -1 }
+      ? { 'likes.count': -1 }
       : params?.sort === 'name'
       ? { name: 1 }
       : { createdAt: -1 };
 
     const apps = await App?.find(query).sort(sortOption as any).limit(50);
-    return JSON.parse(JSON.stringify(apps));
+    
+    // Ensure we always return an array, even if the DB query fails
+    return { 
+      apps: apps ? JSON.parse(JSON.stringify(apps)) : [],
+      success: true
+    };
   } catch (error) {
     console.error('Error fetching apps:', error);
-    return [];
+    return { apps: [], success: false, error: String(error) };
   }
 }
 

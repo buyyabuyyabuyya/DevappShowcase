@@ -2,14 +2,16 @@ import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
-import { AppGrid } from "@/components/shared/app-grid";
 import { AppFilters } from "@/components/apps/app-filters";
 import { getApps } from "@/lib/actions/apps";
 import { AppCategorySection } from "@/components/apps/app-category-section";
 
 export default async function Home() {
   const { userId } = auth();
-  const { apps } = await getApps();
+  const result = await getApps();
+  
+  // Safely handle apps, ensuring it's always an array
+  const apps = Array.isArray(result.apps) ? result.apps : [];
   
   // Organize apps by type and promotion status
   const appTypes = ['website', 'mobile', 'desktop', 'api', 'ai', 'extension'];

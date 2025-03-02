@@ -5,20 +5,14 @@ import { NextResponse } from "next/server";
 export default authMiddleware({
   publicRoutes: [
     "/",
-    "/sign-in(.*)",
-    "/sign-up",
-    "/api/apps(.*)",
-    "/api/webhook/clerk",
-    "/api/webhooks/stripe",
-    "/api/user-status",
-    "/_next(.*)",
-    "/favicon.ico",
-    "/ads.txt",
     "/apps",
     "/apps/(.*)",
     "/api/webhooks/(.*)",
+    "/api/user-status",
     "/_vercel/speed-insights/(.*)",
-    "/cdn-cgi/(.*)",  // Allow Cloudflare paths
+    "/cdn-cgi/(.*)",
+    "/favicon.ico",
+    "/favicon.png"
   ],
   ignoredRoutes: [
     "/api/webhook/clerk",
