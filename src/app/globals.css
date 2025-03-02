@@ -86,4 +86,27 @@
   [data-radix-popper-content-wrapper] {
     background-color: hsl(var(--card)) !important;
   }
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+@media (max-width: 640px) {
+  .scrollbar-thin::-webkit-scrollbar {
+    display: none;
+  }
 } 

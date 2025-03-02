@@ -5,12 +5,24 @@ import { Button } from "@/components/ui/button";
 import { AppGrid } from "@/components/shared/app-grid";
 import { AppFilters } from "@/components/apps/app-filters";
 import { getApps } from "@/lib/actions/apps";
+import { AppCategorySection } from "@/components/apps/app-category-section";
 
-export default async function HomePage({ searchParams }: { 
-  searchParams?: { type?: string; sort?: string; } 
-}) {
+export default async function Home() {
   const { userId } = auth();
-  const apps = await getApps(searchParams);
+  const { apps } = await getApps();
+  
+  // Organize apps by type and promotion status
+  const appTypes = ['website', 'mobile', 'desktop', 'api', 'ai', 'extension'];
+  const organizedApps = appTypes.reduce((acc, type) => {
+    const typeApps = apps.filter((app: any) => app.appType === type);
+    
+    acc[type] = {
+      promoted: typeApps.filter((app: any) => app.isPromoted),
+      regular: typeApps.filter((app: any) => !app.isPromoted)
+    };
+    
+    return acc;
+  }, {} as Record<string, { promoted: any[], regular: any[] }>);
 
   return (
     <main className="container mx-auto px-4 py-8">
@@ -35,9 +47,28 @@ export default async function HomePage({ searchParams }: {
         
         <AppFilters />
         
-        <Suspense fallback={<div>Loading apps...</div>}>
-          <AppGrid apps={apps} />
-        </Suspense>
+        {appTypes.map(type => (
+          <div key={type} className="mb-12">
+            <h2 className="text-2xl font-semibold capitalize mb-4">{type} Apps</h2>
+            
+            {organizedApps[type].promoted.length > 0 && (
+              <AppCategorySection 
+                title="Featured"
+                apps={organizedApps[type].promoted}
+                viewAllHref={`/apps?type=${type}&featured=true`}
+                isPromoted
+              />
+            )}
+            
+            {organizedApps[type].regular.length > 0 && (
+              <AppCategorySection 
+                title="All"
+                apps={organizedApps[type].regular}
+                viewAllHref={`/apps?type=${type}`}
+              />
+            )}
+          </div>
+        ))}
       </div>
     </main>
   );
