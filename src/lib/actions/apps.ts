@@ -95,14 +95,19 @@ export async function createApp(formData: any) {
       }
     };
 
+    // Create the app document
     const app = await App?.create(appData);
     
-    // Update user's app count
-    user.appCount += 1;
-    await user.save();
+    // Update user's app count directly using findOneAndUpdate
+    await User.findOneAndUpdate(
+      { clerkId: userId },
+      { $inc: { appCount: 1 } },
+      { new: true }
+    );
     
     revalidatePath('/');
     revalidatePath('/dashboard');
+    
     return { 
       success: true, 
       app: JSON.parse(JSON.stringify(app))

@@ -228,13 +228,14 @@ export function ListAppForm() {
         title: "Success",
         description: "Your app has been listed successfully.",
       });
-      router.push('/dashboard');
-      router.refresh();
+      
+      // Force navigation to dashboard
+      window.location.href = "/dashboard";
     } catch (error) {
       console.error("Form submission error:", error);
       toast({
         title: "Error",
-        description: "Failed to submit application. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to submit application. Please try again.",
         variant: "destructive"
       });
     } finally {
