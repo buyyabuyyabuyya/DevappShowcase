@@ -1,4 +1,4 @@
-import { authMiddleware } from "@clerk/nextjs";
+import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 // This example protects all routes including api/trpc routes
@@ -19,6 +19,11 @@ export default authMiddleware({
     "/api/webhooks/stripe"
   ],
   afterAuth(auth, req) {
+    // If user is on a verification page and is authenticated, redirect to dashboard
+    if (req.nextUrl.pathname.includes('/sign-up/verify') && auth.userId) {
+      return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
+    
     // Add necessary headers for Cloudflare
     const response = NextResponse.next();
     
