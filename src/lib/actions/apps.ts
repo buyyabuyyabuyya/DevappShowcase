@@ -325,4 +325,23 @@ export async function getAppById(id: string) {
     console.error('Error fetching app:', error);
     return null;
   }
+}
+
+export async function searchApps(searchTerm: string) {
+  try {
+    await connectDB();
+    
+    const apps = await App?.find({
+      $or: [
+        { name: { $regex: searchTerm, $options: 'i' } },
+        { description: { $regex: searchTerm, $options: 'i' } },
+        { category: { $regex: searchTerm, $options: 'i' } }
+      ]
+    }).sort({ isPromoted: -1, createdAt: -1 }).limit(20);
+    
+    return JSON.parse(JSON.stringify(apps));
+  } catch (error) {
+    console.error("Error searching apps:", error);
+    return [];
+  }
 } 

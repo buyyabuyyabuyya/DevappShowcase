@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { UserButton, useAuth, useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import { SearchBar } from "@/components/shared/search-bar";
 
 export function AppHeader() {
   const { isLoaded, userId } = useAuth();
@@ -31,10 +32,16 @@ export function AppHeader() {
   return (
     <header className="border-b">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="font-semibold text-xl">
-          DevApp Showcase
-        </Link>
+        <div className="flex items-center gap-6">
+          <Link href="/" className="font-semibold text-xl">
+            DevApp Showcase
+          </Link>
+          <SearchBar className="hidden md:block" />
+        </div>
+        
         <div className="flex gap-4 items-center">
+          <SearchBar className="md:hidden" />
+          
           {!userId ? (
             <>
               <Button variant="outline" asChild>
