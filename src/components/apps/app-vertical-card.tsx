@@ -42,15 +42,17 @@ export function AppVerticalCard({ app, isPromoted }: AppVerticalCardProps) {
       isPromoted && "border-amber-400 bg-amber-50/30 dark:bg-amber-950/10"
     )}>
       <CardContent className="p-0 flex-grow overflow-hidden">
-        <div className="w-full h-[120px] relative bg-muted">
+        <div className="w-full h-[120px] relative bg-muted flex items-center justify-center p-2">
           {mounted && app.iconUrl ? (
-            <Image
-              src={app.iconUrl}
-              alt={app.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 220px"
-            />
+            <div className="relative w-full h-full flex items-center justify-center">
+              <Image
+                src={app.iconUrl}
+                alt={app.name}
+                className="object-contain max-h-full max-w-full"
+                width={100}
+                height={100}
+              />
+            </div>
           ) : (
             <div className="w-full h-full flex items-center justify-center text-muted-foreground">
               {app.name.charAt(0)}

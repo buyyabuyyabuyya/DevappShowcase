@@ -165,7 +165,7 @@ export function AppDetailView({ app, isOwner, isProUser }: AppDetailViewProps) {
               alt={app.name}
               width={80}
               height={80}
-              className="rounded-lg"
+              className="rounded-lg object-contain"
             />
           ) : (
             <div className="w-20 h-20 bg-muted rounded-lg" />

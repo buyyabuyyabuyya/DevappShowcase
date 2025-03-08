@@ -36,7 +36,7 @@ export function AppCard({ app }: AppCardProps) {
               alt={app.name}
               width={40}
               height={40}
-              className="rounded-lg"
+              className="rounded-lg object-contain"
             />
           ) : (
             <div className="w-10 h-10 bg-muted rounded-lg" />
