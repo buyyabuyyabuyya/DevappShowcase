@@ -269,4 +269,21 @@ export async function handleProSubscription({
     console.error("Error handling subscription:", error);
     return { success: false, error: "Failed to update subscription status" };
   }
+}
+
+export async function getUserById(clerkId: string) {
+  try {
+    await connectDB();
+    
+    const user = await User.findOne({ clerkId });
+    
+    if (!user) {
+      return { user: null };
+    }
+    
+    return { user };
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return { user: null };
+  }
 } 

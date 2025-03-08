@@ -1,13 +1,25 @@
-"use client";
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
+import { auth } from "@clerk/nextjs/server";
+import { getUserById } from "@/lib/actions/users";
 
 // Use the same Stripe URL defined elsewhere in your app
 const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
 
-export function HeroSection() {
+export async function HeroSection() {
+  // Get current user authentication status
+  const { userId } = auth();
+  
+  // Initialize isPro as false
+  let isPro = false;
+  
+  // If user is authenticated, check their Pro status
+  if (userId) {
+    const { user } = await getUserById(userId);
+    isPro = user?.isPro || false;
+  }
+
   return (
     <div className="relative overflow-hidden">
       {/* Background gradient */}
@@ -29,11 +41,14 @@ export function HeroSection() {
                 Showcase Your App
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
-                Upgrade to Pro <Sparkles className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+            
+            {!isPro && (
+              <Button size="lg" variant="outline" asChild>
+                <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
+                  Upgrade to Pro <Sparkles className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            )}
           </div>
           
           <div className="pt-8 flex justify-center gap-8 sm:gap-16">
