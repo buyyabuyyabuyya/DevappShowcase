@@ -514,48 +514,32 @@ export function EditAppForm({ app }: EditAppFormProps) {
           </>
         )}
 
-        {isProUser ? (
-          <FormField
-            control={form.control}
-            name="isPromoted"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                <div className="space-y-0.5">
-                  <FormLabel className="text-base">
-                    Promotion Status
-                  </FormLabel>
-                  <FormDescription>
-                    Your app is {field.value ? "promoted" : "not promoted"} in search results.
-                    {field.value && " Pro users' apps are automatically promoted."}
-                  </FormDescription>
-                </div>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    disabled={isProUser} // Disabled for Pro users since it's always on
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        ) : (
-          <div className="rounded-lg border p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-base font-medium">Promote Your App</h3>
-                <p className="text-sm text-muted-foreground">
-                  Upgrade to Pro to promote your app in search results.
-                </p>
+        <FormField
+          control={form.control}
+          name="isPromoted"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel className="text-base">
+                  Promotion Status
+                </FormLabel>
+                <FormDescription>
+                  {isProUser 
+                    ? "Promoted apps appear at the top of listings with a special badge."
+                    : "Upgrade to Pro to promote your apps."}
+                </FormDescription>
               </div>
-              <Button asChild variant="outline">
-                <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
-                  Upgrade to Pro
-                </Link>
-              </Button>
-            </div>
-          </div>
-        )}
+              <FormControl>
+                <Switch
+                  checked={isProUser ? field.value : false}
+                  onCheckedChange={field.onChange}
+                  disabled={!isProUser} // Only disabled for non-Pro users
+                  aria-readonly={!isProUser}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
         <div className="flex gap-4">
           <Button 

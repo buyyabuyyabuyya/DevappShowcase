@@ -205,23 +205,24 @@ export async function promoteApp(appId: string) {
       return { success: false, error: "Pro subscription required" };
     }
     
-    // Update the app to promoted status
+    // Update the app to toggle promotion status
     const app = await App?.findById(appId);
     if (!app) {
       return { success: false, error: "App not found" };
     }
     
     if (app.userId.toString() !== user._id.toString()) {
-      return { success: false, error: "You can only promote your own apps" };
+      return { success: false, error: "You can only modify your own apps" };
     }
     
-    app.isPromoted = true;
+    // Toggle the promoted status
+    app.isPromoted = !app.isPromoted;
     await app.save();
     
     return { success: true };
   } catch (error) {
-    console.error("Error promoting app:", error);
-    return { success: false, error: "Failed to promote app" };
+    console.error("Error updating app promotion:", error);
+    return { success: false, error: "Failed to update promotion status" };
   }
 }
 
