@@ -199,6 +199,9 @@ export async function promoteApp(appId: string) {
     
     // Get user data
     const user = await User.findOne({ clerkId: userId });
+    if (!user) {
+      return { success: false, error: "User not found" };
+    }
     
     // Check if user is Pro
     if (!user.isPro) {

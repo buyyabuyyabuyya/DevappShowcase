@@ -533,7 +533,7 @@ export function EditAppForm({ app }: EditAppFormProps) {
                 <Switch
                   checked={isProUser ? field.value : false}
                   onCheckedChange={field.onChange}
-                  disabled={!isProUser} // Only disabled for non-Pro users
+                  disabled={!isProUser}
                   aria-readonly={!isProUser}
                 />
               </FormControl>
