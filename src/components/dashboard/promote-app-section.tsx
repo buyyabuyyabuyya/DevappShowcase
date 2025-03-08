@@ -52,7 +52,9 @@ export function PromoteAppSection() {
 
       <div className="pt-4">
         <Button className="w-full" asChild>
-          <Link href={STRIPE_URL}>Promote App</Link>
+          <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
+            Promote App
+          </Link>
         </Button>
       </div>
     </Card>
