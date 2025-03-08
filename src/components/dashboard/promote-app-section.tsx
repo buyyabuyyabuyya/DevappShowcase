@@ -34,6 +34,7 @@ export function PromoteAppSection() {
         <span className="text-2xl font-bold">$14.99</span>
         <span className="text-muted-foreground line-through">$20.00</span>
         <span className="text-sm text-green-600 font-medium">25% OFF</span>
+        <span className="text-xs text-muted-foreground">(one-time purchase)</span>
       </div>
 
       <ul className="space-y-3">

@@ -24,7 +24,9 @@ export function DashboardHeader({
         <div className="flex items-center gap-2">
           {!isPro && (
             <Button variant="outline" asChild>
-              <Link href={STRIPE_URL}>Upgrade to Pro</Link>
+              <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
+                Upgrade to Pro
+              </Link>
             </Button>
           )}
           <Button asChild>

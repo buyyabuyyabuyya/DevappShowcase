@@ -33,6 +33,5 @@ export const APP_LIMITS = {
 };
 
 export const PRO_SUBSCRIPTION = {
-  MONTHLY_PRICE: 9.99,
-  YEARLY_PRICE: 99.99
+  PRICE: 14.99
 }; 

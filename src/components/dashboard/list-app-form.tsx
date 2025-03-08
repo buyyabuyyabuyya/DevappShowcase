@@ -6,6 +6,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+
 import {
   Form,
   FormControl,
@@ -35,6 +36,8 @@ import { PromoteAppSection } from "@/components/dashboard/promote-app-section";
 import { useToast } from "@/components/ui/use-toast";
 import { getUserProfile } from "@/lib/actions/users";
 import Link from "next/link";
+
+const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
 
 const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -252,6 +255,20 @@ export function ListAppForm() {
         }} 
         className="space-y-6"
       >
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">List a New App</h1>
+          {isProUser ? (
+            <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+              Pro Mode
+            </div>
+          ) : (
+            <Button asChild variant="outline" size="sm">
+              <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
+                Upgrade to Pro
+              </Link>
+            </Button>
+          )}
+        </div>
         <FormField
           control={form.control}
           name="name"

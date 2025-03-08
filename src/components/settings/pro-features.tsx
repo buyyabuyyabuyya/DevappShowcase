@@ -36,7 +36,9 @@ export function ProFeatures({ isPro }: { isPro: boolean }) {
       </ul>
       {!isPro && (
         <Button className="w-full" asChild>
-          <Link href={STRIPE_URL}>Upgrade to Pro</Link>
+          <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
+            Upgrade to Pro
+          </Link>
         </Button>
       )}
     </div>

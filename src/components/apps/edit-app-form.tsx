@@ -29,6 +29,11 @@ import { appTypes, categories, APP_LIMITS } from "@/lib/constants";
 import { Loader2, UploadCloud, X } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { Switch } from "@/components/ui/switch";
+
+// Add this constant at the top of the file
+const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
 
 interface EditAppFormProps {
   app: any;
@@ -73,6 +78,7 @@ export function EditAppForm({ app }: EditAppFormProps) {
     apiEndpoint: z.string().url().optional(),
     apiDocs: z.string().url().optional(),
     apiType: z.enum(['rest', 'graphql', 'soap', 'grpc']).optional(),
+    isPromoted: z.boolean().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -90,8 +96,16 @@ export function EditAppForm({ app }: EditAppFormProps) {
       apiEndpoint: app.apiEndpoint,
       apiDocs: app.apiDocs,
       apiType: app.apiType,
+      isPromoted: app.isPromoted,
     },
   });
+
+  useEffect(() => {
+    // Auto-enable promotion if user is Pro
+    if (isProUser && !form.getValues("isPromoted")) {
+      form.setValue("isPromoted", true);
+    }
+  }, [isProUser, form]);
 
   function handleIconChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
@@ -498,6 +512,49 @@ export function EditAppForm({ app }: EditAppFormProps) {
               )}
             />
           </>
+        )}
+
+        {isProUser ? (
+          <FormField
+            control={form.control}
+            name="isPromoted"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base">
+                    Promotion Status
+                  </FormLabel>
+                  <FormDescription>
+                    Your app is {field.value ? "promoted" : "not promoted"} in search results.
+                    {field.value && " Pro users' apps are automatically promoted."}
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    disabled={isProUser} // Disabled for Pro users since it's always on
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        ) : (
+          <div className="rounded-lg border p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-medium">Promote Your App</h3>
+                <p className="text-sm text-muted-foreground">
+                  Upgrade to Pro to promote your app in search results.
+                </p>
+              </div>
+              <Button asChild variant="outline">
+                <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
+                  Upgrade to Pro
+                </Link>
+              </Button>
+            </div>
+          </div>
         )}
 
         <div className="flex gap-4">

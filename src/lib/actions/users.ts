@@ -154,7 +154,7 @@ export async function upgradeToProUser() {
     const userProfile = await getUserProfile();
     if (!userProfile.success) throw new Error("Failed to get user profile");
     
-    // Create Stripe checkout session
+    // Create Stripe checkout session for one-time payment
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       billing_address_collection: "auto",
@@ -164,18 +164,15 @@ export async function upgradeToProUser() {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "DevApp Showcase Pro Subscription",
+              name: "DevApp Showcase Pro",
               description: "Unlimited app postings and app promotion"
             },
-            unit_amount: Math.round(PRO_SUBSCRIPTION.MONTHLY_PRICE * 100),
-            recurring: {
-              interval: "month"
-            }
+            unit_amount: Math.round(PRO_SUBSCRIPTION.PRICE * 100),
           },
           quantity: 1
         }
       ],
-      mode: "subscription",
+      mode: "payment",
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings?success=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings?canceled=true`,
       metadata: {
@@ -192,45 +189,57 @@ export async function upgradeToProUser() {
 
 export async function promoteApp(appId: string) {
   try {
-    const { userId } = auth();
-    if (!userId) throw new Error("Unauthorized");
-    
     await connectDB();
     
-    // Check if user is pro
-    const userProfile = await User.findOne({ clerkId: userId });
-    if (!userProfile) throw new Error("User not found");
-    
-    if (!userProfile.isPro) {
-      throw new Error("Only Pro users can promote apps");
+    // Get the current user
+    const { userId } = auth();
+    if (!userId) {
+      return { success: false, error: "Authentication required" };
     }
     
-    // Find and update the app
+    // Get user data
+    const user = await User.findOne({ clerkId: userId });
+    
+    // Check if user is Pro
+    if (!user.isPro) {
+      return { success: false, error: "Pro subscription required" };
+    }
+    
+    // Update the app to promoted status
     const app = await App?.findById(appId);
-    if (!app) throw new Error("App not found");
-    
-    // Make sure the user owns the app
-    if (app.userId !== userId) {
-      throw new Error("You can only promote your own apps");
+    if (!app) {
+      return { success: false, error: "App not found" };
     }
     
-    // Update promotion status
+    if (app.userId.toString() !== user._id.toString()) {
+      return { success: false, error: "You can only promote your own apps" };
+    }
+    
     app.isPromoted = true;
-    app.promotedAt = new Date();
     await app.save();
     
-    // Update user's lastPromotion date
-    userProfile.lastPromotion = new Date();
-    await userProfile.save();
+    return { success: true };
+  } catch (error) {
+    console.error("Error promoting app:", error);
+    return { success: false, error: "Failed to promote app" };
+  }
+}
+
+// New function to auto-promote all user apps when they become Pro
+export async function promoteAllUserApps(userId: string) {
+  try {
+    await connectDB();
     
-    revalidatePath('/apps');
-    revalidatePath('/');
-    revalidatePath(`/apps/${appId}`);
+    // Update all apps belonging to the user
+    await App?.updateMany(
+      { userId },
+      { $set: { isPromoted: true } }
+    );
     
     return { success: true };
-  } catch (error: any) {
-    console.error("Error promoting app:", error);
-    return { success: false, error: error.message };
+  } catch (error) {
+    console.error("Error promoting all apps:", error);
+    return { success: false, error: "Failed to promote apps" };
   }
 }
 

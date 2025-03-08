@@ -67,38 +67,50 @@ export function PromotionCard({ appId, isProUser, isAppPromoted }: PromotionCard
   };
 
   return (
-    <Card className="border-primary/20">
-      <CardHeader className="bg-primary/5 rounded-t-lg">
+    <Card className="overflow-hidden">
+      <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30">
         <CardTitle className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
-          {isProUser ? "Promote Your App" : "Upgrade to Pro"}
+          <Sparkles className="h-5 w-5 text-blue-500" />
+          App Promotion
         </CardTitle>
         <CardDescription>
-          {isProUser 
-            ? "Make your app stand out from the crowd!" 
-            : "Unlock premium features and promote your apps"}
+          Get more visibility for your application
         </CardDescription>
       </CardHeader>
-      <CardContent className="pt-6 pb-2">
+      <CardContent className="pt-6">
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <h3 className="font-medium">Free User</h3>
-              <ul className="space-y-1">
-                <li className="flex items-start gap-2 text-sm">
-                  <Check className="h-4 w-4 text-green-500 mt-0.5" />
-                  <span>Post up to 3 apps</span>
-                </li>
-                <li className="flex items-start gap-2 text-sm">
-                  <Check className="h-4 w-4 text-green-500 mt-0.5" />
-                  <span>500 character descriptions</span>
-                </li>
-                <li className="flex items-start gap-2 text-sm">
-                  <X className="h-4 w-4 text-red-500 mt-0.5" />
-                  <span>Standard listing position</span>
-                </li>
-              </ul>
-            </div>
+          <div className="flex flex-col md:flex-row gap-6">
+            {isProUser ? (
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 p-4 rounded-lg flex items-center gap-3 border border-blue-100 dark:border-blue-900 w-full">
+                <div className="bg-blue-500 rounded-full p-2 text-white">
+                  <Check className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-medium">Pro Subscription Active</h3>
+                  <p className="text-sm text-muted-foreground">
+                    All your apps are automatically promoted in search results.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <h3 className="font-medium">Free User</h3>
+                <ul className="space-y-1">
+                  <li className="flex items-start gap-2 text-sm">
+                    <Check className="h-4 w-4 text-green-500 mt-0.5" />
+                    <span>Post up to 3 apps</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <Check className="h-4 w-4 text-green-500 mt-0.5" />
+                    <span>500 character descriptions</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <X className="h-4 w-4 text-red-500 mt-0.5" />
+                    <span>Standard listing position</span>
+                  </li>
+                </ul>
+              </div>
+            )}
             
             <div className="space-y-2">
               <h3 className="font-medium">Pro User</h3>
@@ -122,7 +134,7 @@ export function PromotionCard({ appId, isProUser, isAppPromoted }: PromotionCard
           {isProUser && (
             <div className="rounded-lg bg-muted p-4">
               <p className="text-sm mb-2">
-                <strong>Promote this app</strong> to have it appear at the top of search results with a "Promoted" badge.
+                <strong>Pro benefit:</strong> All your apps are automatically promoted to the top of search results with a "Promoted" badge.
               </p>
             </div>
           )}
@@ -130,22 +142,15 @@ export function PromotionCard({ appId, isProUser, isAppPromoted }: PromotionCard
       </CardContent>
       <CardFooter className="flex justify-end pt-2">
         {isProUser ? (
-          isAppPromoted ? (
-            <Button variant="outline" disabled>
-              <Check className="h-4 w-4 mr-2" />
-              Currently Promoted
-            </Button>
-          ) : (
-            <Button onClick={handlePromoteClick} disabled={isLoading}>
-              <Sparkles className="h-4 w-4 mr-2" />
-              {isLoading ? "Processing..." : "Promote This App"}
-            </Button>
-          )
+          <Button variant="outline" disabled>
+            <Check className="h-4 w-4 mr-2" />
+            Auto-Promoted with Pro
+          </Button>
         ) : (
           <Button asChild>
-            <Link href={STRIPE_URL}>
+            <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
               <Sparkles className="h-4 w-4 mr-2" />
-              Upgrade to Pro - ${PRO_SUBSCRIPTION.MONTHLY_PRICE}/month
+              Upgrade to Pro - ${PRO_SUBSCRIPTION.PRICE}
             </Link>
           </Button>
         )}
