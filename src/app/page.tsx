@@ -6,6 +6,8 @@ import { AppFilters } from "@/components/apps/app-filters";
 import { getApps } from "@/lib/actions/apps";
 import { AppCategorySection } from "@/components/apps/app-category-section";
 import { cn } from "@/lib/utils";
+import { HeroSection } from "@/components/home/hero-section";
+import { FeaturedApps } from "@/components/home/featured-apps";
 
 // App type colors for visual distinction
 const appTypeColors: Record<string, string> = {
@@ -38,72 +40,76 @@ export default async function Home() {
   }, {} as Record<string, { promoted: any[], regular: any[] }>);
 
   return (
-    <main className="container mx-auto px-4 py-8">
-      <div className="space-y-12">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-6">DevApp Showcase</h1>
-          <p className="text-lg text-muted-foreground mb-8">
-            Discover amazing developer projects and applications
-          </p>
-          
-          {!userId && (
-            <div className="flex gap-4 justify-center mb-8">
-              <Button asChild>
-                <Link href="/sign-in">Sign In</Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/sign-up">Sign Up</Link>
-              </Button>
-            </div>
-          )}
-        </div>
-        
-        <AppFilters />
-        
-        {appTypes.map(type => (
-          <div 
-            key={type} 
-            className={cn(
-              "mb-16 pt-6 pb-8 px-6 rounded-lg border", 
-              appTypeColors[type]
-            )}
-          >
-            <div className="flex items-center mb-6">
-              <h2 className="text-3xl font-bold capitalize">
-                {type} 
-                <span className="text-muted-foreground ml-2 text-lg font-normal">
-                  Apps
-                </span>
-              </h2>
-              <div className="ml-3 h-1 w-full rounded-full bg-muted"></div>
-            </div>
+    <main>
+      <HeroSection />
+      <FeaturedApps />
+      <main className="container mx-auto px-4 py-8">
+        <div className="space-y-12">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold mb-6">DevApp Showcase</h1>
+            <p className="text-lg text-muted-foreground mb-8">
+              Discover amazing developer projects and applications
+            </p>
             
-            {organizedApps[type].promoted.length > 0 && (
-              <AppCategorySection 
-                title="Featured"
-                apps={organizedApps[type].promoted}
-                viewAllHref={`/apps?type=${type}&featured=true`}
-                isPromoted
-              />
-            )}
-            
-            {organizedApps[type].regular.length > 0 && (
-              <AppCategorySection 
-                title="All"
-                apps={organizedApps[type].regular}
-                viewAllHref={`/apps?type=${type}`}
-              />
-            )}
-            
-            {organizedApps[type].promoted.length === 0 && 
-             organizedApps[type].regular.length === 0 && (
-              <div className="text-center py-10 text-muted-foreground">
-                No {type} apps available yet
+            {!userId && (
+              <div className="flex gap-4 justify-center mb-8">
+                <Button asChild>
+                  <Link href="/sign-in">Sign In</Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link href="/sign-up">Sign Up</Link>
+                </Button>
               </div>
             )}
           </div>
-        ))}
-      </div>
+          
+          <AppFilters />
+          
+          {appTypes.map(type => (
+            <div 
+              key={type} 
+              className={cn(
+                "mb-16 pt-6 pb-8 px-6 rounded-lg border", 
+                appTypeColors[type]
+              )}
+            >
+              <div className="flex items-center mb-6">
+                <h2 className="text-3xl font-bold capitalize">
+                  {type} 
+                  <span className="text-muted-foreground ml-2 text-lg font-normal">
+                    Apps
+                  </span>
+                </h2>
+                <div className="ml-3 h-1 w-full rounded-full bg-muted"></div>
+              </div>
+              
+              {organizedApps[type].promoted.length > 0 && (
+                <AppCategorySection 
+                  title="Featured"
+                  apps={organizedApps[type].promoted}
+                  viewAllHref={`/apps?type=${type}&featured=true`}
+                  isPromoted
+                />
+              )}
+              
+              {organizedApps[type].regular.length > 0 && (
+                <AppCategorySection 
+                  title="All"
+                  apps={organizedApps[type].regular}
+                  viewAllHref={`/apps?type=${type}`}
+                />
+              )}
+              
+              {organizedApps[type].promoted.length === 0 && 
+               organizedApps[type].regular.length === 0 && (
+                <div className="text-center py-10 text-muted-foreground">
+                  No {type} apps available yet
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </main>
     </main>
   );
 }
