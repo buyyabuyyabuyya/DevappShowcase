@@ -13,7 +13,7 @@ import { UpgradeButton } from "@/components/shared/upgrade-button";
 import { useProStatus } from "@/context/pro-status-provider";
 
 // Direct Stripe URL
-const STRIPE_URL = "https://buy.stripe.com/test_8wMdRDeo88p6f4scMM";
+const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
 
 interface PromotionCardProps {
   appId: string;
