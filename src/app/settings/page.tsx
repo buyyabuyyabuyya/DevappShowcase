@@ -5,18 +5,17 @@ import { useProStatus } from "@/context/pro-status-provider";
 import { ProFeatures } from "@/components/settings/pro-features";
 import { toast } from "@/components/ui/use-toast";
 import { useSearchParams } from "next/navigation";
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { getUserProfile } from "@/lib/actions/users";
+import { useUser } from "@clerk/nextjs";
 
-export default async function SettingsPage() {
+export default function SettingsPage() {
   const { checkProStatus, isPro } = useProStatus();
   const searchParams = useSearchParams();
   const success = searchParams.get("success");
   const canceled = searchParams.get("canceled");
+  const { user, isLoaded } = useUser();
   
   useEffect(() => {
     // Show toast and check status when returning from Stripe
@@ -37,11 +36,8 @@ export default async function SettingsPage() {
     }
   }, [success, canceled, checkProStatus]);
 
-  const { userId } = auth();
-  const user = await currentUser();
-  const userProfile = await getUserProfile();
-  if (!userId) {
-    redirect("/sign-in");
+  if (!isLoaded) {
+    return <div>Loading...</div>;
   }
 
   return (
@@ -69,9 +65,8 @@ export default async function SettingsPage() {
               <Link href="/sign-out">Sign Out</Link>
             </Button>
           </div>
-          <CardContent className="space-y-4">
-            <ProFeatures isPro={isPro} />
-          </CardContent>
+          
+          <ProFeatures />
         </CardContent>
       </Card>
     </main>

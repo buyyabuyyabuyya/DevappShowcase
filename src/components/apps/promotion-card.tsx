@@ -17,17 +17,17 @@ const STRIPE_URL = "https://buy.stripe.com/test_8wMdRDeo88p6f4scMM";
 
 interface PromotionCardProps {
   appId: string;
-  isAppPromoted: boolean;
-  initialIsPro: boolean;
+  isProUser?: boolean;
+  isAppPromoted?: boolean;
 }
 
-export function PromotionCard({ appId, isAppPromoted, initialIsPro }: PromotionCardProps) {
+export function PromotionCard({ appId, isProUser = false, isAppPromoted = false }: PromotionCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { isPro } = useProStatus();
   
-  // Use isPro from context, falling back to initialIsPro prop
-  const userIsPro = isPro || initialIsPro;
+  // Use isPro from context, falling back to isProUser prop
+  const userIsPro = isPro || isProUser;
 
   // If user is Pro, all apps are automatically promoted
   if (userIsPro) return null;
