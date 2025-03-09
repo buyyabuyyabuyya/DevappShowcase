@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
+const STRIPE_URL = "https://buy.stripe.com/test_8wMdRDeo88p6f4scMM";
 
 export function DashboardHeader({
   heading,

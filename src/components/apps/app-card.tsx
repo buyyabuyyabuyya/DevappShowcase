@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 
 // Stripe URL for Pro upgrade
-const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
+const STRIPE_URL = "https://buy.stripe.com/test_8wMdRDeo88p6f4scMM";
 
 interface AppCardProps {
   app: {

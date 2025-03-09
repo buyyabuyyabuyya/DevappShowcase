@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { CheckIcon } from "lucide-react";
 import Link from "next/link";
 
-const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
+const STRIPE_URL = "https://buy.stripe.com/test_8wMdRDeo88p6f4scMM";
 
 export function ProFeatures({ isPro }: { isPro: boolean }) {
   return (

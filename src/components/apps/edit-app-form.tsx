@@ -33,7 +33,7 @@ import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
 
 // Add this constant at the top of the file
-const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
+const STRIPE_URL = "https://buy.stripe.com/test_8wMdRDeo88p6f4scMM";
 
 interface EditAppFormProps {
   app: any;

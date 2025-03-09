@@ -37,7 +37,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { getUserProfile } from "@/lib/actions/users";
 import Link from "next/link";
 
-const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
+const STRIPE_URL = "https://buy.stripe.com/test_8wMdRDeo88p6f4scMM";
 
 const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
