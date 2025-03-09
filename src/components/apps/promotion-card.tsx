@@ -9,39 +9,29 @@ import { upgradeToProUser, promoteApp } from "@/lib/actions/users";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { UpgradeButton } from "@/components/shared/upgrade-button";
+import { useProStatus } from "@/context/pro-status-provider";
 
 // Direct Stripe URL
 const STRIPE_URL = "https://buy.stripe.com/test_8wMdRDeo88p6f4scMM";
 
 interface PromotionCardProps {
   appId: string;
-  isProUser: boolean;
   isAppPromoted: boolean;
+  initialIsPro: boolean;
 }
 
-export function PromotionCard({ appId, isProUser, isAppPromoted }: PromotionCardProps) {
+export function PromotionCard({ appId, isAppPromoted, initialIsPro }: PromotionCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { isPro } = useProStatus();
+  
+  // Use isPro from context, falling back to initialIsPro prop
+  const userIsPro = isPro || initialIsPro;
 
-  const handleUpgradeClick = async () => {
-    setIsLoading(true);
-    try {
-      // This will redirect to Stripe
-      const response = await upgradeToProUser();
-      if (response.url) {
-        router.push(response.url);
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to initiate upgrade process.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // If user is Pro, all apps are automatically promoted
+  if (userIsPro) return null;
+  
   const handlePromoteClick = async () => {
     setIsLoading(true);
     try {
@@ -80,7 +70,7 @@ export function PromotionCard({ appId, isProUser, isAppPromoted }: PromotionCard
       <CardContent className="pt-6">
         <div className="space-y-4">
           <div className="flex flex-col md:flex-row gap-6">
-            {isProUser ? (
+            {userIsPro ? (
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 p-4 rounded-lg flex items-center gap-3 border border-blue-100 dark:border-blue-900 w-full">
                 <div className="bg-blue-500 rounded-full p-2 text-white">
                   <Check className="h-5 w-5" />
@@ -131,7 +121,7 @@ export function PromotionCard({ appId, isProUser, isAppPromoted }: PromotionCard
             </div>
           </div>
           
-          {isProUser && (
+          {userIsPro && (
             <div className="rounded-lg bg-muted p-4">
               <p className="text-sm mb-2">
                 <strong>Pro benefit:</strong> All your apps are automatically promoted to the top of search results with a "Promoted" badge.
@@ -141,18 +131,16 @@ export function PromotionCard({ appId, isProUser, isAppPromoted }: PromotionCard
         </div>
       </CardContent>
       <CardFooter className="flex justify-end pt-2">
-        {isProUser ? (
+        {userIsPro ? (
           <Button variant="outline" disabled>
             <Check className="h-4 w-4 mr-2" />
             Auto-Promoted with Pro
           </Button>
         ) : (
-          <Button asChild>
-            <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
-              <Sparkles className="h-4 w-4 mr-2" />
-              Upgrade to Pro - ${PRO_SUBSCRIPTION.PRICE}
-            </Link>
-          </Button>
+          <UpgradeButton>
+            <Sparkles className="h-4 w-4 mr-2" />
+            Upgrade to Pro - ${PRO_SUBSCRIPTION.PRICE}
+          </UpgradeButton>
         )}
       </CardFooter>
     </Card>

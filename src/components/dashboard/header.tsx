@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-
-const STRIPE_URL = "https://buy.stripe.com/test_8wMdRDeo88p6f4scMM";
+import { UpgradeButton } from "@/components/shared/upgrade-button";
+import { ProBadge } from "@/components/shared/pro-badge";
 
 export function DashboardHeader({
   heading,
@@ -17,18 +17,13 @@ export function DashboardHeader({
   return (
     <div className="flex flex-col gap-4 md:gap-8">
       <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
-        <div>
+        <div className="flex items-center gap-2">
           <h1 className="text-2xl font-bold">{heading}</h1>
+          {isPro && <ProBadge />}
           {text && <p className="text-muted-foreground">{text}</p>}
         </div>
         <div className="flex items-center gap-2">
-          {!isPro && (
-            <Button variant="outline" asChild>
-              <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
-                Upgrade to Pro
-              </Link>
-            </Button>
-          )}
+          {!isPro && <UpgradeButton variant="outline" />}
           <Button asChild>
             <Link href="/dashboard/list-app">Add New App</Link>
           </Button>

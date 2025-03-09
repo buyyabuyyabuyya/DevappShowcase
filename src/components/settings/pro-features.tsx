@@ -1,11 +1,14 @@
+"use client";
+
 import { APP_LIMITS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
-import { CheckIcon } from "lucide-react";
-import Link from "next/link";
+import { CheckIcon, Sparkles } from "lucide-react";
+import { useProStatus } from "@/context/pro-status-provider";
+import { UpgradeButton } from "@/components/shared/upgrade-button";
 
-const STRIPE_URL = "https://buy.stripe.com/test_8wMdRDeo88p6f4scMM";
+export function ProFeatures() {
+  const { isPro } = useProStatus();
 
-export function ProFeatures({ isPro }: { isPro: boolean }) {
   return (
     <div className="rounded-lg border p-6 mt-6">
       <h3 className="text-lg font-medium mb-2">
@@ -35,11 +38,9 @@ export function ProFeatures({ isPro }: { isPro: boolean }) {
         </li>
       </ul>
       {!isPro && (
-        <Button className="w-full" asChild>
-          <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
-            Upgrade to Pro
-          </Link>
-        </Button>
+        <UpgradeButton className="w-full">
+          Upgrade to Pro <Sparkles className="ml-2 h-4 w-4" />
+        </UpgradeButton>
       )}
     </div>
   );

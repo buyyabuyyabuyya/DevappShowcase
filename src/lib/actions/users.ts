@@ -135,14 +135,17 @@ export async function getUserStatus() {
   try {
     const { userId } = auth();
     if (!userId) return { isPro: false };
-
+    
     await connectDB();
     const user = await User.findOne({ clerkId: userId });
     
-    return { isPro: user?.isPro || false };
+    return { 
+      isPro: user?.isPro || false,
+      success: true 
+    };
   } catch (error) {
-    console.error("Error fetching user status:", error);
-    return { isPro: false };
+    console.error("Error checking pro status:", error);
+    return { isPro: false, success: false };
   }
 }
 
