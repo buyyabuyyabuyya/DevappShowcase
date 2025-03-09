@@ -35,6 +35,10 @@ import { Switch } from "@/components/ui/switch";
 // Add this constant at the top of the file
 const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
 
+//need to re-deploy
+//need to re-deploy
+
+
 interface EditAppFormProps {
   app: any;
 }
