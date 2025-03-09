@@ -1,9 +1,11 @@
 "use client";
 
-import { Check, X } from "lucide-react";
+import { Check, X, Sparkles } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useProStatus } from "@/context/pro-status-provider";
+import { UpgradeButton } from "@/components/shared/upgrade-button";
 
 interface PromoFeature {
   feature: string;
@@ -21,6 +23,25 @@ const promoFeatures: PromoFeature[] = [
 ];
 
 export function PromoteAppSection() {
+  const { isPro } = useProStatus();
+  
+  // Don't render the promotion section if user is already Pro
+  if (isPro) {
+    return (
+      <Card className="p-6">
+        <div className="flex flex-col items-center text-center py-4">
+          <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-md flex items-center gap-2 mb-4">
+            <Sparkles className="h-5 w-5" />
+            <span className="font-medium">PRO ACTIVE</span>
+          </div>
+          <p className="text-muted-foreground">
+            Your apps are automatically promoted across the platform
+          </p>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-6 space-y-6">
       <div className="space-y-2">
@@ -51,11 +72,10 @@ export function PromoteAppSection() {
       </ul>
 
       <div className="pt-4">
-        <Button className="w-full" asChild>
-          <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
-            Promote App
-          </Link>
-        </Button>
+        <UpgradeButton className="w-full">
+          <Sparkles className="h-4 w-4 mr-2" />
+          Promote All Your Apps
+        </UpgradeButton>
       </div>
     </Card>
   );
