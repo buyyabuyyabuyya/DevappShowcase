@@ -184,15 +184,18 @@ export function AppDetailView({ app, isOwner, isProUser }: AppDetailViewProps) {
         </div>
         
         {isOwner && (
+          
+          
           <div className="flex gap-2">
+            {/*
             <Button 
               variant="outline" 
               onClick={handlePromote}
               className={app.isPromoted ? "bg-yellow-100" : ""}
             >
               <Star className={`w-4 h-4 mr-2 ${app.isPromoted ? "text-yellow-500 fill-yellow-500" : ""}`} />
-              {/*{app.isPromoted ? "Promoted" : "Promote"}*/}
-            </Button>
+              {app.isPromoted ? "Promoted" : "Promote"}
+            </Button>*/}
             <Button variant="outline" asChild>
               <Link href={`/apps/${app._id}/edit`}>
                 <Edit2 className="w-4 h-4 mr-2" />
