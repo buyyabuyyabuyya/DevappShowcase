@@ -59,7 +59,7 @@ export function UpgradeButton({
     <Button 
       variant={variant} 
       size={size} 
-      onClick={handleUpgrade}
+      onClick={() => window.open(STRIPE_URL, '_blank')}
       disabled={isLoading}
       className={className}
     >
