@@ -22,16 +22,10 @@ const appSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please select a category"],
   },
-  pricing: { 
-    type: String, 
-    required: true,
-    enum: ['free', 'paid', 'freemium', 'subscription'],
-    default: 'free'
-  },
   pricingModel: {
     type: String,
     required: [true, "Please select a pricing model"],
-    enum: ["free", "freemium", "paid", "subscription", "other"],
+    enum: ["free", "freemium", "paid"],
   },
   repoUrl: { type: String },
   liveUrl: { type: String, required: true },
