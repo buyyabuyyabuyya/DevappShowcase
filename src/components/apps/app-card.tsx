@@ -6,7 +6,6 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { pricingTypes } from "@/lib/constants";
 
 // Stripe URL for Pro upgrade
 const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
@@ -28,9 +27,11 @@ interface AppCardProps {
 }
 
 export function AppCard({ app }: AppCardProps) {
-  // Get pricing badge color based on model
+  // Simplified pricing badge color function
   function getPricingColor(model?: string) {
-    switch (model) {
+    if (!model) return '';
+    
+    switch (model.toLowerCase()) {
       case 'free':
         return 'bg-green-500/10 text-green-500';
       case 'paid':
@@ -61,8 +62,8 @@ export function AppCard({ app }: AppCardProps) {
               <Badge variant="secondary">{app.category}</Badge>
               <Badge variant="secondary">{app.appType}</Badge>
               {app.pricingModel && (
-                <Badge className={getPricingColor(app.pricingModel.toLowerCase())}>
-                  {pricingTypes.find(p => p.value === app.pricingModel)?.label || app.pricingModel}
+                <Badge className={getPricingColor(app.pricingModel)}>
+                  {app.pricingModel}
                 </Badge>
               )}
             </div>
