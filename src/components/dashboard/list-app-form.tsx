@@ -110,7 +110,9 @@ export function ListAppForm() {
     async function checkUserStatus() {
       const response = await fetch('/api/user-status');
       const data = await response.json();
-      form.setValue("pricingModel", data.isPro ? "paid" : "free");
+      if (!form.getValues("pricingModel")) {
+        form.setValue("pricingModel", data.isPro ? "paid" : "free");
+      }
     }
     checkUserStatus();
   }, []);
@@ -204,6 +206,7 @@ export function ListAppForm() {
       
       const formData = {
         ...values,
+        pricingModel: values.pricing,
         apiType: values.appType === 'api' ? (values.apiType || 'rest') : undefined,
         apiEndpoint: values.appType === 'api' ? values.apiEndpoint : undefined,
         apiDocs: values.appType === 'api' ? values.apiDocs : undefined,
@@ -250,10 +253,7 @@ export function ListAppForm() {
   return (
     <Form {...form}>
       <form 
-        onSubmit={(e) => {
-          console.log('Form submit event triggered');
-          form.handleSubmit(onSubmit)(e);
-        }} 
+        onSubmit={form.handleSubmit(onSubmit)} 
         className="space-y-6"
       >
         <div className="flex justify-between items-center mb-6">
@@ -537,7 +537,13 @@ export function ListAppForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Pricing Model</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select 
+                onValueChange={(value) => {
+                  field.onChange(value);
+                  form.setValue("pricingModel", value as 'free' | 'paid' | 'freemium' );
+                }} 
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select pricing model" />
@@ -638,7 +644,6 @@ export function ListAppForm() {
           type="submit" 
           className="w-full"
           disabled={isSubmitting}
-          onClick={() => console.log('Submit button clicked')}
         >
           {isSubmitting ? "Submitting..." : "Submit Application"}
         </Button>
