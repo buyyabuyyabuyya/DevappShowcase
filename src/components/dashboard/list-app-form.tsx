@@ -220,14 +220,17 @@ export function ListAppForm() {
       if (!response.success) {
         if (response.error === 'MAX_APPS_REACHED') {
           toast({
-            title: "Free Plan Limit Reached",
-            description: "Upgrade to Pro to post unlimited apps",
+            title: "Free Plan Limit Reached (3 Apps)",
+            description: "You've reached the maximum of 3 apps on the Free plan. Upgrade to Pro for unlimited app listings.",
             variant: "destructive",
             action: (
-              <Button asChild variant="outline">
-                <Link href="/settings">Upgrade to Pro</Link>
+              <Button asChild variant="outline" className="mt-2">
+                <Link href="/settings">
+                  Upgrade to Pro
+                </Link>
               </Button>
             ),
+            duration: 6000, // Show for longer (6 seconds)
           });
           return;
         }
