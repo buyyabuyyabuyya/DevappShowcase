@@ -8,6 +8,7 @@ import { Heart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { pricingTypes } from "@/lib/constants";
 
+
 // Stripe URL for Pro upgrade
 const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
 
@@ -20,6 +21,7 @@ interface AppCardProps {
     category: string;
     iconUrl?: string;
     pricingModel?: string;
+    pricing?: string;
     likes: {
       count: number;
       users: string[];
