@@ -8,7 +8,6 @@ import { Heart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { pricingTypes } from "@/lib/constants";
 
-
 // Stripe URL for Pro upgrade
 const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
 
@@ -21,7 +20,6 @@ interface AppCardProps {
     category: string;
     iconUrl?: string;
     pricingModel?: string;
-    pricing?: string;
     likes: {
       count: number;
       users: string[];
@@ -63,8 +61,8 @@ export function AppCard({ app }: AppCardProps) {
               <Badge variant="secondary">{app.category}</Badge>
               <Badge variant="secondary">{app.appType}</Badge>
               {app.pricingModel && (
-                <Badge className={getPricingColor(app.pricingModel.toLowerCase())}>
-                  {pricingTypes.find(p => p.value === app.pricingModel)?.label || app.pricingModel}
+                <Badge className={getPricingColor(app.pricingModel)}>
+                  {app.pricingModel}
                 </Badge>
               )}
             </div>

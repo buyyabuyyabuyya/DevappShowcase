@@ -36,6 +36,7 @@ import { PromoteAppSection } from "@/components/dashboard/promote-app-section";
 import { useToast } from "@/components/ui/use-toast";
 import { getUserProfile } from "@/lib/actions/users";
 import Link from "next/link";
+import { useProStatus } from "@/context/pro-status-provider";
 
 const STRIPE_URL = "https://https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
 
@@ -51,16 +52,16 @@ export function ListAppForm() {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isProUser, setIsProUser] = useState(false);
   const { toast } = useToast();
+  const { isPro } = useProStatus();
 
   const formSchema = z.object({
     name: z.string().min(2).max(50),
     description: z.string()
       .min(10, "Description must be at least 10 characters")
       .max(
-        isProUser ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH,
-        `Description cannot exceed ${isProUser ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH} characters`
+        isPro ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH,
+        `Description cannot exceed ${isPro ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH} characters`
       ),
     appType: z.enum(appTypes.map(t => t.value) as [string, ...string[]]),
     category: z.enum(categories.map(c => c.value) as [string, ...string[]]),
@@ -93,7 +94,7 @@ export function ListAppForm() {
       imageUrls: [],
       isPromoted: false,
       pricing: 'free',
-      pricingModel: 'free'
+      pricingModel: "free"
     }
   });
 
@@ -109,7 +110,7 @@ export function ListAppForm() {
     async function checkUserStatus() {
       const response = await fetch('/api/user-status');
       const data = await response.json();
-      setIsProUser(data.isPro);
+      form.setValue("pricingModel", data.isPro ? "paid" : "free");
     }
     checkUserStatus();
   }, []);
@@ -257,7 +258,7 @@ export function ListAppForm() {
       >
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">List a New App</h1>
-          {isProUser ? (
+          {isPro ? (
             <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium">
               Pro Mode
             </div>
@@ -294,7 +295,7 @@ export function ListAppForm() {
                   placeholder="Describe your app in detail..." 
                   className="resize-y min-h-[120px]"
                   {...field}
-                  maxLength={isProUser ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH}
+                  maxLength={isPro ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH}
                 />
               </FormControl>
               <div className="flex justify-between items-center mt-1">
@@ -302,11 +303,11 @@ export function ListAppForm() {
                   Explain what your app does, its features, and why users should try it.
                 </FormDescription>
                 <div className={`text-xs ${
-                  field.value.length > (isProUser ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH * 0.9 : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH * 0.9) 
+                  field.value.length > (isPro ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH * 0.9 : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH * 0.9) 
                     ? "text-destructive font-medium" 
                     : "text-muted-foreground"
                 }`}>
-                  {field.value.length}/{isProUser ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH}
+                  {field.value.length}/{isPro ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH}
                 </div>
               </div>
               <FormMessage />
