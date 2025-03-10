@@ -191,7 +191,7 @@ export function AppDetailView({ app, isOwner, isProUser }: AppDetailViewProps) {
               className={app.isPromoted ? "bg-yellow-100" : ""}
             >
               <Star className={`w-4 h-4 mr-2 ${app.isPromoted ? "text-yellow-500 fill-yellow-500" : ""}`} />
-              {app.isPromoted ? "Promoted" : "Promote"}
+              {/*{app.isPromoted ? "Promoted" : "Promote"}*/}
             </Button>
             <Button variant="outline" asChild>
               <Link href={`/apps/${app._id}/edit`}>
