@@ -72,10 +72,13 @@ export function PromoteAppSection() {
       </ul>
 
       <div className="pt-4">
-        <UpgradeButton className="w-full" onClick={() => window.open(STRIPE_URL, '_blank')}>
+        <Button 
+          className="w-full" 
+          onClick={() => window.open(STRIPE_URL, '_blank')}
+        >
           <Sparkles className="h-4 w-4 mr-2" />
           Promote All Your Apps
-        </UpgradeButton>
+        </Button>
       </div>
     </Card>
   );
