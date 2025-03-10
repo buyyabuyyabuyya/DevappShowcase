@@ -203,6 +203,7 @@ export function ListAppForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsSubmitting(true);
+      console.log("Starting submission with values:", values);
       
       const formData = {
         ...values,
@@ -212,7 +213,9 @@ export function ListAppForm() {
         apiDocs: values.appType === 'api' ? values.apiDocs : undefined,
       };
       
+      console.log("Sending data to createApp:", formData);
       const response = await createApp(formData);
+      console.log("Received response:", response);
       
       if (!response.success) {
         if (response.error === 'MAX_APPS_REACHED') {
@@ -236,8 +239,9 @@ export function ListAppForm() {
         description: "Your app has been listed successfully.",
       });
       
-      // Force navigation to dashboard
-      window.location.href = "/dashboard";
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 500);
     } catch (error) {
       console.error("Form submission error:", error);
       toast({
