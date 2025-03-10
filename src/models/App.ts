@@ -25,7 +25,7 @@ const appSchema = new mongoose.Schema({
   pricing: { 
     type: String, 
     required: true,
-    enum: ['free', 'paid', 'freemium'],
+    enum: ['free', 'paid', 'freemium', 'subscription'],
     default: 'free'
   },
   pricingModel: {

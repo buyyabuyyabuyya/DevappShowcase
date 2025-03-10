@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { pricingTypes } from "@/lib/constants";
 
 // Stripe URL for Pro upgrade
 const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
@@ -17,7 +19,7 @@ interface AppCardProps {
     appType: string;
     category: string;
     iconUrl?: string;
-    pricingModel?: string; // Added pricing model
+    pricingModel?: string;
     likes: {
       count: number;
       users: string[];
@@ -26,43 +28,49 @@ interface AppCardProps {
 }
 
 export function AppCard({ app }: AppCardProps) {
+  // Get pricing badge color based on model
+  function getPricingColor(model?: string) {
+    switch (model) {
+      case 'free':
+        return 'bg-green-500/10 text-green-500';
+      case 'paid':
+        return 'bg-blue-500/10 text-blue-500';
+      case 'freemium':
+        return 'bg-purple-500/10 text-purple-500';
+      default:
+        return 'bg-gray-500/10 text-gray-500';
+    }
+  }
+
   return (
     <Card className="overflow-hidden">
-      <CardHeader>
+      <CardHeader className="p-4">
         <div className="flex items-center gap-4">
-          {app.iconUrl ? (
+          {app.iconUrl && (
             <Image
               src={app.iconUrl}
               alt={app.name}
-              width={40}
-              height={40}
-              className="rounded-lg object-contain"
+              width={48}
+              height={48}
+              className="rounded-lg"
             />
-          ) : (
-            <div className="w-10 h-10 bg-muted rounded-lg" />
           )}
-          <CardTitle className="line-clamp-1">{app.name}</CardTitle>
+          <div className="flex-1 min-w-0">
+            <CardTitle className="text-lg truncate">{app.name}</CardTitle>
+            <div className="flex gap-2 mt-2">
+              <Badge variant="secondary">{app.category}</Badge>
+              <Badge variant="secondary">{app.appType}</Badge>
+              {app.pricingModel && (
+                <Badge className={getPricingColor(app.pricingModel.toLowerCase())}>
+                  {pricingTypes.find(p => p.value === app.pricingModel)?.label || app.pricingModel}
+                </Badge>
+              )}
+            </div>
+          </div>
         </div>
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground line-clamp-2">{app.description}</p>
-        <div className="flex flex-wrap gap-2 mt-2">
-          <span className={`text-xs px-2 py-1 rounded ${
-            app.appType === 'api' 
-              ? 'bg-blue-100 text-blue-700' 
-              : 'bg-primary/10 text-primary'
-          }`}>
-            {app.appType.toUpperCase()}
-          </span>
-          <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
-            {app.category}
-          </span>
-          {app.pricingModel && (
-            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded capitalize">
-              {app.pricingModel}
-            </span>
-          )}
-        </div>
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="ghost" size="sm">
