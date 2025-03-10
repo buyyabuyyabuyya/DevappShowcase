@@ -13,7 +13,7 @@ interface PromoFeature {
 }
 
 // Use the direct Stripe URL
-const STRIPE_URL = "https://https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
+const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
 
 const promoFeatures: PromoFeature[] = [
   { feature: "Featured placement on homepage", included: true },
@@ -72,7 +72,7 @@ export function PromoteAppSection() {
       </ul>
 
       <div className="pt-4">
-        <UpgradeButton className="w-full">
+        <UpgradeButton className="w-full" onClick={() => window.open(STRIPE_URL, '_blank')}>
           <Sparkles className="h-4 w-4 mr-2" />
           Promote All Your Apps
         </UpgradeButton>
