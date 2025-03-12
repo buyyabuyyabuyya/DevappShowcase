@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { getUserProfile } from "@/lib/actions/users";
-import { getUserStatus } from "@/lib/actions/users";
 
 export default async function SettingsPage() {
   const { checkProStatus, isPro } = useProStatus();
@@ -71,7 +70,7 @@ export default async function SettingsPage() {
             </Button>
           </div>
           <CardContent className="space-y-4">
-            <ProFeatures isPro={isPro} />
+            <ProFeatures />
           </CardContent>
         </CardContent>
       </Card>

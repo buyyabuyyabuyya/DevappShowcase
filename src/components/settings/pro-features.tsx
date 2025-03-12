@@ -6,11 +6,9 @@ import { CheckIcon, Sparkles } from "lucide-react";
 import { useProStatus } from "@/context/pro-status-provider";
 import { UpgradeButton } from "@/components/shared/upgrade-button";
 
-interface ProFeaturesProps {
-  isPro: boolean;
-}
+export function ProFeatures() {
+  const { isPro } = useProStatus();
 
-export function ProFeatures({ isPro }: ProFeaturesProps) {
   return (
     <div className="rounded-lg border p-6 mt-6">
       <h3 className="text-lg font-medium mb-2">
