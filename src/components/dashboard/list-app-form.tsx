@@ -457,6 +457,9 @@ export function ListAppForm() {
                         <p className="text-sm text-muted-foreground">
                           Click to upload an icon
                         </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Image must be less than 5MB in size
+                        </p>
                       </>
                     )}
                   </div>
