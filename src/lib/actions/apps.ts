@@ -118,6 +118,12 @@ export async function createApp(formData: any) {
       app: JSON.parse(JSON.stringify(app))
     };
   } catch (error) {
+    if (error instanceof Error && 
+        error.message.includes('Body exceeded 1MB limit')) {
+      throw new Error(
+        "Images are too large. Please reduce image sizes or upload fewer images. Maximum total size is 1MB."
+      );
+    }
     console.error("Error creating app:", error);
     return { 
       success: false, 

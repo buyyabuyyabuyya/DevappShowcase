@@ -248,22 +248,11 @@ export function ListAppForm() {
     } catch (error) {
       console.error("Form submission error:", error);
       
-      // Check if it's a payload too large error (413)
-      if (error instanceof Error && error.message.includes("413") || 
-          error instanceof Error && error.message.includes("Payload Too Large")) {
-        toast({
-          title: "Payload Too Large",
-          description: "Your images are too large. Please refresh the page and try again with smaller images (under 1MB each).",
-          variant: "destructive",
-          duration: 10000, // Show for longer (10 seconds)
-        });
-      } else {
-        toast({
-          title: "Error",
-          description: error instanceof Error ? error.message : "Failed to submit application. Please try again.",
-          variant: "destructive"
-        });
-      }
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Something went wrong",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
