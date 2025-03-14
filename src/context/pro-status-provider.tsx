@@ -26,8 +26,11 @@ export function ProStatusProvider({
   const [isPro, setIsPro] = useState(initialIsPro);
   const [isLoading, setIsLoading] = useState(true);
   const [subscriptionExpiresAt, setSubscriptionExpiresAt] = useState<Date | null>(null);
+  const [hasFetched, setHasFetched] = useState(false);
 
   const refreshProStatus = async () => {
+    if (hasFetched) return; // Prevent multiple fetches
+    
     try {
       setIsLoading(true);
       console.log("Fetching user status...");
@@ -57,20 +60,15 @@ export function ProStatusProvider({
       }
     } catch (error) {
       console.error('Failed to refresh PRO status:', error);
-      // Don't throw the error, just log it and keep the current state
     } finally {
       setIsLoading(false);
+      setHasFetched(true);
     }
   };
 
   useEffect(() => {
     refreshProStatus();
-    
-    // Check subscription status every hour
-    const intervalId = setInterval(refreshProStatus, 60 * 60 * 1000);
-    
-    return () => clearInterval(intervalId);
-  }, []);
+  }, []); // Only run once on mount
 
   return (
     <ProStatusContext.Provider 
