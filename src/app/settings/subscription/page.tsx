@@ -8,7 +8,12 @@ import Link from 'next/link';
 import { PRO_SUBSCRIPTION } from '@/lib/constants';
 
 export default function SubscriptionPage() {
-  const { isPro, isLoading, subscriptionExpiresAt } = useProStatus();
+  const { isPro, isLoading, subscriptionExpiresAt, refreshProStatus } = useProStatus();
+
+  useEffect(() => {
+    // Force a refresh when the page loads
+    refreshProStatus();
+  }, [refreshProStatus]);
   
   if (isLoading) {
     return (

@@ -31,9 +31,17 @@ export function ProStatusProvider({
     try {
       setIsLoading(true);
       console.log("Fetching user status...");
-      const response = await fetch('/api/user-status');
+      
+      const response = await fetch('/api/user-status', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-store',
+      });
       
       if (!response.ok) {
+        console.error('Failed to fetch user status:', response.status);
         throw new Error('Failed to fetch user status');
       }
       
@@ -49,6 +57,7 @@ export function ProStatusProvider({
       }
     } catch (error) {
       console.error('Failed to refresh PRO status:', error);
+      // Don't throw the error, just log it and keep the current state
     } finally {
       setIsLoading(false);
     }
