@@ -30,6 +30,7 @@ export function ProStatusProvider({
   const refreshProStatus = async () => {
     try {
       setIsLoading(true);
+      console.log("Fetching user status...");
       const response = await fetch('/api/user-status');
       
       if (!response.ok) {
@@ -37,6 +38,8 @@ export function ProStatusProvider({
       }
       
       const data = await response.json();
+      console.log("User status data:", data);
+      
       setIsPro(!!data.isPro);
       
       if (data.subscriptionExpiresAt) {
