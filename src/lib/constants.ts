@@ -36,5 +36,7 @@ export const PRO_SUBSCRIPTION = {
   PRICE: 5.99,
   INTERVAL: 'month',
   STRIPE_URL: "https://buy.stripe.com/test_eVadRDbbW9ta3lK5kl",
-  CUSTOMER_PORTAL: "https://billing.stripe.com/p/login/28o29Q2Zg1W19tmcMO"
+  CUSTOMER_PORTAL: "https://billing.stripe.com/p/login/test_cN2g0Y9QtgQ1568aEE"
+
+  //CUSTOMER_PORTAL: "https://billing.stripe.com/p/login/28o29Q2Zg1W19tmcMO"
 }; 
