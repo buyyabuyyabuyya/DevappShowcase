@@ -288,17 +288,53 @@ export async function updateUserSubscriptionStatus(data: SubscriptionUpdateData)
   try {
     await connectDB();
     
-    // Update using Mongoose instead of Prisma
+    console.log("Updating subscription status for user:", {
+      stripeCustomerId,
+      isActive,
+      subscriptionId,
+      currentPeriodEnd: currentPeriodEnd?.toISOString(),
+    });
+
+    // First, try to find user by stripeCustomerId
+    let user = await User.findOne({ stripeCustomerId });
+    console.log("Found user by stripeCustomerId:", user ? "Yes" : "No");
+
+    // If not found, try to find by email from Stripe customer
+    if (!user) {
+      const customer = await stripe.customers.retrieve(stripeCustomerId) as Stripe.Customer;
+      console.log("Retrieved Stripe customer:", {
+        email: customer.email,
+        id: customer.id
+      });
+
+      if (customer.email) {
+        user = await User.findOne({ email: customer.email });
+        console.log("Found user by email:", user ? "Yes" : "No");
+      }
+    }
+
+    if (!user) {
+      console.error("No user found for subscription update");
+      return { success: false, error: "User not found" };
+    }
+
+    // Update user subscription status
     const result = await User.updateOne(
-      { stripeCustomerId },
+      { _id: user._id },
       {
         $set: {
           isPro: isActive,
           subscriptionId,
           subscriptionExpiresAt: currentPeriodEnd,
+          stripeCustomerId: stripeCustomerId,
         }
       }
     );
+    
+    console.log("Update result:", {
+      modifiedCount: result.modifiedCount,
+      matchedCount: result.matchedCount
+    });
     
     return { 
       success: true, 
