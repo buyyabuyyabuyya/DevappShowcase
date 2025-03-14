@@ -33,7 +33,7 @@ import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
 
 // Add this constant at the top of the file
-const STRIPE_URL = "https://buy.stripe.com/test_eVadRDbbW9ta3lK5kl";
+const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
 
 //need to re-deploy
 //need to re-deploy
