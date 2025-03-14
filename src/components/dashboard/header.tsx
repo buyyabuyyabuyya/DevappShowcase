@@ -25,6 +25,9 @@ export function DashboardHeader({
         <div className="flex items-center gap-2">
           {!isPro && <UpgradeButton variant="outline" />}
           <Button asChild>
+            <Link href="/settings/subscription">Subscription</Link>
+          </Button>
+          <Button asChild>
             <Link href="/dashboard/list-app">Add New App</Link>
           </Button>
         </div>
