@@ -16,8 +16,14 @@ const ProStatusContext = createContext<ProStatusContextType>({
   subscriptionExpiresAt: null,
 });
 
-export function ProStatusProvider({ children }: { children: React.ReactNode }) {
-  const [isPro, setIsPro] = useState(false);
+export function ProStatusProvider({ 
+  children,
+  initialIsPro = false 
+}: { 
+  children: React.ReactNode;
+  initialIsPro?: boolean;
+}) {
+  const [isPro, setIsPro] = useState(initialIsPro);
   const [isLoading, setIsLoading] = useState(true);
   const [subscriptionExpiresAt, setSubscriptionExpiresAt] = useState<Date | null>(null);
 
