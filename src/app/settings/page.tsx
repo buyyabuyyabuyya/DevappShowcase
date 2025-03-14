@@ -13,7 +13,7 @@ import Link from "next/link";
 import { getUserProfile } from "@/lib/actions/users";
 
 export default async function SettingsPage() {
-  const { checkProStatus, isPro } = useProStatus();
+  const { refreshProStatus, isPro } = useProStatus();
   const searchParams = useSearchParams();
   const success = searchParams.get("success");
   const canceled = searchParams.get("canceled");
@@ -25,7 +25,7 @@ export default async function SettingsPage() {
         title: "Success!",
         description: "Your payment was successful. Welcome to Pro!",
       });
-      checkProStatus();
+      refreshProStatus();
     }
     
     if (canceled === "true") {
@@ -35,7 +35,7 @@ export default async function SettingsPage() {
         variant: "destructive",
       });
     }
-  }, [success, canceled, checkProStatus]);
+  }, [success, canceled, refreshProStatus]);
 
   const { userId } = auth();
   const user = await currentUser();
