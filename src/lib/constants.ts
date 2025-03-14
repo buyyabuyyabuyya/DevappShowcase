@@ -33,5 +33,8 @@ export const APP_LIMITS = {
 };
 
 export const PRO_SUBSCRIPTION = {
-  PRICE: 14.99
+  PRICE: 5.99,
+  INTERVAL: 'month',
+  STRIPE_URL: "https://buy.stripe.com/28o29Q2Zg1W19tmcMO",
+  CUSTOMER_PORTAL: "https://billing.stripe.com/p/login/28o29Q2Zg1W19tmcMO"
 }; 

@@ -10,7 +10,10 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   appCount: { type: Number, default: 0 },
-  lastPromotion: { type: Date }
+  lastPromotion: { type: Date },
+  stripeCustomerId: { type: String, sparse: true },
+  subscriptionId: { type: String, sparse: true },
+  subscriptionExpiresAt: { type: Date, sparse: true }
 });
 
 // Check if model already exists to prevent overwrite in development

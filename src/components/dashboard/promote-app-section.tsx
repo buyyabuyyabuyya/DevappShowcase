@@ -13,7 +13,7 @@ interface PromoFeature {
 }
 
 // Use the direct Stripe URL
-const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
+const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
 
 const promoFeatures: PromoFeature[] = [
   { feature: "Featured placement on homepage", included: true },
@@ -52,10 +52,10 @@ export function PromoteAppSection() {
       </div>
 
       <div className="flex items-baseline gap-2">
-        <span className="text-2xl font-bold">$14.99</span>
-        <span className="text-muted-foreground line-through">$20.00</span>
-        <span className="text-sm text-green-600 font-medium">25% OFF</span>
-        <span className="text-xs text-muted-foreground">(one-time purchase)</span>
+        <span className="text-2xl font-bold">$5.99</span>
+        <span className="text-muted-foreground line-through">$10.00</span>
+        <span className="text-sm text-green-600 font-medium">40% OFF</span>
+        <span className="text-xs text-muted-foreground">(Monthly)</span>
       </div>
 
       <ul className="space-y-3">

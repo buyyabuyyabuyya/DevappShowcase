@@ -7,7 +7,7 @@ import { upgradeToProUser } from "@/lib/actions/users";
 import { useProStatus } from "@/context/pro-status-provider";
 
 // Direct Stripe URL as fallback
-const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
+const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
 
 interface UpgradeButtonProps {
   variant?: "default" | "outline" | "secondary";

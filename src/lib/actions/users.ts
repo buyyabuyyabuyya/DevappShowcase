@@ -23,6 +23,12 @@ export async function getUserProfile() {
     
     if (!user) return { success: false, error: "User not found" };
     
+    // If the user has a subscription but it's expired, update isPro to false
+    if (user.isPro && user.subscriptionExpiresAt && new Date() > user.subscriptionExpiresAt) {
+      await User.updateOne({ clerkId: userId }, { isPro: false });
+      user.isPro = false;
+    }
+    
     return { 
       success: true, 
       user: JSON.parse(JSON.stringify(user)) 
@@ -157,33 +163,11 @@ export async function upgradeToProUser() {
     const userProfile = await getUserProfile();
     if (!userProfile.success) throw new Error("Failed to get user profile");
     
-    // Create Stripe checkout session for one-time payment
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      billing_address_collection: "auto",
-      customer_email: userProfile.user.email,
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: "DevApp Showcase Pro",
-              description: "Unlimited app postings and app promotion"
-            },
-            unit_amount: Math.round(PRO_SUBSCRIPTION.PRICE * 100),
-          },
-          quantity: 1
-        }
-      ],
-      mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings?canceled=true`,
-      metadata: {
-        userId: userId
-      }
-    });
-    
-    return { success: true, url: session.url };
+    // Redirect to Stripe checkout for subscription
+    return { 
+      success: true, 
+      url: PRO_SUBSCRIPTION.STRIPE_URL 
+    };
   } catch (error) {
     console.error("Error upgrading to pro:", error);
     return { success: false, error: "Failed to create checkout session" };
@@ -288,5 +272,40 @@ export async function getUserById(clerkId: string) {
   } catch (error) {
     console.error("Error fetching user:", error);
     return { user: null };
+  }
+}
+
+export interface SubscriptionUpdateData {
+  stripeCustomerId: string;
+  isActive: boolean;
+  subscriptionId: string | null;
+  currentPeriodEnd: Date | null;
+}
+
+export async function updateUserSubscriptionStatus(data: SubscriptionUpdateData) {
+  const { stripeCustomerId, isActive, subscriptionId, currentPeriodEnd } = data;
+  
+  try {
+    await connectDB();
+    
+    // Update using Mongoose instead of Prisma
+    const result = await User.updateOne(
+      { stripeCustomerId },
+      {
+        $set: {
+          isPro: isActive,
+          subscriptionId,
+          subscriptionExpiresAt: currentPeriodEnd,
+        }
+      }
+    );
+    
+    return { 
+      success: true, 
+      updatedCount: result.modifiedCount 
+    };
+  } catch (error) {
+    console.error('Error updating subscription status:', error);
+    return { success: false, error: 'Failed to update subscription status' };
   }
 } 

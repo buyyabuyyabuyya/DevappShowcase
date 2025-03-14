@@ -1,64 +1,71 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { getUserStatus } from "@/lib/actions/users";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface ProStatusContextType {
   isPro: boolean;
-  checkProStatus: () => Promise<void>;
-  loading: boolean;
+  isLoading: boolean;
+  refreshProStatus: () => Promise<void>;
+  subscriptionExpiresAt: Date | null;
 }
 
-const defaultContext: ProStatusContextType = {
+const ProStatusContext = createContext<ProStatusContextType>({
   isPro: false,
-  checkProStatus: async () => {},
-  loading: false
-};
+  isLoading: true,
+  refreshProStatus: async () => {},
+  subscriptionExpiresAt: null,
+});
 
-const ProStatusContext = createContext<ProStatusContextType>(defaultContext);
+export function ProStatusProvider({ children }: { children: React.ReactNode }) {
+  const [isPro, setIsPro] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [subscriptionExpiresAt, setSubscriptionExpiresAt] = useState<Date | null>(null);
 
-export const useProStatus = () => useContext(ProStatusContext);
-
-export function ProStatusProvider({ 
-  children,
-  initialIsPro = false
-}: { 
-  children: ReactNode;
-  initialIsPro?: boolean;
-}) {
-  const [isPro, setIsPro] = useState(initialIsPro);
-  const [loading, setLoading] = useState(false);
-
-  const checkProStatus = async () => {
-    setLoading(true);
+  const refreshProStatus = async () => {
     try {
-      const result = await getUserStatus();
-      if (result.success) {
-        setIsPro(result.isPro);
+      setIsLoading(true);
+      const response = await fetch('/api/user-status');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch user status');
+      }
+      
+      const data = await response.json();
+      setIsPro(!!data.isPro);
+      
+      if (data.subscriptionExpiresAt) {
+        setSubscriptionExpiresAt(new Date(data.subscriptionExpiresAt));
+      } else {
+        setSubscriptionExpiresAt(null);
       }
     } catch (error) {
-      console.error("Failed to check Pro status:", error);
+      console.error('Failed to refresh PRO status:', error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  // Check status when returning from Stripe
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("success") === "true") {
-      checkProStatus();
-      
-      // Clean URL without refreshing
-      const url = new URL(window.location.href);
-      url.searchParams.delete("success");
-      window.history.replaceState({}, document.title, url.toString());
-    }
+    refreshProStatus();
+    
+    // Check subscription status every hour
+    const intervalId = setInterval(refreshProStatus, 60 * 60 * 1000);
+    
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
-    <ProStatusContext.Provider value={{ isPro, checkProStatus, loading }}>
+    <ProStatusContext.Provider 
+      value={{ 
+        isPro, 
+        isLoading, 
+        refreshProStatus,
+        subscriptionExpiresAt 
+      }}
+    >
       {children}
     </ProStatusContext.Provider>
   );
-} 
+}
+
+export const useProStatus = () => useContext(ProStatusContext); 

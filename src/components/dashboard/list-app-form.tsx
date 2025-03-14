@@ -26,7 +26,7 @@ import {
 import { createApp } from "@/lib/actions/apps";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
-import { appTypes, categories, pricingTypes } from "@/lib/constants";
+import { appTypes, categories, pricingTypes, PRO_SUBSCRIPTION } from "@/lib/constants";
 import { UploadCloud, X } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
@@ -37,8 +37,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { getUserProfile } from "@/lib/actions/users";
 import Link from "next/link";
 import { useProStatus } from "@/context/pro-status-provider";
-
-const STRIPE_URL = "https://buy.stripe.com/8wMcOu43kcAFaxqcMN";
 
 const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
 const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
@@ -272,7 +270,7 @@ export function ListAppForm() {
             </div>
           ) : (
             <Button asChild variant="outline" size="sm">
-              <Link href={STRIPE_URL} target="_blank" rel="noopener noreferrer">
+              <Link href={PRO_SUBSCRIPTION.STRIPE_URL} target="_blank" rel="noopener noreferrer">
                 Upgrade to Pro
               </Link>
             </Button>
