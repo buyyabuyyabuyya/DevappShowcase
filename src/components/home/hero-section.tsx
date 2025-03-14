@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { getUserById } from "@/lib/actions/users";
 
 // Use the same Stripe URL defined elsewhere in your app
-const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
+const STRIPE_URL = "https://buy.stripe.com/test_eVadRDbbW9ta3lK5kl";
 
 export async function HeroSection() {
   // Get current user authentication status
