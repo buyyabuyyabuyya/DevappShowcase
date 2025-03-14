@@ -9,13 +9,23 @@ import { PRO_SUBSCRIPTION } from '@/lib/constants';
 
 export default function SubscriptionPage() {
   const { isPro, isLoading, subscriptionExpiresAt, refreshProStatus } = useProStatus();
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-    // Force a refresh when the page loads
-    refreshProStatus();
+    const loadData = async () => {
+      try {
+        await refreshProStatus();
+      } catch (error) {
+        console.error('Failed to load subscription data:', error);
+      } finally {
+        setIsInitialLoad(false);
+      }
+    };
+
+    loadData();
   }, [refreshProStatus]);
-  
-  if (isLoading) {
+
+  if (isInitialLoad || isLoading) {
     return (
       <div className="container max-w-2xl py-10">
         <div className="flex justify-center items-center h-32">
