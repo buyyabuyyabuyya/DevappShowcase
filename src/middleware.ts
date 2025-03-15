@@ -1,5 +1,6 @@
 import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
+import { getCacheControlHeaders } from "@/lib/utils";
 
 // This example protects all routes including api/trpc routes
 export default authMiddleware({
@@ -24,11 +25,16 @@ export default authMiddleware({
       return NextResponse.redirect(new URL('/dashboard', req.url));
     }
     
-    // Add necessary headers for Cloudflare
+    // Create the response
     const response = NextResponse.next();
     
     // Add headers that help with Cloudflare bot protection
     response.headers.set('Permissions-Policy', 'interest-cohort=()');
+    
+    // Set appropriate cache headers based on route and authentication status
+    const isAuthenticated = !!auth.userId;
+    const cacheControl = getCacheControlHeaders(req.nextUrl.pathname, isAuthenticated);
+    response.headers.set('Cache-Control', cacheControl);
     
     return response;
   }

@@ -12,7 +12,12 @@ export async function GET(request: NextRequest) {
       console.log("No user ID found in session");
       return NextResponse.json(
         { isPro: false, message: 'Unauthorized' },
-        { status: 401 }
+        { 
+          status: 401,
+          headers: {
+            'Cache-Control': 'no-store'
+          }
+        }
       );
     }
     
@@ -23,7 +28,12 @@ export async function GET(request: NextRequest) {
       console.log("Failed to get user profile");
       return NextResponse.json(
         { isPro: false, message: 'User not found' },
-        { status: 404 }
+        { 
+          status: 404,
+          headers: {
+            'Cache-Control': 'no-store'
+          }
+        }
       );
     }
 
@@ -33,12 +43,23 @@ export async function GET(request: NextRequest) {
     };
     console.log("Sending response:", response);
     
-    return NextResponse.json(response);
+    // For authenticated user data, allow short-term caching (30 seconds)
+    // but require revalidation for fresh data
+    return NextResponse.json(response, {
+      headers: {
+        'Cache-Control': 'private, max-age=30, must-revalidate'
+      }
+    });
   } catch (error) {
     console.error('Error fetching user status:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      { 
+        status: 500,
+        headers: {
+          'Cache-Control': 'no-store'
+        }
+      }
     );
   }
 } 
