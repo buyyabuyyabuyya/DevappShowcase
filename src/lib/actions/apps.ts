@@ -175,6 +175,8 @@ export async function updateApp(id: string, values: any) {
         apiType: values.apiType,
         apiEndpoint: values.apiEndpoint,
         apiDocs: values.apiDocs,
+        isPromoted: values.isPromoted,
+        ...(values.isPromoted && !app.isPromoted ? { promotedAt: new Date() } : {})
       },
       { new: true }
     );
@@ -269,9 +271,20 @@ export async function togglePromoteApp(id: string) {
     if (!app) throw new Error("App not found");
     if (app.userId !== userId) throw new Error("Unauthorized");
     
+    // Check if user is Pro
+    const { success, user } = await getUserProfile();
+    if (!success || !user?.isPro) {
+      throw new Error("Pro subscription required to promote apps");
+    }
+    
+    const isPromoting = !app.isPromoted;
+    
     const updated = await App?.findByIdAndUpdate(
       id, 
-      { isPromoted: !app.isPromoted },
+      { 
+        isPromoted: isPromoting,
+        ...(isPromoting ? { promotedAt: new Date() } : { promotedAt: null })
+      },
       { new: true }
     );
     

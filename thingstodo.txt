@@ -1,0 +1,81 @@
+make the promote toggle in the edit tab acuttaly work correctly
+
+
+make the filter options work or dont (i dont know)
+
+
+
+make the IMAGES of the Featured Applications get them from the MONGODB base64 pictures
+
+
+
+
+
+
+
+
+
+
+
+
+
+AVL Trees:
+
+AVL trees are self-balancing binary search trees where the heights of the left and right subtrees of any node differ by at most 1. Key properties:
+
+1. Balance Factor
+- For each node, height(left) - height(right) must be -1, 0, or 1
+- If balance factor is outside this range, rebalancing is needed
+The balance factor of -1, 0, or 1 indicates how balanced a node is:
+
+Balance Factor = 0:
+   10        The left and right subtrees have equal height
+  /  \       This is perfectly balanced
+ 5    15     Height difference = 0
+ 
+Balance Factor = +1:
+   10        The left subtree is one level taller
+  /  \       Still acceptably balanced 
+ 5    15     Height difference = +1
+/
+2
+
+Balance Factor = -1:
+   10        The right subtree is one level taller
+  /  \       Still acceptably balanced
+ 5    15     Height difference = -1
+      \
+      20
+
+Unbalanced (needs rotation):
+   10        Left subtree is two levels taller
+  /  \       Balance factor = +2
+ 5    15     Requires rebalancing
+/
+2
+/
+1
+
+2. Operations
+- Insert: O(log n) - Standard BST insert followed by rebalancing
+- Delete: O(log n) - Standard BST delete followed by rebalancing 
+- Search: O(log n) - Same as regular BST search
+
+3. Rebalancing
+Done through rotations:
+- Left rotation
+- Right rotation 
+- Left-Right rotation
+- Right-Left rotation
+
+4. Advantages
+- Guaranteed O(log n) operations
+- More balanced than regular BSTs
+- Good for frequent lookups
+
+5. Disadvantages  
+- Extra space for height info
+- More complex insert/delete
+- Red-black trees may be better for frequent modifications
+
+AVL trees are ideal when lookup speed is critical and modifications are less frequent.
