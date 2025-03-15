@@ -64,16 +64,19 @@ export async function FeaturedApps() {
                   </div>
                 )}
                 
-                {app.imageUrl ? (
-                  <Image 
-                    src={app.imageUrl} 
-                    alt={app.name}
-                    fill
-                    className="object-cover"
-                  />
+                {app.iconUrl ? (
+                  <div className="absolute inset-0 flex items-center justify-center p-4">
+                    <Image
+                      src={app.iconUrl}
+                      alt={app.name}
+                      width={100}
+                      height={100}
+                      className="object-contain max-h-32"
+                    />
+                  </div>
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-white">
-                    <Code className="h-16 w-16" />
+                  <div className="absolute inset-0 flex items-center justify-center text-white text-4xl">
+                    &lt; &gt;
                   </div>
                 )}
               </div>
