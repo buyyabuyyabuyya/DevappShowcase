@@ -1,4 +1,4 @@
-make the promote toggle in the edit tab acuttaly work correctly
+make the promote toggle in the edit tab acuttaly work correctly  --- done
 
 
 make the filter options work or dont (i dont know)

@@ -19,11 +19,15 @@ export async function getApps(params?: { type?: string; sort?: string }) {
       ? { appType: params.type }
       : {};
     
-    const sortOption = params?.sort === 'likes' 
-      ? { 'likes.count': -1 }
-      : params?.sort === 'name'
-      ? { name: 1 }
-      : { createdAt: -1 };
+    // Define sort order based on params
+    let sortOption;
+    if (params?.sort === 'likes') {
+      sortOption = { isPromoted: -1, 'likes.count': -1 }; // First promotion, then likes
+    } else if (params?.sort === 'name') {
+      sortOption = { isPromoted: -1, name: 1 }; // First promotion, then name
+    } else {
+      sortOption = { isPromoted: -1, createdAt: -1 }; // First promotion, then creation date
+    }
 
     const apps = await App?.find(query).sort(sortOption as any).limit(50);
     

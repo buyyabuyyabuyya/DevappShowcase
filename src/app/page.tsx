@@ -19,9 +19,10 @@ const appTypeColors: Record<string, string> = {
   extension: "bg-cyan-50 dark:bg-cyan-950/30 border-cyan-200 dark:border-cyan-800"
 };
 
-export default async function Home() {
+export default async function HomePage({ searchParams }: { searchParams: { sort?: string } }) {
   const { userId } = auth();
-  const result = await getApps();
+  const { sort = "recent" } = searchParams;
+  const result = await getApps({ sort });
   
   // Safely handle apps, ensuring it's always an array
   const apps = Array.isArray(result.apps) ? result.apps : [];
