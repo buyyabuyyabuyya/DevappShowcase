@@ -5,7 +5,7 @@ make the filter options work or dont (i dont know)-- done
 
 
 
-make the IMAGES of the Featured Applications get them from the MONGODB base64 pictures
+make the IMAGES of the Featured Applications get them from the MONGODB base64 pictures -- done
 
 
 
