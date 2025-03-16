@@ -53,7 +53,7 @@ export async function HeroSection() {
           
           <div className="pt-8 flex justify-center gap-8 sm:gap-16">
             <div className="flex flex-col items-center">
-              <span className="text-3xl font-bold text-foreground">100+</span>
+              <span className="text-3xl font-bold text-foreground">50+</span>
               <span className="text-sm text-muted-foreground">Projects</span>
             </div>
             <div className="flex flex-col items-center">
@@ -61,7 +61,7 @@ export async function HeroSection() {
               <span className="text-sm text-muted-foreground">Visitors</span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-3xl font-bold text-foreground">60+</span>
+              <span className="text-3xl font-bold text-foreground">40+</span>
               <span className="text-sm text-muted-foreground">Pro Developers</span>
             </div>
           </div>
