@@ -18,7 +18,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
 };
-
+//to pus to vercel and make it static
 export const metadata: Metadata = {
   title: "DevApp Showcase",
   description: "Showcase your developer applications and projects",
