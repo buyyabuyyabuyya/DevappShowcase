@@ -3,6 +3,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { getUserProfile } from '@/lib/firestore/users';
+import { DocumentData } from 'firebase/firestore';
+
+interface UserResult {
+  success: boolean;
+  user?: DocumentData;
+  error?: string;
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,18 +22,21 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    const user = await getUserProfile();
+    const result = await getUserProfile() as UserResult;
     
-    if (!user || !user.success) {
+    if (!result || !result.success) {
       return NextResponse.json(
         { isPro: false, message: 'User not found' },
         { status: 404 }
       );
     }
 
+    // At this point we know result.success is true and result.user exists
+    const userData = result.user as DocumentData;
+
     return NextResponse.json({
-      isPro: !!(user.user?.isPro),
-      subscriptionExpiresAt: user.user?.subscriptionExpiresAt || null
+      isPro: !!userData?.isPro,
+      subscriptionExpiresAt: userData?.subscriptionExpiresAt || null
     });
   } catch (error) {
     console.error('Error fetching user status:', error);
