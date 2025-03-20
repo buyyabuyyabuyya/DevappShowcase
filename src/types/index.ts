@@ -1,27 +1,34 @@
-import { Document } from 'mongoose';
+import { Timestamp } from 'firebase/firestore';
 
 export interface App {
+  id?: string;
   iconUrl: any;
-  _id?: string;
-  title: string;
+  name: string;
   description: string;
-  type: 'website' | 'mobile' | 'desktop' | 'extension' | 'api' | 'ai';
+  appType: 'website' | 'mobile' | 'desktop' | 'extension' | 'api' | 'ai';
   url: string;
   images: string[];
   userId: string;
   isPromoted: boolean;
-  promotionEndDate?: Date;
-  createdAt: Date;
+  promotionEndDate?: Timestamp;
+  createdAt: Timestamp;
+  category?: string;
 }
 
-export interface AppDocument extends Document {
-  title: string;
-  description: string;
-  type: 'website' | 'mobile' | 'desktop' | 'extension' | 'api' | 'ai';
-  url: string;
-  images: string[];
+export interface FeedbackEntry {
+  id?: string;
   userId: string;
-  isPromoted: boolean;
-  promotionEndDate?: Date;
-  createdAt: Date;
+  userName: string;
+  userImage?: string;
+  comment: string;
+  createdAt: Timestamp;
+  appId: string;
+}
+
+export interface Rating {
+  appId: string;
+  userId: string;
+  ideaRating: number;
+  productRating: number;
+  createdAt: Timestamp;
 } 
