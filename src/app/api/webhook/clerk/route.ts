@@ -50,6 +50,8 @@ export async function POST(req: Request) {
     };
 
     const response = await createUser(userData);
+    // Add to line 53 near "User created:"
+    console.log('Creating user with data:', JSON.stringify(userData));    
     console.log('User created:', response);
     
     if (!response.success) {

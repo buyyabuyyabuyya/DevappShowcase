@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { getUserByClerkId } from '@/lib/firestore/users';
+import { clerkClient } from '@clerk/nextjs';
+import { createUser } from '@/lib/firestore/users';
 
 export async function GET(request: NextRequest) {
   try {
@@ -25,16 +27,36 @@ export async function GET(request: NextRequest) {
     console.log("User profile response:", user);
     
     if (!user.success) {
-      console.log("Failed to get user profile");
-      return NextResponse.json(
-        { isPro: false, message: 'User not found' },
-        { 
-          status: 404,
-          headers: {
-            'Cache-Control': 'no-store'
-          }
+      console.log("User not found, attempting to create user from Clerk data");
+      try {
+        // Get user data from Clerk
+        const clerkUser = await clerkClient.users.getUser(session.userId);
+        
+        // Create user in Firestore
+        const userData = {
+          clerkId: session.userId,
+          email: clerkUser.emailAddresses[0]?.emailAddress,
+          first_name: clerkUser.firstName,
+          last_name: clerkUser.lastName,
+          image_url: clerkUser.imageUrl
+        };
+        
+        const newUser = await createUser(userData);
+        
+        if (newUser.success) {
+          console.log("Created new user:", newUser.user);
+          return NextResponse.json({
+            isPro: false,
+            subscriptionExpiresAt: null
+          }, {
+            headers: {
+              'Cache-Control': 'private, max-age=30, must-revalidate'
+            }
+          });
         }
-      );
+      } catch (createError) {
+        console.error("Failed to create user:", createError);
+      }
     }
 
     const response = {
