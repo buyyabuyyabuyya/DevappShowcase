@@ -1,12 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
-  Heart, 
   ExternalLink, 
   Github, 
   Youtube, 
@@ -14,9 +13,10 @@ import {
   Trash2, 
   Star,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Heart
 } from "lucide-react";
-import { deleteApp, likeApp, togglePromoteApp } from "@/lib/actions/apps";
+import { deleteApp, likeApp, togglePromoteApp } from "@/lib/firestore/apps";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import { 
@@ -31,9 +31,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { RatingSection } from "./rating-section";
-import { rateApp } from "@/lib/actions/ratings";
+import { rateApp } from "@/lib/firestore/ratings";
 import { FeedbackSection } from "./feedback-section";
 import { PromotionCard } from "./promotion-card";
+import { doc, updateDoc, increment, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { auth } from "@clerk/nextjs/server";
 
 interface AppDetailViewProps {
   app: any;
@@ -85,72 +88,80 @@ export function AppDetailView({ app, isOwner, isProUser }: AppDetailViewProps) {
 
   async function handleLike() {
     try {
-      const result = await likeApp(app._id);
-      if (result.success) {
-        setIsLiked(result.isLiked);
-        setLikeCount(result.count);
-        toast({
-          title: result.isLiked ? "Liked" : "Unliked",
-          description: result.isLiked ? "You've liked this app" : "You've unliked this app",
-        });
+      const result = await likeApp(app.id);
+      
+      if (!result.success) {
+        throw new Error(result.error);
       }
-    } catch (error: any) {
+      
+      setIsLiked(result.isLiked || false);
+      setLikeCount(result.count);
+      
       toast({
-        title: "Error",
-        description: error.message || "Failed to like app",
+        title: "Success",
+        description: result.isLiked ? "You've liked this app" : "You've unliked this app",
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
         variant: "destructive",
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to like app",
       });
     }
   }
 
   async function handlePromote() {
     try {
-      await togglePromoteApp(app._id);
+      const result = await togglePromoteApp(app.id);
+      
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+      
+      // Toggle local state
       app.isPromoted = !app.isPromoted;
+      
       toast({
         title: "Success",
-        description: app.isPromoted 
-          ? "App promoted successfully" 
+        description: app.isPromoted
+          ? "App promoted successfully"
           : "App removed from promotion",
       });
+      
       router.refresh();
     } catch (error) {
+      console.error(error);
       toast({
-        title: "Error",
-        description: "Failed to update promotion status",
         variant: "destructive",
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to update promotion status",
       });
     }
   }
 
   const handleRatingChange = async (type: 'idea' | 'product', rating: number) => {
     try {
-      const result = await rateApp({ 
-        appId: app._id, 
-        type, 
-        rating 
+      const result = await rateApp({
+        appId: app.id,
+        ideaRating: type === 'idea' ? rating : 0,
+        productRating: type === 'product' ? rating : 0,
+        provideFeedback: false
       });
-      
+
       if (!result.success) {
-        toast({
-          title: "Error",
-          description: "Failed to update rating",
-          variant: "destructive",
-        });
-        return;
+        throw new Error(result.error);
       }
 
       toast({
-        title: "Success",
-        description: "Rating updated successfully",
+        title: "Rating submitted",
+        description: "Thank you for your feedback!",
       });
-
     } catch (error) {
-      console.error('Error updating rating:', error);
       toast({
-        title: "Error",
-        description: "Failed to update rating",
         variant: "destructive",
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to submit rating",
       });
     }
   };

@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createApp } from "@/lib/actions/apps";
+import { createApp } from "@/lib/firestore/apps";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { appTypes, categories, pricingTypes, PRO_SUBSCRIPTION } from "@/lib/constants";
@@ -34,7 +34,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { APP_LIMITS } from "@/lib/constants";
 import { PromoteAppSection } from "@/components/dashboard/promote-app-section";
 import { useToast } from "@/components/ui/use-toast";
-import { getUserProfile } from "@/lib/actions/users";
+import { getUserProfile } from "@/lib/firestore/users";
 import Link from "next/link";
 import { useProStatus } from "@/context/pro-status-provider";
 

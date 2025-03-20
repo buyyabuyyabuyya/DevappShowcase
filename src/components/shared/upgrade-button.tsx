@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
-import { upgradeToProUser } from "@/lib/actions/users";
+import { upgradeToProUser } from "@/lib/firestore/users";
 import { useProStatus } from "@/context/pro-status-provider";
 
 // Direct Stripe URL as fallback
@@ -39,16 +39,11 @@ export function UpgradeButton({
 
     setIsLoading(true);
     try {
-      const result = await upgradeToProUser();
-      if (result.success && result.url) {
-        window.location.href = result.url;
-      } else {
-        // Fallback to direct URL
-        window.location.href = STRIPE_URL;
-      }
+      // Just use the direct Stripe URL instead of the upgradeToProUser function
+      // which requires a userId and doesn't return a URL
+      window.location.href = STRIPE_URL;
     } catch (error) {
       console.error("Failed to create checkout session:", error);
-      // Fallback to direct URL
       window.location.href = STRIPE_URL;
     } finally {
       setIsLoading(false);

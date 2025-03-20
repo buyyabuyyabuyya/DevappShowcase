@@ -1,5 +1,5 @@
 import { ProStatusProvider } from "@/context/pro-status-provider";
-import { getUserStatus } from "@/lib/actions/users";
+import { getUserStatus } from "@/lib/firestore/users";
 
 export default async function DashboardLayout({
   children,

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Star } from "lucide-react";
-import { rateApp, provideFeedback } from "@/lib/actions/ratings";
+import { rateApp as firestoreRateApp, provideFeedback as firestoreProvideFeedback } from "@/lib/firestore/ratings";
 import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -72,13 +72,21 @@ export function RatingSection({ appId, ratings: initialRatings, onRatingChange }
         };
       });
 
-      const result = await rateApp({ appId, type, rating });
+      // Convert to the format expected by Firestore implementation
+      const result = await firestoreRateApp({
+        appId,
+        ideaRating: type === 'idea' ? rating : 0,
+        productRating: type === 'product' ? rating : 0,
+        provideFeedback: false
+      });
       
       if (result.success) {
         toast({
           title: "Rating updated",
           description: "Thank you for your feedback!"
         });
+      } else {
+        throw new Error(result.error);
       }
     } catch (error: any) {
       // Revert optimistic updates
@@ -107,7 +115,7 @@ export function RatingSection({ appId, ratings: initialRatings, onRatingChange }
         }
       }));
 
-      await provideFeedback({ appId, comment: "" });
+      await firestoreProvideFeedback({ appId, comment: "" });
                             
       toast({
         title: "Feedback recorded", 

@@ -5,12 +5,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Sparkles, Check, X } from "lucide-react";
 import { PRO_SUBSCRIPTION } from "@/lib/constants";
-import { upgradeToProUser, promoteApp } from "@/lib/actions/users";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { UpgradeButton } from "@/components/shared/upgrade-button";
 import { useProStatus } from "@/context/pro-status-provider";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { auth } from "@clerk/nextjs/server";
 
 // Direct Stripe URL
 const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
@@ -28,28 +30,42 @@ export function PromotionCard({ appId, isProUser = false, isAppPromoted = false 
   
   // Use isPro from context, falling back to isProUser prop
   const userIsPro = isPro || isProUser;
-
+  
   // If user is Pro, all apps are automatically promoted
   if (userIsPro) return null;
-  
+
   const handlePromoteClick = async () => {
-    setIsLoading(true);
     try {
-      const result = await promoteApp(appId);
-      if (result.success) {
+      setIsLoading(true);
+      
+      const { userId } = auth();
+      if (!userId) {
         toast({
-          title: "Success",
-          description: "Your app is now promoted! It will appear at the top of search results.",
+          variant: "destructive",
+          title: "Authentication required",
+          description: "Please sign in to promote apps",
         });
-        router.refresh();
-      } else {
-        throw new Error(result.error);
+        return;
       }
-    } catch (error: any) {
+
+      // Update the promotion status
+      const appRef = doc(db, 'apps', appId);
+      await updateDoc(appRef, {
+        isPromoted: true
+      });
+      
       toast({
-        title: "Error",
-        description: error.message || "Failed to promote app",
+        title: "Success",
+        description: "Your app is now promoted! It will appear at the top of search results.",
+      });
+      
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      toast({
         variant: "destructive",
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to promote app",
       });
     } finally {
       setIsLoading(false);

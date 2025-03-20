@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
 import { auth } from "@clerk/nextjs/server";
-import { getUserById } from "@/lib/actions/users";
+import { getUserById } from "@/lib/firestore/users";
 
 // Use the same Stripe URL defined elsewhere in your app
 const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
@@ -17,7 +17,7 @@ export async function HeroSection() {
   // If user is authenticated, check their Pro status
   if (userId) {
     const { user } = await getUserById(userId);
-    isPro = user?.isPro || false;
+    isPro = (user as any)?.isPro || false;
   }
 
   return (

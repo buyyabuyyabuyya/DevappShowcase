@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { updateApp } from "@/lib/actions/apps";
+import { updateApp } from "@/lib/firestore/apps";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { appTypes, categories, APP_LIMITS } from "@/lib/constants";

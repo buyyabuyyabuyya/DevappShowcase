@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { AppFilters } from "@/components/apps/app-filters";
-import { getApps } from "@/lib/actions/apps";
+import { getApps } from "@/lib/firestore/apps";
 import { AppCategorySection } from "@/components/apps/app-category-section";
 import { cn } from "@/lib/utils";
 import { HeroSection } from "@/components/home/hero-section";

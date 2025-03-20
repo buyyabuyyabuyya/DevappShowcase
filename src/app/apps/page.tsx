@@ -1,4 +1,4 @@
-import { getApps } from "@/lib/actions/apps";
+import { getApps } from "@/lib/firestore/apps";
 import { AppGrid } from "@/components/apps/app-grid";
 import { AppFilters } from "@/components/apps/app-filters";
 
@@ -15,10 +15,11 @@ export default async function AppsPage({ searchParams }: AppsPageProps) {
   const { type, featured, category, search } = searchParams;
   
   // Get all apps
-  const { apps } = await getApps();
+  const response = await getApps();
+  const apps = response.success ? response.apps || [] : [];
   
   // Filter apps based on URL parameters
-  let filteredApps = [...apps];
+  let filteredApps = [...apps] as any[];
   
   if (type) {
     filteredApps = filteredApps.filter(app => app.appType === type);

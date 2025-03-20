@@ -1,76 +1,64 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Stripe } from "stripe";
-import connectDB from "@/lib/db";
-import { User } from "@/models/User";
-import { handleProSubscription, promoteAllUserApps, updateUserSubscriptionStatus } from "@/lib/actions/users";
+import Stripe from "stripe";
+import { updateUserSubscriptionStatus } from "@/lib/firestore/users";
 import { headers } from 'next/headers';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2023-10-16",
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 export async function POST(req: Request) {
   try {
     const body = await req.text();
-    const signature = headers().get("stripe-signature");
+    const signature = req.headers.get('stripe-signature')!;
 
-    console.log("Webhook received with signature:", signature);
+    if (!signature) {
+      return NextResponse.json(
+        { error: "Stripe signature missing" },
+        { status: 400 }
+      );
+    }
 
     let event: Stripe.Event;
 
     try {
       event = stripe.webhooks.constructEvent(
         body,
-        signature || "",
-        webhookSecret
+        signature,
+        webhookSecret!
       );
-    } catch (err) {
-      console.error("Webhook signature verification failed:", err);
+    } catch (err: any) {
+      console.error(`Webhook signature verification failed: ${err.message}`);
       return NextResponse.json(
-        { error: "Webhook signature verification failed" },
+        { error: `Webhook signature verification failed` },
         { status: 400 }
       );
     }
 
-    console.log("Processing webhook event:", event.type);
+    console.log(`Stripe webhook received: ${event.type}`);
 
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
         console.log("Checkout session completed:", {
-          customerEmail: session.customer_details?.email,
           customerId: session.customer,
-          subscriptionId: session.subscription,
+          mode: session.mode,
         });
 
-        if (!session.customer || !session.subscription) {
-          console.error("Missing customer or subscription ID");
-          return NextResponse.json(
-            { error: "Missing customer or subscription ID" },
-            { status: 400 }
+        if (session.mode === "subscription" && session.subscription) {
+          const subscription = await stripe.subscriptions.retrieve(
+            session.subscription as string
           );
+
+          const result = await updateUserSubscriptionStatus({
+            stripeCustomerId: session.customer as string,
+            isActive: subscription.status === "active",
+            subscriptionId: subscription.id,
+            currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+          });
+
+          console.log("Subscription created:", result);
         }
-
-        // Get subscription details
-        const subscription = await stripe.subscriptions.retrieve(
-          session.subscription as string
-        );
-        console.log("Subscription details:", {
-          status: subscription.status,
-          currentPeriodEnd: new Date(subscription.current_period_end * 1000).toISOString(),
-        });
-
-        await connectDB();
-        const result = await updateUserSubscriptionStatus({
-          stripeCustomerId: session.customer as string,
-          isActive: subscription.status === "active",
-          subscriptionId: subscription.id,
-          currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-        });
-
-        console.log("Update result:", result);
         break;
       }
 
@@ -82,7 +70,6 @@ export async function POST(req: Request) {
           currentPeriodEnd: new Date(subscription.current_period_end * 1000).toISOString(),
         });
 
-        await connectDB();
         const result = await updateUserSubscriptionStatus({
           stripeCustomerId: subscription.customer as string,
           isActive: subscription.status === "active",
@@ -101,12 +88,11 @@ export async function POST(req: Request) {
           status: subscription.status,
         });
 
-        await connectDB();
         const result = await updateUserSubscriptionStatus({
           stripeCustomerId: subscription.customer as string,
           isActive: false,
-          subscriptionId: null,
-          currentPeriodEnd: null,
+          subscriptionId: "",
+          currentPeriodEnd: new Date(),
         });
 
         console.log("Update result:", result);

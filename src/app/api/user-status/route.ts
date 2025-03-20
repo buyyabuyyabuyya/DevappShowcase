@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { getUserProfile } from '@/lib/actions/users';
+import { getUserByClerkId } from '@/lib/firestore/users';
 
 export async function GET(request: NextRequest) {
   try {
@@ -21,10 +21,10 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    const user = await getUserProfile();
+    const user = await getUserByClerkId(session.userId);
     console.log("User profile response:", user);
     
-    if (!user || !user.success) {
+    if (!user.success) {
       console.log("Failed to get user profile");
       return NextResponse.json(
         { isPro: false, message: 'User not found' },
@@ -38,8 +38,8 @@ export async function GET(request: NextRequest) {
     }
 
     const response = {
-      isPro: !!(user.user?.isPro),
-      subscriptionExpiresAt: user.user?.subscriptionExpiresAt || null
+      isPro: user.user?.isPro ?? false,
+      subscriptionExpiresAt: user.user?.subscriptionExpiresAt ?? null
     };
     console.log("Sending response:", response);
     

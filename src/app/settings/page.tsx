@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { getUserProfile } from "@/lib/actions/users";
+import { getUserProfile } from "@/lib/firestore/users";
 
 export default async function SettingsPage() {
   const { refreshProStatus, isPro } = useProStatus();

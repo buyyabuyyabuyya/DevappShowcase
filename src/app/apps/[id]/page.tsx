@@ -1,35 +1,35 @@
 import { auth } from "@clerk/nextjs/server";
 import { DashboardShell } from "@/components/dashboard/shell";
-import { App } from "@/models/App";
-import { User } from "@/models/User";
-import connectDB from "@/lib/db";
+import { getAppById } from "@/lib/firestore/apps";
+import { getUserByClerkId } from "@/lib/firestore/users";
 import { AppDetailView } from "@/components/apps/app-detail-view";
 import { notFound } from "next/navigation";
 
 export default async function AppDetailPage({ params }: { params: { id: string } }) {
-  await connectDB();
-  const app = await App?.findById(params.id);
+  const appResponse = await getAppById(params.id);
   
-  if (!app) {
+  if (!appResponse.success || !appResponse.app) {
     notFound();
   }
 
+  const app = appResponse.app as any; // Type assertion to handle different data structure
   const session = await auth();
   const userId = session?.userId;
-  const isOwner = userId === app.userId;
+  // Check ownership safely
+  const isOwner = !!userId && userId === app.userId;
 
   // Get user's pro status
   let isProUser = false;
   if (userId) {
-    const userProfile = await User.findOne({ clerkId: userId });
-    isProUser = userProfile?.isPro ?? false;
+    const userResponse = await getUserByClerkId(userId);
+    isProUser = userResponse.success ? userResponse.user?.isPro ?? false : false;
   }
 
   return (
     <DashboardShell>
       <div className="mx-auto max-w-4xl">
         <AppDetailView 
-          app={JSON.parse(JSON.stringify(app))} 
+          app={app}
           isOwner={isOwner} 
           isProUser={isProUser}
         />

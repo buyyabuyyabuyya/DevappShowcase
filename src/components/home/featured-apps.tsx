@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Code, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { getApps } from "@/lib/actions/apps";
+import { getApps } from "@/lib/firestore/apps";
 
 // Fallback placeholder apps when no promoted apps exist yet
 const placeholderApps = [
@@ -35,10 +35,10 @@ const placeholderApps = [
 export async function FeaturedApps() {
   // Fetch all apps
   const result = await getApps();
-  const apps = Array.isArray(result.apps) ? result.apps : [];
+  const apps = result.success && Array.isArray(result.apps) ? result.apps : [];
   
-  // Filter for promoted apps
-  const promotedApps = apps.filter(app => app.isPromoted);
+  // Filter for promoted apps - using type assertion to handle Firestore data
+  const promotedApps = apps.filter(app => (app as any).isPromoted);
   
   // Use real promoted apps if available, otherwise fallback to placeholders
   const displayApps = promotedApps.length > 0 ? 
@@ -54,51 +54,55 @@ export async function FeaturedApps() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {displayApps.map((app, index) => (
-            <Card key={index} className="overflow-hidden flex flex-col h-full">
-              <div className="h-40 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 relative">
-                {app.isPromoted && (
-                  <div className="absolute top-2 right-2 bg-amber-400 text-amber-950 text-xs font-semibold px-2 py-0.5 rounded-full flex items-center">
-                    <Sparkles className="h-3 w-3 mr-1" />
-                    Featured
-                  </div>
-                )}
-                
-                {app.iconUrl ? (
-                  <div className="absolute inset-0 flex items-center justify-center p-4">
-                    <Image
-                      src={app.iconUrl}
-                      alt={app.name}
-                      width={100}
-                      height={100}
-                      className="object-contain max-h-32"
-                    />
-                  </div>
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-white text-4xl">
-                    &lt; &gt;
-                  </div>
-                )}
-              </div>
-              <CardContent className="flex-1 flex flex-col pt-6">
-                <div className="flex items-center justify-between">
-                  <Badge variant="outline" className="capitalize">{app.appType}</Badge>
+          {displayApps.map((app, index) => {
+            // Safely access properties with type assertion
+            const appData = app as any;
+            return (
+              <Card key={index} className="overflow-hidden flex flex-col h-full">
+                <div className="h-40 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 relative">
+                  {appData.isPromoted && (
+                    <div className="absolute top-2 right-2 bg-amber-400 text-amber-950 text-xs font-semibold px-2 py-0.5 rounded-full flex items-center">
+                      <Sparkles className="h-3 w-3 mr-1" />
+                      Featured
+                    </div>
+                  )}
+                  
+                  {appData.iconUrl ? (
+                    <div className="absolute inset-0 flex items-center justify-center p-4">
+                      <Image
+                        src={appData.iconUrl}
+                        alt={appData.name}
+                        width={100}
+                        height={100}
+                        className="object-contain max-h-32"
+                      />
+                    </div>
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-white text-4xl">
+                      &lt; &gt;
+                    </div>
+                  )}
                 </div>
-                <h3 className="font-semibold text-xl mt-2">{app.name}</h3>
-                <p className="text-muted-foreground text-sm mt-1 flex-1">
-                  {app.description?.substring(0, 120)}
-                  {app.description?.length > 120 ? '...' : ''}
-                </p>
-                <div className="mt-4">
-                  <Button variant="outline" className="w-full" asChild>
-                    <Link href={`/apps/${app._id}`}>
-                      View Details
-                    </Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                <CardContent className="flex-1 flex flex-col pt-6">
+                  <div className="flex items-center justify-between">
+                    <Badge variant="outline" className="capitalize">{appData.appType}</Badge>
+                  </div>
+                  <h3 className="font-semibold text-xl mt-2">{appData.name}</h3>
+                  <p className="text-muted-foreground text-sm mt-1 flex-1">
+                    {appData.description?.substring(0, 120)}
+                    {appData.description?.length > 120 ? '...' : ''}
+                  </p>
+                  <div className="mt-4">
+                    <Button variant="outline" className="w-full" asChild>
+                      <Link href={`/apps/${appData.id || appData._id}`}>
+                        View Details
+                      </Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          })}
         </div>
         
         <div className="mt-10 text-center">

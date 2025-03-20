@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useDebounce } from "@/lib/hooks/use-debounce";
-import { searchApps } from "@/lib/actions/apps";
+import { searchApps } from "@/lib/firestore/apps";
 
 interface SearchSuggestionsProps {
   searchTerm: string;
@@ -54,9 +54,9 @@ export function SearchSuggestions({
         <>
           <ul className="max-h-[400px] overflow-y-auto">
             {results.map((app) => (
-              <li key={app._id}>
+              <li key={app.id}>
                 <Link 
-                  href={`/apps/${app._id}`}
+                  href={`/apps/${app.id}`}
                   className="flex items-center gap-3 p-3 hover:bg-muted transition-colors"
                   onClick={onSelect}
                 >

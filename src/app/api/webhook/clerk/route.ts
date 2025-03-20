@@ -1,7 +1,7 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
-import { createUser, updateUser, deleteUser } from '@/lib/actions/users';
+import { createUser, updateUser, deleteUser } from '@/lib/firestore/users';
 
 export async function POST(req: Request) {
   // Get the headers
@@ -34,51 +34,61 @@ export async function POST(req: Request) {
     return new Response('Error verifying webhook', { status: 400 });
   }
 
-  // Handle different webhook events
-  try {
-    switch (evt.type) {
-      case 'user.created':
-        const { id, email_addresses, ...attributes } = evt.data;
-        await createUser({
-          clerkId: id,
-          email: email_addresses[0]?.email_address,
-          ...attributes
-        });
-        break;
+  // Handle the webhook event
+  const eventType = evt.type;
+  console.log(`Webhook received: ${eventType}`);
 
-      case 'user.updated':
-        await updateUser(evt.data.id, {
-          email: evt.data.email_addresses[0]?.email_address,
-          ...evt.data
-        });
-        break;
+  if (eventType === "user.created") {
+    const { id, email_addresses, first_name, last_name, image_url } = evt.data;
+    
+    const userData = {
+      clerkId: id,
+      email: email_addresses[0]?.email_address,
+      first_name,
+      last_name,
+      image_url
+    };
 
-      case 'user.deleted':
-        await deleteUser(evt.data.id || '');
-        break;
-
-      case 'session.created':
-        // Log session creation or handle as needed
-        console.log('New session created:', evt.data.id);
-        break;
-
-      case 'session.ended':
-        // Log session end or handle as needed
-        console.log('Session ended:', evt.data.id);
-        break;
-
-      case 'organization.created':
-        // Handle organization creation
-        console.log('Organization created:', evt.data);
-        break;
-
-      default:
-        console.log('Unhandled webhook event type:', evt.type);
+    const response = await createUser(userData);
+    console.log('User created:', response);
+    
+    if (!response.success) {
+      return new Response('Error creating user', { status: 500 });
     }
-
-    return new Response('Webhook processed successfully', { status: 200 });
-  } catch (error) {
-    console.error('Error processing webhook:', error);
-    return new Response('Webhook processing failed', { status: 500 });
   }
+
+  if (eventType === "user.updated") {
+    const { id, email_addresses, first_name, last_name, image_url } = evt.data;
+    
+    const userData = {
+      email: email_addresses[0]?.email_address,
+      first_name,
+      last_name,
+      image_url
+    };
+
+    const response = await updateUser(id, userData);
+    console.log('User updated:', response);
+    
+    if (!response.success) {
+      return new Response('Error updating user', { status: 500 });
+    }
+  }
+
+  if (eventType === "user.deleted") {
+    const { id } = evt.data;
+    
+    if (!id) {
+      return new Response('User ID is required', { status: 400 });
+    }
+    
+    const response = await deleteUser(id);
+    console.log('User deleted:', response);
+    
+    if (!response.success) {
+      return new Response('Error deleting user', { status: 500 });
+    }
+  }
+
+  return new Response('Webhook processed successfully', { status: 200 });
 } 

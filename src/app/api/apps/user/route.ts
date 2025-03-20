@@ -1,7 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { App } from "@/models/App";
-import connectDB from "@/lib/db";
+import { getUserApps } from "@/lib/firestore/apps";
 
 export async function GET() {
   const { userId } = auth();
@@ -11,11 +10,20 @@ export async function GET() {
   }
 
   try {
-    await connectDB();
-    const apps = await App?.find({ userId }).sort({ createdAt: -1 });
-    return NextResponse.json(apps);
+    const response = await getUserApps(userId);
+    if (!response.success) {
+      return NextResponse.json(
+        { error: response.error }, 
+        { status: 500 }
+      );
+    }
+    
+    return NextResponse.json(response.apps);
   } catch (error) {
     console.error('Error fetching user apps:', error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" }, 
+      { status: 500 }
+    );
   }
 } 

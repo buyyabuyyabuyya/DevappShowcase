@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@clerk/nextjs";
-import { provideFeedback } from "@/lib/actions/ratings";
+import { provideFeedback as firestoreProvideFeedback } from "@/lib/firestore/ratings";
 import { toast } from "@/components/ui/use-toast";
 import { formatDistanceToNow } from "date-fns";
 
@@ -32,18 +32,19 @@ export function FeedbackSection({ appId, initialFeedback }: FeedbackSectionProps
     
     setIsSubmitting(true);
     try {
-      const result = await provideFeedback({ 
+      const result = await firestoreProvideFeedback({ 
         appId: appId,
         comment: comment
       });
+      
       if (result.success && result.feedbackEntry) {
         setFeedback(prev => [
           {
             userId: result.feedbackEntry.userId,
-            userName: result.feedbackEntry.userName,
-            userImageUrl: result.feedbackEntry.userImageUrl,
+            userName: result.feedbackEntry.userName || 'Anonymous',
+            userImageUrl: result.feedbackEntry.userImage,
             comment: result.feedbackEntry.comment,
-            createdAt: result.feedbackEntry.createdAt.toString()
+            createdAt: new Date().toString() // Fallback to current date if not provided
           },
           ...prev
         ]);
