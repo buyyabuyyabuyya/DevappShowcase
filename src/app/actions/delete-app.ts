@@ -12,8 +12,8 @@ export async function deleteApp(appId: string) {
   }
   
   try {
-    // Call Firestore function with userId
-    const result = await firestoreDeleteApp(appId, userId);
+    // Call Firestore function with just the appId
+    const result = await firestoreDeleteApp(appId);
     
     if (result.success) {
       // Revalidate dashboard
