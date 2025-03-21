@@ -241,7 +241,11 @@ export function ListAppForm() {
       });
       
       setTimeout(() => {
-        router.push("/dashboard");
+        if (result.appId) {
+          router.push(`/apps/${result.appId}`);
+        } else {
+          router.push("/dashboard");
+        }
       }, 500);
     } catch (error) {
       console.error("Form submission error:", error);

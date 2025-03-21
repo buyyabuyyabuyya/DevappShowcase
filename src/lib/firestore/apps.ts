@@ -236,10 +236,12 @@ export async function deleteApp(id: string) {
   }
 }
 
-export async function likeApp(id: string) {
+export async function likeApp(id: string, userId?: string) {
   try {
-    const { userId } = auth();
-    if (!userId) {
+    // Use passed userId or get from auth()
+    const currentUserId = userId || auth()?.userId;
+    
+    if (!currentUserId) {
       return { success: false, error: "Unauthorized" };
     }
 
@@ -256,18 +258,18 @@ export async function likeApp(id: string) {
     const currentCount = appData.likes?.count || 0;
     
     // Check if user already liked this app
-    const isLiked = currentLikes.includes(userId);
+    const isLiked = currentLikes.includes(currentUserId);
     
     // Update likes count and users array
     if (isLiked) {
       await updateDoc(appRef, {
         'likes.count': increment(-1),
-        'likes.users': currentLikes.filter((id: string) => id !== userId)
+        'likes.users': currentLikes.filter((id: string) => id !== currentUserId)
       });
     } else {
       await updateDoc(appRef, {
         'likes.count': increment(1),
-        'likes.users': [...currentLikes, userId]
+        'likes.users': [...currentLikes, currentUserId]
       });
     }
     

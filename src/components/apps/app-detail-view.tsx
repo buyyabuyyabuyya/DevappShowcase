@@ -16,7 +16,10 @@ import {
   ChevronRight,
   Heart
 } from "lucide-react";
-import { deleteApp, likeApp, togglePromoteApp } from "@/lib/firestore/apps";
+import { deleteApp } from "@/app/actions/delete-app";
+import { togglePromoteApp } from "@/app/actions/toggle-promote-app";
+import { rateApp } from "@/app/actions/rate-app";
+import { likeApp } from "@/app/actions/like-app";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import { 
@@ -31,12 +34,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { RatingSection } from "./rating-section";
-import { rateApp } from "@/lib/firestore/ratings";
 import { FeedbackSection } from "./feedback-section";
 import { PromotionCard } from "./promotion-card";
 import { doc, updateDoc, increment, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { auth } from "@clerk/nextjs/server";
 
 interface AppDetailViewProps {
   app: any;
@@ -70,7 +71,10 @@ export function AppDetailView({ app, isOwner, isProUser }: AppDetailViewProps) {
 
   async function handleDelete() {
     try {
-      await deleteApp(app._id);
+      const result = await deleteApp(app.id);
+      if (!result.success) {
+        throw new Error(result.error || "An error occurred");
+      }
       toast({
         title: "Success",
         description: "App deleted successfully",
@@ -119,7 +123,6 @@ export function AppDetailView({ app, isOwner, isProUser }: AppDetailViewProps) {
         throw new Error(result.error);
       }
       
-      // Toggle local state
       app.isPromoted = !app.isPromoted;
       
       toast({
@@ -148,9 +151,8 @@ export function AppDetailView({ app, isOwner, isProUser }: AppDetailViewProps) {
         productRating: type === 'product' ? rating : 0,
         provideFeedback: false
       });
-
       if (!result.success) {
-        throw new Error(result.error);
+        throw new Error(result.error ?? "Unknown error");
       }
 
       toast({
@@ -207,7 +209,7 @@ export function AppDetailView({ app, isOwner, isProUser }: AppDetailViewProps) {
               </Button>
             )}
             <Button variant="outline" asChild>
-              <Link href={`/apps/${app._id}/edit`}>
+              <Link href={`/apps/${app.id}/edit`}>
                 <Edit2 className="w-4 h-4 mr-2" />
                 Edit
               </Link>
@@ -358,21 +360,21 @@ export function AppDetailView({ app, isOwner, isProUser }: AppDetailViewProps) {
 
       {/* Ratings Section - Now below Screenshots */}
       <RatingSection 
-        appId={app._id}
+        appId={app.id}
         ratings={app.ratings}
         onRatingChange={handleRatingChange}
       />
       
       {/* Feedback Section */}
       <FeedbackSection 
-        appId={app._id}
+        appId={app.id}
         initialFeedback={app.feedback || []}
       />
 
       {/* Only show promotion card to the app owner */}
       {isOwner && (
         <PromotionCard 
-          appId={app._id}
+          appId={app.id}
           isProUser={isProUser}
           isAppPromoted={app.isPromoted}
         />

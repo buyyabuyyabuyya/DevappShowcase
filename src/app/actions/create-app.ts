@@ -26,12 +26,12 @@ export async function createApp(formData: FormData | Record<string, any>) {
   if (result.success) {
     revalidatePath('/dashboard');
     
-    // Return a clean serializable object using the correct structure
-    // Extract only what we need from the app object
+    // Return a clean serializable object with the app ID
+    // This is critical for navigation to the app details page
     return { 
-      success: true,
-      // Don't return the actual app object which might contain non-serializable data
-      // Just indicate success
+      success: true, 
+      // Extract the ID from the app object but don't pass the non-serializable Firestore data
+      appId: result.app?.id || null
     };
   }
   

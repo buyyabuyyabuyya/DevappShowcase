@@ -10,9 +10,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { UpgradeButton } from "@/components/shared/upgrade-button";
 import { useProStatus } from "@/context/pro-status-provider";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { auth } from "@clerk/nextjs/server";
+import { togglePromoteApp } from "@/app/actions/toggle-promote-app";
 
 // Direct Stripe URL
 const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
@@ -38,21 +36,12 @@ export function PromotionCard({ appId, isProUser = false, isAppPromoted = false 
     try {
       setIsLoading(true);
       
-      const { userId } = auth();
-      if (!userId) {
-        toast({
-          variant: "destructive",
-          title: "Authentication required",
-          description: "Please sign in to promote apps",
-        });
-        return;
+      // Use the server action instead of direct Firestore operations
+      const result = await togglePromoteApp(appId);
+      
+      if (!result.success) {
+        throw new Error(result.error);
       }
-
-      // Update the promotion status
-      const appRef = doc(db, 'apps', appId);
-      await updateDoc(appRef, {
-        isPromoted: true
-      });
       
       toast({
         title: "Success",

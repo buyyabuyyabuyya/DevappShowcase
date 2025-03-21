@@ -6,9 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@clerk/nextjs";
-import { provideFeedback as firestoreProvideFeedback } from "@/lib/firestore/ratings";
 import { toast } from "@/components/ui/use-toast";
 import { formatDistanceToNow } from "date-fns";
+import { provideFeedback } from "@/app/actions/provide-feedback";
 
 interface FeedbackSectionProps {
   appId: string;
@@ -32,7 +32,7 @@ export function FeedbackSection({ appId, initialFeedback }: FeedbackSectionProps
     
     setIsSubmitting(true);
     try {
-      const result = await firestoreProvideFeedback({ 
+      const result = await provideFeedback({ 
         appId: appId,
         comment: comment
       });
@@ -40,11 +40,11 @@ export function FeedbackSection({ appId, initialFeedback }: FeedbackSectionProps
       if (result.success && result.feedbackEntry) {
         setFeedback(prev => [
           {
-            userId: result.feedbackEntry.userId,
-            userName: result.feedbackEntry.userName || 'Anonymous',
-            userImageUrl: result.feedbackEntry.userImage,
-            comment: result.feedbackEntry.comment,
-            createdAt: new Date().toString() // Fallback to current date if not provided
+            userId: result.feedbackEntry?.userId || '',
+            userName: result.feedbackEntry?.userName || 'Anonymous',
+            userImageUrl: result.feedbackEntry?.userImage || '',
+            comment: result.feedbackEntry?.comment || '',
+            createdAt: result.feedbackEntry?.createdAt || new Date().toISOString()
           },
           ...prev
         ]);
@@ -54,7 +54,7 @@ export function FeedbackSection({ appId, initialFeedback }: FeedbackSectionProps
           description: "Your feedback has been submitted",
         });
       } else {
-        throw new Error(result.error);
+        throw new Error(result.error || "An error occurred");
       }
     } catch (error: any) {
       toast({
