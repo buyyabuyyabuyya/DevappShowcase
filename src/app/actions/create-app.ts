@@ -25,7 +25,19 @@ export async function createApp(formData: FormData | Record<string, any>) {
   
   if (result.success) {
     revalidatePath('/dashboard');
+    
+    // Return a clean serializable object using the correct structure
+    // Extract only what we need from the app object
+    return { 
+      success: true,
+      // Don't return the actual app object which might contain non-serializable data
+      // Just indicate success
+    };
   }
   
-  return result;
+  // For error cases, return as is (already serializable)
+  return { 
+    success: false, 
+    error: typeof result.error === 'string' ? result.error : "An unexpected error occurred" 
+  };
 }
