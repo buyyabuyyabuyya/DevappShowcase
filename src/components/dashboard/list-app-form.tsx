@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createApp } from "@/lib/firestore/apps";
+import { createApp } from "@/app/actions/create-app";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { appTypes, categories, pricingTypes, PRO_SUBSCRIPTION } from "@/lib/constants";
@@ -212,11 +212,11 @@ export function ListAppForm() {
       };
       
       console.log("Sending data to createApp:", formData);
-      const response = await createApp(formData);
-      console.log("Received response:", response);
+      const result = await createApp(formData);
+      console.log("Received response:", result);
       
-      if (!response.success) {
-        if (response.error === 'MAX_APPS_REACHED') {
+      if (!result.success) {
+        if (result.error === 'MAX_APPS_REACHED') {
           toast({
             title: "Free Plan Limit Reached (3 Apps)",
             description: "You've reached the maximum of 3 apps on the Free plan. Upgrade to Pro for unlimited app listings.",
@@ -232,7 +232,7 @@ export function ListAppForm() {
           });
           return;
         }
-        throw new Error(response.error);
+        throw new Error(result.error || "Failed to create app");
       }
       
       toast({
