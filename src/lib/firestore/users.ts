@@ -54,18 +54,17 @@ export async function createUser(userData: any) {
     // Create new user
     const userDoc = {
       clerkId: userData.clerkId,
-      email: userData.email,
-      firstName: userData.first_name || userData.firstName,
-      lastName: userData.last_name || userData.lastName,
-      imageUrl: userData.image_url || userData.imageUrl,
-      isPro: userData.isPro || false,
-      appCount: userData.appCount || 0,
+      email: userData.email || null,
+      firstName: (userData.first_name || userData.firstName || null),
+      lastName: (userData.last_name || userData.lastName || null),
+      imageUrl: (userData.image_url || userData.imageUrl || null),
+      isPro: false,
+      appCount: 0,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-      stripeCustomerId: userData.stripeCustomerId || null,
-      subscriptionExpiresAt: userData.subscriptionExpiresAt ? 
-        Timestamp.fromDate(new Date(userData.subscriptionExpiresAt)) : null,
-      subscriptionId: userData.subscriptionId || null
+      stripeCustomerId: null,
+      subscriptionExpiresAt: null,
+      subscriptionId: null
     };
     
     await setDoc(doc(db, 'users', userData.clerkId), userDoc);

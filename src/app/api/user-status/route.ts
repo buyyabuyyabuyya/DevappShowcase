@@ -35,10 +35,10 @@ export async function GET(request: NextRequest) {
         // Create user in Firestore
         const userData = {
           clerkId: session.userId,
-          email: clerkUser.emailAddresses[0]?.emailAddress,
-          first_name: clerkUser.firstName,
-          last_name: clerkUser.lastName,
-          image_url: clerkUser.imageUrl
+          email: clerkUser.emailAddresses[0]?.emailAddress || null,
+          first_name: clerkUser.firstName || null,
+          last_name: clerkUser.lastName || null,
+          image_url: clerkUser.imageUrl || null
         };
         
         const newUser = await createUser(userData);

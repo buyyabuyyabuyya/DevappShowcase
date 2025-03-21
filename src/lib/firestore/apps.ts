@@ -74,23 +74,25 @@ export async function getUserApps(userId: string) {
   }
 }
 
-export async function createApp(formData: any) {
+export async function createApp(formData: any, userId?: string) {
   console.log('Server action createApp started', { formData });
   
-  const { userId } = auth();
-  if (!userId) {
+  // Allow userId to be passed as parameter for server-side calls
+  const currentUserId = userId || auth()?.userId;
+  
+  if (!currentUserId) {
     return { success: false, error: "Unauthorized" };
   }
 
   try {
     // Get user profile and check pro status
-    const { success, user } = await getUserByClerkId(userId);
+    const { success, user } = await getUserByClerkId(currentUserId);
     if (!success || !user) {
       return { success: false, error: "Failed to get user profile" };
     }
     
     // Check app limit
-    const userApps = await getUserApps(userId);
+    const userApps = await getUserApps(currentUserId);
     const appCount = userApps.success && userApps.apps ? userApps.apps.length : 0;
     const maxApps = user.isPro ? APP_LIMITS.PRO_USER.MAX_APPS : APP_LIMITS.FREE_USER.MAX_APPS;
 
@@ -112,7 +114,7 @@ export async function createApp(formData: any) {
     
     const appData = {
       ...formData,
-      userId,
+      userId: currentUserId,
       likes: {
         count: 0,
         users: []
@@ -139,7 +141,7 @@ export async function createApp(formData: any) {
     const appRef = await addDoc(collection(db, 'apps'), appData);
     
     // Update user's app count
-    const userRef = doc(db, 'users', userId);
+    const userRef = doc(db, 'users', currentUserId);
     await updateDoc(userRef, {
       appCount: increment(1),
       updatedAt: serverTimestamp()
