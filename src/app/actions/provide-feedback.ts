@@ -3,6 +3,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { provideFeedback as firestoreProvideFeedback } from "@/lib/firestore/ratings";
 import { revalidatePath } from "next/cache";
+import { Timestamp } from "firebase/firestore";
 
 export async function provideFeedback({ 
   appId, 
@@ -25,7 +26,7 @@ export async function provideFeedback({
       revalidatePath(`/apps/${appId}`);
     }
     
-    // Return a serializable result (without Firestore timestamps)
+    // Return a serializable result with more accurate timestamp processing
     return { 
       success: result.success,
       error: result.error || null,
@@ -36,8 +37,11 @@ export async function provideFeedback({
         userName: result.feedbackEntry.userName || '',
         userImage: result.feedbackEntry.userImage || '',
         comment: result.feedbackEntry.comment || '',
-        // Convert timestamp to string to make it serializable
-        createdAt: new Date().toISOString()
+        // Convert the Firestore timestamp to ISO string if it exists
+        createdAt: result.feedbackEntry.createdAt && 
+                  typeof result.feedbackEntry.createdAt.toDate === 'function' ? 
+                  result.feedbackEntry.createdAt.toDate().toISOString() : 
+                  new Date().toISOString()
       } : null
     };
   } catch (error) {

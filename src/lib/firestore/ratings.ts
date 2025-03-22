@@ -43,13 +43,13 @@ export async function rateApp({
       return { success: false, error: "You have already rated this app" };
     }
     
-    // Create user rating object
+    // Create user rating object with Timestamp.now() instead of serverTimestamp()
     const userRating = {
       userId,
       idea: ideaRating,
       product: productRating,
       feedback: provideFeedback,
-      createdAt: serverTimestamp()
+      createdAt: Timestamp.now()
     };
     
     // Update ratings in app document
@@ -71,12 +71,12 @@ export async function rateApp({
   }
 }
 
-export async function provideFeedback({ 
-  appId, 
-  comment 
-}: { 
-  appId: string; 
-  comment: string 
+export async function provideFeedback({
+  appId,
+  comment
+}: {
+  appId: string;
+  comment: string;
 }) {
   const { userId } = auth();
   if (!userId) {
@@ -100,14 +100,21 @@ export async function provideFeedback({
     
     const user = userResponse.user;
     
+    // Extract username from email if available
+    let userName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+    if (!userName && user.email) {
+      // Extract username part from email (before the @)
+      userName = user.email.split('@')[0];
+    }
+    
     // Create feedback entry
     const feedbackEntry = {
       userId,
       appId,
-      userName: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+      userName: userName || 'Anonymous', // Use extracted name or fallback
       userImage: user.imageUrl || '',
       comment,
-      createdAt: serverTimestamp()
+      createdAt: Timestamp.now() // Use Timestamp.now() instead of serverTimestamp()
     };
     
     // Add to feedback collection
