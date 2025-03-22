@@ -171,21 +171,24 @@ export async function createApp(formData: any, userId?: string) {
   }
 }
 
-export async function updateApp(id: string, formData: any) {
+export async function updateApp(id: string, formData: any, userId?: string) {
   try {
-    const { userId } = auth();
-    if (!userId) {
+    // Allow userId to be passed as parameter for client-side calls
+    const currentUserId = userId || auth()?.userId;
+    
+    if (!currentUserId) {
       return { success: false, error: "Unauthorized" };
     }
     
     // Verify ownership
-    const appDoc = await getDoc(doc(db, 'apps', id));
+    const appRef = doc(db, 'apps', id);
+    const appDoc = await getDoc(appRef);
     if (!appDoc.exists()) {
       return { success: false, error: "App not found" };
     }
     
     const appData = appDoc.data();
-    if (appData.userId !== userId) {
+    if (appData.userId !== currentUserId) {
       return { success: false, error: "Unauthorized" };
     }
     
@@ -195,14 +198,19 @@ export async function updateApp(id: string, formData: any) {
       updatedAt: serverTimestamp()
     };
     
-    await updateDoc(doc(db, 'apps', id), updateData);
+    // Also update the appId field if it's missing
+    if (!appData.appId) {
+      updateData.appId = id;
+    }
+    
+    await updateDoc(appRef, updateData);
     
     revalidatePath(`/apps/${id}`);
     revalidatePath('/dashboard');
     
     return { 
       success: true, 
-      app: { id, ...appData, ...updateData } 
+      app: { id, appId: id, ...appData, ...updateData } 
     };
   } catch (error) {
     console.error("Error updating app:", error);

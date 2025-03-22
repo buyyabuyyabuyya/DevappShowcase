@@ -28,6 +28,8 @@ interface AppCardProps {
       count: number;
       users: string[];
     };
+    appId?: string;
+    id?: string;
   };
 }
 
@@ -82,7 +84,7 @@ export function AppCard({ app }: AppCardProps) {
           {app.likes.count}
         </Button>
         <Button asChild>
-          <Link href={`/apps/${app._id}`}>View Details</Link>
+          <Link href={`/apps/${app.appId || app.id}`}>View Details</Link>
         </Button>
       </CardFooter>
     </Card>

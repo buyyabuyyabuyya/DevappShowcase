@@ -78,7 +78,7 @@ export function AppGrid({ apps }: AppGridProps) {
                 <span>{app.likes?.count || 0}</span>
               </div>
               <Button asChild variant="outline" size="sm">
-                <Link href={`/apps/${app._id}`}>
+                <Link href={`/apps/${app.appId || app.id || app._id}`}>
                   View Details
                 </Link>
               </Button>

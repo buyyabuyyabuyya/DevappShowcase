@@ -1,4 +1,6 @@
 interface App {
+  appId: any;
+  id: any;
   createdAt: string | number | Date;
   _id: string;
   name: string;

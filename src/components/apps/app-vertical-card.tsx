@@ -23,11 +23,14 @@ interface AppVerticalCardProps {
       users: string[];
     };
     isPromoted?: boolean;
+    appId?: string;
+    id?: string;
   };
   isPromoted?: boolean;
+  children?: React.ReactNode;
 }
 
-export function AppVerticalCard({ app, isPromoted }: AppVerticalCardProps) {
+export function AppVerticalCard({ app, isPromoted, children }: AppVerticalCardProps) {
   // Use client-side state instead of directly accessing app properties
   const [mounted, setMounted] = useState(false);
   
@@ -97,11 +100,15 @@ export function AppVerticalCard({ app, isPromoted }: AppVerticalCardProps) {
         </div>
         
         <div className="flex gap-2 w-full">
-          <Button size="sm" className="w-full text-xs" asChild>
-            <Link href={`/apps/${app._id}`}>
-              View
-            </Link>
-          </Button>
+          {!children && (
+            <Button size="sm" className="w-full text-xs" asChild>
+              <Link href={`/apps/${app.appId || app.id || app._id}`}>
+                View Details
+              </Link>
+            </Button>
+          )}
+          
+          {children}
           
           {mounted && app.liveUrl && (
             <Button size="sm" variant="outline" className="px-2" asChild>

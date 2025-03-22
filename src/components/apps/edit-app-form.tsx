@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { updateApp } from "@/lib/firestore/apps";
+import { updateApp } from "@/app/actions/update-app";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { appTypes, categories, APP_LIMITS } from "@/lib/constants";
@@ -158,7 +158,7 @@ export function EditAppForm({ app }: EditAppFormProps) {
     setIconPreview(null);
   }
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsSubmitting(true);
       console.log("Submitting update...", values);
@@ -186,7 +186,9 @@ export function EditAppForm({ app }: EditAppFormProps) {
         iconUrl: iconBase64 || app.iconUrl,
       };
       
-      const response = await updateApp(app._id, updatedValues);
+      // Use appId with fallbacks for older data
+      const appId = app.appId || app.id || app._id;
+      const response = await updateApp(appId, updatedValues);
       console.log("Update response:", response);
       
       if (!response.success) {
@@ -214,7 +216,7 @@ export function EditAppForm({ app }: EditAppFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="name"
