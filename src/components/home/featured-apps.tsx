@@ -94,9 +94,13 @@ export async function FeaturedApps() {
                   </p>
                   <div className="mt-4">
                     <Button variant="outline" className="w-full" asChild>
-                      <Link href={`/apps/${appData.id}`}>
-                        View Details
-                      </Link>
+                      {(appData.id || appData._id) ? (
+                        <Link href={`/apps/${appData.id || appData._id}`}>
+                          View Details
+                        </Link>
+                      ) : (
+                        <span>App Unavailable</span>
+                      )}
                     </Button>
                   </div>
                 </CardContent>

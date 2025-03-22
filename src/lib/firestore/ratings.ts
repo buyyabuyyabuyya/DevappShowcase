@@ -84,6 +84,10 @@ export async function provideFeedback({
   }
 
   try {
+    // Enforce character limit on the server side
+    const MAX_FEEDBACK_LENGTH = 200;
+    const trimmedComment = comment.substring(0, MAX_FEEDBACK_LENGTH);
+    
     // Get the app document
     const appRef = doc(db, 'apps', appId);
     const appDoc = await getDoc(appRef);
@@ -111,10 +115,10 @@ export async function provideFeedback({
     const feedbackEntry = {
       userId,
       appId,
-      userName: userName || 'Anonymous', // Use extracted name or fallback
+      userName: userName || 'Anonymous',
       userImage: user.imageUrl || '',
-      comment,
-      createdAt: Timestamp.now() // Use Timestamp.now() instead of serverTimestamp()
+      comment: trimmedComment,
+      createdAt: Timestamp.now()
     };
     
     // Add to feedback collection

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -21,20 +21,27 @@ interface FeedbackSectionProps {
   }>;
 }
 
+const MAX_FEEDBACK_LENGTH = 200;
+
 export function FeedbackSection({ appId, initialFeedback }: FeedbackSectionProps) {
   const { userId, isSignedIn } = useAuth();
   const [comment, setComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState(initialFeedback);
+  const [isOverLimit, setIsOverLimit] = useState(false);
+  
+  useEffect(() => {
+    setIsOverLimit(comment.length > MAX_FEEDBACK_LENGTH);
+  }, [comment]);
 
   const handleSubmit = async () => {
-    if (!comment.trim()) return;
+    if (!comment.trim() || isOverLimit) return;
     
     setIsSubmitting(true);
     try {
       const result = await provideFeedback({ 
         appId: appId,
-        comment: comment
+        comment: comment.substring(0, MAX_FEEDBACK_LENGTH)
       });
       
       if (result.success && result.feedbackEntry) {
@@ -76,20 +83,25 @@ export function FeedbackSection({ appId, initialFeedback }: FeedbackSectionProps
       </CardHeader>
       <CardContent className="space-y-6">
         {isSignedIn ? (
-          <div className="space-y-4">
+          <div className="space-y-2">
             <Textarea
               placeholder="Share your thoughts about this app..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className="min-h-[100px]"
+              className={`min-h-[100px] ${isOverLimit ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
             />
-            <Button 
-              onClick={handleSubmit} 
-              disabled={isSubmitting || !comment.trim()}
-              className="ml-auto block"
-            >
-              {isSubmitting ? "Submitting..." : "Submit Feedback"}
-            </Button>
+            <div className="flex justify-between items-center">
+              <div className={`text-sm ${isOverLimit ? 'text-red-500 font-medium' : 'text-muted-foreground'}`}>
+                {comment.length}/{MAX_FEEDBACK_LENGTH} characters
+                {isOverLimit && <span className="ml-2">Character limit exceeded</span>}
+              </div>
+              <Button 
+                onClick={handleSubmit} 
+                disabled={isSubmitting || !comment.trim() || isOverLimit}
+              >
+                {isSubmitting ? "Submitting..." : "Submit Feedback"}
+              </Button>
+            </div>
           </div>
         ) : (
           <div className="text-center py-4 bg-muted/30 rounded-lg">
