@@ -140,6 +140,17 @@ export async function createApp(formData: any, userId?: string) {
     // Create the app document
     const appRef = await addDoc(collection(db, 'apps'), appData);
     
+    // Add the appId field to match the document ID
+    await updateDoc(appRef, {
+      appId: appRef.id
+    });
+    
+    // Update the returned appData to include the appId
+    const returnedAppData = {
+      ...appData,
+      appId: appRef.id
+    };
+    
     // Update user's app count
     const userRef = doc(db, 'users', currentUserId);
     await updateDoc(userRef, {
@@ -152,7 +163,7 @@ export async function createApp(formData: any, userId?: string) {
     
     return { 
       success: true, 
-      app: { id: appRef.id, ...appData } 
+      app: { id: appRef.id, ...returnedAppData } 
     };
   } catch (error) {
     console.error("Error creating app:", error);

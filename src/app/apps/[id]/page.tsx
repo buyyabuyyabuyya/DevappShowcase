@@ -17,8 +17,26 @@ export default async function AppDetailPage({ params }: { params: { id: string }
   
   // Fetch feedback data
   const feedbackResponse = await getFeedback(params.id);
-  if (feedbackResponse.success) {
-    app.feedback = feedbackResponse.feedback;
+  if (feedbackResponse.success && Array.isArray(feedbackResponse.feedback)) {
+    // Make sure each feedback item's timestamp is valid
+    app.feedback = feedbackResponse.feedback.map((item: any) => {
+      // Safe timestamp handling
+      let createdAt = item.createdAt;
+      
+      // If it's a Firestore timestamp, convert it
+      if (typeof item.createdAt?.toDate === 'function') {
+        createdAt = item.createdAt.toDate().toISOString();
+      } 
+      // Handle invalid timestamps by providing a fallback
+      else if (item.createdAt && isNaN(new Date(item.createdAt).getTime())) {
+        createdAt = new Date().toISOString();
+      }
+      
+      return {
+        ...item,
+        createdAt
+      };
+    });
   } else {
     app.feedback = [];
   }

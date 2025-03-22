@@ -143,15 +143,22 @@ export async function provideFeedback({
 
 export async function getAppFeedback(appId: string) {
   try {
-    // Get feedback from the feedback collection
+    // Get feedback from the feedback collection - without ordering
     const feedbackRef = collection(db, 'feedback');
-    const q = query(feedbackRef, where("appId", "==", appId), orderBy("createdAt", "desc"));
+    const q = query(feedbackRef, where("appId", "==", appId));
     const querySnapshot = await getDocs(q);
     
     const feedback = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data()
     }));
+    
+    // Sort on client side
+    feedback.sort((a: any, b: any) => {
+      const dateA = a.createdAt?.toDate?.() || new Date(0);
+      const dateB = b.createdAt?.toDate?.() || new Date(0);
+      return dateB.getTime() - dateA.getTime(); // Descending order
+    });
     
     return { success: true, feedback };
   } catch (error) {
