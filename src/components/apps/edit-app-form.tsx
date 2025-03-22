@@ -180,14 +180,33 @@ export function EditAppForm({ app }: EditAppFormProps) {
         }
       }
 
+      // Create a clean copy of values based on form schema
+      const cleanValues = {
+        name: values.name,
+        description: values.description,
+        appType: values.appType,
+        category: values.category,
+        liveUrl: values.liveUrl,
+        repoUrl: values.repoUrl || "",
+        youtubeUrl: values.youtubeUrl || "",
+        apiEndpoint: values.apiEndpoint,
+        apiDocs: values.apiDocs,
+        apiType: values.apiType,
+        isPromoted: values.isPromoted
+      };
+
       const updatedValues = {
-        ...values,
+        ...cleanValues,
         imageUrls: [...existingImages, ...imageBase64Array],
         iconUrl: iconBase64 || app.iconUrl,
       };
       
       // Use appId with fallbacks for older data
       const appId = app.appId || app.id || app._id;
+      
+      console.log("Using appId:", appId);
+      console.log("Sending update with data:", JSON.stringify(updatedValues));
+      
       const response = await updateApp(appId, updatedValues);
       console.log("Update response:", response);
       

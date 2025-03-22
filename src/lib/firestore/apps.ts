@@ -203,18 +203,33 @@ export async function updateApp(id: string, formData: any, userId?: string) {
       updateData.appId = id;
     }
     
-    await updateDoc(appRef, updateData);
+    // Make sure sensitive data is not overwritten
+    delete updateData.userId;
+    delete updateData.createdAt;
     
-    revalidatePath(`/apps/${id}`);
-    revalidatePath('/dashboard');
+    // Enforce only allowed fields
+    const sanitizedData = Object.entries(updateData)
+      .filter(([key]) => [
+        'name', 'description', 'appType', 'category', 'iconUrl', 
+        'liveUrl', 'repoUrl', 'pricingModel', 'imageUrls', 
+        'appId', 'updatedAt'
+      ].includes(key))
+      .reduce((obj, [key, value]) => ({...obj, [key]: value}), {});
+    
+    await updateDoc(appRef, sanitizedData);
+    
+    // Don't call revalidatePath here as it should be called from the server action
     
     return { 
       success: true, 
-      app: { id, appId: id, ...appData, ...updateData } 
+      app: { id, appId: id, ...appData, ...sanitizedData } 
     };
   } catch (error) {
     console.error("Error updating app:", error);
-    return { success: false, error: "Failed to update app" };
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : "Failed to update app" 
+    };
   }
 }
 
