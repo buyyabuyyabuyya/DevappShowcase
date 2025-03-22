@@ -211,18 +211,34 @@ export async function updateApp(id: string, formData: any, userId?: string) {
     const sanitizedData = Object.entries(updateData)
       .filter(([key]) => [
         'name', 'description', 'appType', 'category', 'iconUrl', 
-        'liveUrl', 'repoUrl', 'pricingModel', 'imageUrls', 
+        'liveUrl', 'repoUrl', 'pricingModel', 'imageUrls', 'youtubeUrl',
+        'apiEndpoint', 'apiDocs', 'apiType', 'isPromoted',
         'appId', 'updatedAt'
       ].includes(key))
       .reduce((obj, [key, value]) => ({...obj, [key]: value}), {});
     
     await updateDoc(appRef, sanitizedData);
     
-    // Don't call revalidatePath here as it should be called from the server action
+    // Prepare a serializable response by converting Firestore Timestamps
+    const serializedAppData = Object.entries(appData).reduce<Record<string, any>>((obj, [key, value]) => {
+      // Convert Timestamp objects to ISO strings
+      if (value instanceof Timestamp) {
+        return {...obj, [key]: value.toDate().toISOString()};
+      }
+      return {...obj, [key]: value};
+    }, {});
     
     return { 
       success: true, 
-      app: { id, appId: id, ...appData, ...sanitizedData } 
+      app: { 
+        id, 
+        appId: id,
+        ...serializedAppData,
+        ...sanitizedData,
+        // Ensure timestamps are serialized
+        createdAt: serializedAppData.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString() // Use current time for updatedAt
+      } 
     };
   } catch (error) {
     console.error("Error updating app:", error);

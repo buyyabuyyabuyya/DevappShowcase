@@ -181,24 +181,30 @@ export function EditAppForm({ app }: EditAppFormProps) {
       }
 
       // Create a clean copy of values based on form schema
+      // Only include primitive values and strings to avoid serialization issues
       const cleanValues = {
         name: values.name,
         description: values.description,
         appType: values.appType,
         category: values.category,
-        liveUrl: values.liveUrl,
+        liveUrl: values.liveUrl || "",
         repoUrl: values.repoUrl || "",
         youtubeUrl: values.youtubeUrl || "",
-        apiEndpoint: values.apiEndpoint,
-        apiDocs: values.apiDocs,
+        apiEndpoint: values.apiEndpoint || "",
+        apiDocs: values.apiDocs || "",
         apiType: values.apiType,
-        isPromoted: values.isPromoted
+        isPromoted: Boolean(values.isPromoted)
       };
+
+      // Prepare image URLs - ensure they're all strings
+      const validExistingImages = existingImages.filter(url => 
+        typeof url === 'string' && url.trim().length > 0
+      );
 
       const updatedValues = {
         ...cleanValues,
-        imageUrls: [...existingImages, ...imageBase64Array],
-        iconUrl: iconBase64 || app.iconUrl,
+        imageUrls: [...validExistingImages, ...imageBase64Array],
+        iconUrl: iconBase64 || app.iconUrl || "",
       };
       
       // Use appId with fallbacks for older data
