@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { Star } from "lucide-react";
-import { rateApp } from "@/app/actions/rate-app";
-import { provideFeedback } from "@/app/actions/provide-feedback";
+import { rateApp, provideFeedback } from "@/app/actions/rating";
 import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -76,9 +75,8 @@ export function RatingSection({ appId, ratings: initialRatings, onRatingChange }
       // Use server action instead of direct Firestore call
       const result = await rateApp({
         appId,
-        ideaRating: type === 'idea' ? rating : 0,
-        productRating: type === 'product' ? rating : 0,
-        provideFeedback: false
+        type: type,
+        rating: rating
       });
       
       if (result.success) {

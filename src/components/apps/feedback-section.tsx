@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@clerk/nextjs";
 import { toast } from "@/components/ui/use-toast";
 import { formatDistanceToNow } from "date-fns";
-import { provideFeedback } from "@/app/actions/provide-feedback";
+import { provideFeedback } from "@/app/actions/rating";
 
 interface FeedbackSectionProps {
   appId: string;
@@ -47,17 +47,17 @@ export function FeedbackSection({ appId, initialFeedback }: FeedbackSectionProps
       if (result.success && result.feedbackEntry) {
         setFeedback(prev => [
           {
-            userId: result.feedbackEntry?.userId || '',
-            userName: result.feedbackEntry?.userName || 'Anonymous',
-            userImageUrl: result.feedbackEntry?.userImage || '',
-            comment: result.feedbackEntry?.comment || '',
-            createdAt: result.feedbackEntry?.createdAt || new Date().toISOString()
+            userId: result.feedbackEntry.userId,
+            userName: result.feedbackEntry.userName,
+            userImageUrl: result.feedbackEntry.userImage,
+            comment: result.feedbackEntry.comment,
+            createdAt: result.feedbackEntry.createdAt.toString()
           },
           ...prev
         ]);
         setComment("");
         toast({
-          title: "Success", 
+          title: "Success",
           description: "Your feedback has been submitted",
         });
       } else {

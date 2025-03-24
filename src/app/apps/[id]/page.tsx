@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { getAppById } from "@/lib/firestore/apps";
 import { getUserByClerkId } from "@/lib/firestore/users";
-import { getFeedback } from "@/lib/actions/ratings";
+import { getFeedback } from "@/app/actions/rating";
 import { AppDetailView } from "@/components/apps/app-detail-view";
 import { notFound } from "next/navigation";
 

@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { deleteApp } from "@/app/actions/delete-app";
 import { togglePromoteApp } from "@/app/actions/toggle-promote-app";
-import { rateApp } from "@/app/actions/rate-app";
+import { rateApp } from "@/app/actions/rating";
 import { likeApp } from "@/app/actions/like-app";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
@@ -147,9 +147,8 @@ export function AppDetailView({ app, isOwner, isProUser }: AppDetailViewProps) {
     try {
       const result = await rateApp({
         appId: app.id,
-        ideaRating: type === 'idea' ? rating : 0,
-        productRating: type === 'product' ? rating : 0,
-        provideFeedback: false
+        type: type,
+        rating: rating
       });
       if (!result.success) {
         throw new Error(result.error ?? "Unknown error");
