@@ -96,8 +96,8 @@ export async function rateApp({
       ideaRating: ideaRating !== null ? ideaRating : (existingRating?.ideaRating || null),
       productRating: productRating !== null ? productRating : (existingRating?.productRating || null),
       provideFeedback,
-      createdAt: existingRating?.createdAt || serverTimestamp(),
-      updatedAt: serverTimestamp()
+      createdAt: existingRating?.createdAt || Timestamp.now(),
+      updatedAt: Timestamp.now()
     };
     
     // Update ratings array
