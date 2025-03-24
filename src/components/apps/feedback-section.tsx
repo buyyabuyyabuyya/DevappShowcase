@@ -17,7 +17,7 @@ interface FeedbackSectionProps {
     userName: string;
     userImageUrl?: string;
     comment: string;
-    createdAt: string;
+    createdAt: any; // Changed to any to handle both string and Timestamp
   }>;
 }
 
@@ -51,7 +51,7 @@ export function FeedbackSection({ appId, initialFeedback }: FeedbackSectionProps
             userName: result.feedbackEntry.userName,
             userImageUrl: result.feedbackEntry.userImage,
             comment: result.feedbackEntry.comment,
-            createdAt: result.feedbackEntry.createdAt.toString()
+            createdAt: result.feedbackEntry.createdAt
           },
           ...prev
         ]);
@@ -71,6 +71,27 @@ export function FeedbackSection({ appId, initialFeedback }: FeedbackSectionProps
       });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const formatCreatedAt = (createdAt: any) => {
+    try {
+      // Handle Firestore Timestamp
+      if (createdAt?.toDate) {
+        return formatDistanceToNow(createdAt.toDate(), { addSuffix: true });
+      }
+      // Handle ISO string
+      if (typeof createdAt === 'string') {
+        return formatDistanceToNow(new Date(createdAt), { addSuffix: true });
+      }
+      // Handle Date object
+      if (createdAt instanceof Date) {
+        return formatDistanceToNow(createdAt, { addSuffix: true });
+      }
+      return 'Just now';
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Recently';
     }
   };
 
@@ -123,7 +144,7 @@ export function FeedbackSection({ appId, initialFeedback }: FeedbackSectionProps
                   <div className="flex items-center justify-between">
                     <p className="font-medium">{item.userName}</p>
                     <p className="text-xs text-muted-foreground">
-                      {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
+                      {formatCreatedAt(item.createdAt)}
                     </p>
                   </div>
                   <p className="text-sm text-muted-foreground whitespace-pre-wrap">{item.comment}</p>
