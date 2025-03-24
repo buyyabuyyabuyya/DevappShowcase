@@ -191,54 +191,59 @@ export async function updateApp(id: string, formData: any, userId?: string) {
     if (appData.userId !== currentUserId) {
       return { success: false, error: "Unauthorized" };
     }
-    
-    // Update app
-    const updateData = {
-      ...formData,
+
+    // List of fields that can be updated
+    const allowedFields = [
+      'name', 'description', 'appType', 'category', 'iconUrl', 
+      'liveUrl', 'repoUrl', 'pricingModel', 'imageUrls', 'youtubeUrl',
+      'apiEndpoint', 'apiDocs', 'apiType', 'isPromoted'
+    ];
+
+    // Filter and sanitize the update data
+    const sanitizedUpdates = Object.entries(formData)
+      .filter(([key]) => allowedFields.includes(key))
+      .reduce((obj, [key, value]) => ({...obj, [key]: value}), {});
+
+    // Create the update object that preserves existing data
+    const updateData: DocumentData = {
+      ...appData,           // Keep all existing data
+      ...sanitizedUpdates,  // Apply new updates
+      appId: id,           // Ensure appId is always set
       updatedAt: serverTimestamp()
     };
-    
-    // Also update the appId field if it's missing
-    if (!appData.appId) {
-      updateData.appId = id;
-    }
-    
-    // Make sure sensitive data is not overwritten
-    delete updateData.userId;
-    delete updateData.createdAt;
-    
-    // Enforce only allowed fields
-    const sanitizedData = Object.entries(updateData)
-      .filter(([key]) => [
-        'name', 'description', 'appType', 'category', 'iconUrl', 
-        'liveUrl', 'repoUrl', 'pricingModel', 'imageUrls', 'youtubeUrl',
-        'apiEndpoint', 'apiDocs', 'apiType', 'isPromoted',
-        'appId', 'updatedAt'
-      ].includes(key))
-      .reduce((obj, [key, value]) => ({...obj, [key]: value}), {});
-    
-    await updateDoc(appRef, sanitizedData);
-    
-    // Prepare a serializable response by converting Firestore Timestamps
-    const serializedAppData = Object.entries(appData).reduce<Record<string, any>>((obj, [key, value]) => {
-      // Convert Timestamp objects to ISO strings
+
+    // Protect sensitive fields from being modified
+    updateData.userId = appData.userId;
+    updateData.createdAt = appData.createdAt;
+    updateData.likes = appData.likes || { count: 0, users: [] };
+    updateData.ratings = appData.ratings || {
+      idea: { total: 0, count: 0 },
+      product: { total: 0, count: 0 },
+      feedback: { count: 0 },
+      userRatings: []
+    };
+
+    // Update the document
+    await updateDoc(appRef, updateData);
+
+    // Prepare a serializable response
+    const serializedAppData = Object.entries(updateData).reduce<Record<string, any>>((obj, [key, value]) => {
       if (value instanceof Timestamp) {
         return {...obj, [key]: value.toDate().toISOString()};
       }
       return {...obj, [key]: value};
     }, {});
-    
+
     return { 
       success: true, 
-      app: { 
-        id, 
-        appId: id,
+      app: {
+        id,
         ...serializedAppData,
-        ...sanitizedData,
-        // Ensure timestamps are serialized
-        createdAt: serializedAppData.createdAt || new Date().toISOString(),
-        updatedAt: new Date().toISOString() // Use current time for updatedAt
-      } 
+        createdAt: appData.createdAt instanceof Timestamp 
+          ? appData.createdAt.toDate().toISOString() 
+          : appData.createdAt,
+        updatedAt: new Date().toISOString()
+      }
     };
   } catch (error) {
     console.error("Error updating app:", error);
