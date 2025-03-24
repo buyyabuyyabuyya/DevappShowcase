@@ -11,8 +11,8 @@ export async function rateApp({
   provideFeedback
 }: {
   appId: string;
-  ideaRating: number;
-  productRating: number;
+  ideaRating: number | null;
+  productRating: number | null;
   provideFeedback: boolean;
 }) {
   const { userId } = auth();
@@ -34,7 +34,6 @@ export async function rateApp({
       revalidatePath(`/apps/${appId}`);
     }
     
-    // Return serializable result
     return { 
       success: result.success,
       error: result.error || null

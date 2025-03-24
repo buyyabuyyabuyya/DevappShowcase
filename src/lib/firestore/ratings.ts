@@ -15,15 +15,16 @@ export async function rateApp({
   provideFeedback
 }: {
   appId: string;
-  ideaRating: number;
-  productRating: number;
+  ideaRating: number | null;
+  productRating: number | null;
   provideFeedback: boolean;
 }) {
   const { userId } = auth();
+  
   if (!userId) {
     return { success: false, error: "Unauthorized" };
   }
-
+  
   try {
     // Get the app document
     const appRef = doc(db, 'apps', appId);
@@ -35,34 +36,87 @@ export async function rateApp({
     
     const appData = appDoc.data();
     
-    // Check if user already rated this app
-    const userRatings = appData.ratings?.userRatings || [];
-    const existingRating = userRatings.find((r: any) => r.userId === userId);
-    
-    if (existingRating) {
-      return { success: false, error: "You have already rated this app" };
+    // Get user information for the rating
+    const { success: userSuccess, user } = await getUserByClerkId(userId);
+    if (!userSuccess || !user) {
+      return { success: false, error: "User not found" };
     }
     
-    // Create user rating object with Timestamp.now() instead of serverTimestamp()
-    const userRating = {
-      userId,
-      idea: ideaRating,
-      product: productRating,
-      feedback: provideFeedback,
-      createdAt: Timestamp.now()
+    // Initialize ratings data structure if not exists
+    const ratings = appData.ratings || {
+      idea: { total: 0, count: 0 },
+      product: { total: 0, count: 0 },
+      feedback: { count: 0 },
+      userRatings: []
     };
     
-    // Update ratings in app document
-    await updateDoc(appRef, {
-      "ratings.idea.total": increment(ideaRating),
-      "ratings.idea.count": increment(1),
-      "ratings.product.total": increment(productRating),
-      "ratings.product.count": increment(1),
-      "ratings.userRatings": arrayUnion(userRating),
-      ...(provideFeedback ? { "ratings.feedback.count": increment(1) } : {})
-    });
+    // Find user's existing rating if any
+    const userRatingIndex = ratings.userRatings.findIndex(
+      (rating: any) => rating.userId === userId
+    );
     
-    revalidatePath(`/apps/${appId}`);
+    const userHasExistingRating = userRatingIndex !== -1;
+    const existingRating = userHasExistingRating ? ratings.userRatings[userRatingIndex] : null;
+    
+    // Calculate new rating totals
+    let newIdeaTotal = ratings.idea.total;
+    let newIdeaCount = ratings.idea.count;
+    let newProductTotal = ratings.product.total;
+    let newProductCount = ratings.product.count;
+    
+    // Handle idea rating if provided
+    if (ideaRating !== null) {
+      if (userHasExistingRating && existingRating.ideaRating) {
+        // Update existing idea rating
+        newIdeaTotal = newIdeaTotal - existingRating.ideaRating + ideaRating;
+      } else {
+        // Add new idea rating
+        newIdeaTotal += ideaRating;
+        newIdeaCount += 1;
+      }
+    }
+    
+    // Handle product rating if provided
+    if (productRating !== null) {
+      if (userHasExistingRating && existingRating.productRating) {
+        // Update existing product rating
+        newProductTotal = newProductTotal - existingRating.productRating + productRating;
+      } else {
+        // Add new product rating
+        newProductTotal += productRating;
+        newProductCount += 1;
+      }
+    }
+    
+    // Create/update user rating entry
+    const userRating = {
+      userId,
+      userName: user.firstName || "Anonymous",
+      userImage: user.imageUrl || "",
+      ideaRating: ideaRating !== null ? ideaRating : (existingRating?.ideaRating || null),
+      productRating: productRating !== null ? productRating : (existingRating?.productRating || null),
+      provideFeedback,
+      createdAt: existingRating?.createdAt || serverTimestamp(),
+      updatedAt: serverTimestamp()
+    };
+    
+    // Update ratings array
+    if (userHasExistingRating) {
+      ratings.userRatings[userRatingIndex] = userRating;
+    } else {
+      ratings.userRatings.push(userRating);
+    }
+    
+    // Update app document
+    await updateDoc(appRef, {
+      ratings: {
+        idea: { total: newIdeaTotal, count: newIdeaCount },
+        product: { total: newProductTotal, count: newProductCount },
+        feedback: ratings.feedback,
+        userRatings: ratings.userRatings
+      },
+      updatedAt: serverTimestamp()
+    });
     
     return { success: true };
   } catch (error) {
