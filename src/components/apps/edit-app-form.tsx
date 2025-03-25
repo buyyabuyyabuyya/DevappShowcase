@@ -161,18 +161,20 @@ export function EditAppForm({ app }: EditAppFormProps) {
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsSubmitting(true);
-      console.log("Submitting update...", values);
+      console.log("[EditForm] Starting submission with values:", values);
 
       // Convert files to base64 before sending
       let iconBase64: string | undefined;
       let imageBase64Array: string[] = [];
 
       if (iconFile) {
+        console.log("[EditForm] Converting icon file to base64");
         const buffer = await iconFile.arrayBuffer();
         iconBase64 = `data:${iconFile.type};base64,${Buffer.from(buffer).toString('base64')}`;
       }
 
       if (imageFiles.length > 0) {
+        console.log("[EditForm] Converting image files to base64");
         for (const file of imageFiles) {
           const buffer = await file.arrayBuffer();
           const base64 = `data:${file.type};base64,${Buffer.from(buffer).toString('base64')}`;
@@ -181,7 +183,7 @@ export function EditAppForm({ app }: EditAppFormProps) {
       }
 
       // Create a clean copy of values based on form schema
-      // Only include primitive values and strings to avoid serialization issues
+      console.log("[EditForm] Creating clean values object");
       const cleanValues = {
         name: values.name,
         description: values.description,
@@ -196,7 +198,8 @@ export function EditAppForm({ app }: EditAppFormProps) {
         isPromoted: Boolean(values.isPromoted)
       };
 
-      // Prepare image URLs - ensure they're all strings
+      // Prepare image URLs
+      console.log("[EditForm] Preparing image URLs");
       const validExistingImages = existingImages.filter(url => 
         typeof url === 'string' && url.trim().length > 0
       );
@@ -207,16 +210,16 @@ export function EditAppForm({ app }: EditAppFormProps) {
         iconUrl: iconBase64 || app.iconUrl || "",
       };
       
-      // Use appId with fallbacks for older data
+      // Use appId with fallbacks
       const appId = app.appId || app.id || app._id;
-      
-      console.log("Using appId:", appId);
-      console.log("Sending update with data:", JSON.stringify(updatedValues));
+      console.log("[EditForm] Using appId:", appId);
+      console.log("[EditForm] Sending update with data:", JSON.stringify(updatedValues, null, 2));
       
       const response = await updateApp(appId, updatedValues);
-      console.log("Update response:", response);
+      console.log("[EditForm] Update response:", response);
       
       if (!response.success) {
+        console.error("[EditForm] Update failed:", response.error);
         throw new Error(response.error || "Failed to update application");
       }
 
@@ -228,7 +231,8 @@ export function EditAppForm({ app }: EditAppFormProps) {
       router.refresh();
       router.push('/dashboard');
     } catch (error) {
-      console.error("Update error:", error);
+      console.error("[EditForm] Update error:", error);
+      console.error("[EditForm] Error stack:", error instanceof Error ? error.stack : 'No stack trace');
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to update application. Please try again.",

@@ -35,11 +35,13 @@ function sanitizeData(data: Record<string, any>): Record<string, any> {
 
 export async function updateApp(appId: string, formData: FormData | Record<string, any>) {
   try {
-    console.log("Server action started with appId:", appId);
+    console.log("[ServerAction] Starting update for appId:", appId);
     
     const { userId } = auth();
+    console.log("[ServerAction] User ID:", userId);
     
     if (!userId) {
+      console.log("[ServerAction] No user ID found");
       return { success: false, error: "Unauthorized" };
     }
     
@@ -47,20 +49,21 @@ export async function updateApp(appId: string, formData: FormData | Record<strin
     
     // Handle both FormData and regular objects
     if (formData instanceof FormData) {
+      console.log("[ServerAction] Converting FormData to object");
       data = Object.fromEntries(formData.entries());
     } else {
+      console.log("[ServerAction] Using provided data object");
       data = formData;
     }
     
-    // Sanitize the data to ensure it's serializable
-    const sanitizedData = sanitizeData(data);
-    console.log("Sanitized data:", JSON.stringify(sanitizedData));
+    console.log("[ServerAction] Calling Firestore with data:", JSON.stringify(data, null, 2));
     
     // Call Firestore function with userId explicitly
-    const result = await firestoreUpdateApp(appId, sanitizedData, userId);
+    const result = await firestoreUpdateApp(appId, data, userId);
+    console.log("[ServerAction] Firestore result:", result);
     
     if (result.success) {
-      // Only revalidate paths if the update was successful
+      console.log("[ServerAction] Update successful, revalidating paths");
       revalidatePath(`/apps/${appId}`);
       revalidatePath('/dashboard');
     }
@@ -71,7 +74,8 @@ export async function updateApp(appId: string, formData: FormData | Record<strin
       app: result.app || null
     };
   } catch (error) {
-    console.error("Server action error:", error);
+    console.error("[ServerAction] Error:", error);
+    console.error("[ServerAction] Error stack:", error instanceof Error ? error.stack : 'No stack trace');
     return { 
       success: false, 
       error: error instanceof Error ? error.message : "An error occurred while updating the app",
