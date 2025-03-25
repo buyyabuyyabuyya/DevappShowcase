@@ -9,6 +9,7 @@ import { useAuth } from "@clerk/nextjs";
 import { toast } from "@/components/ui/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { provideFeedback } from "@/app/actions/rating";
+import Image from "next/image";
 
 interface FeedbackSectionProps {
   appId: string;
@@ -131,23 +132,38 @@ export function FeedbackSection({ appId, initialFeedback }: FeedbackSectionProps
         )}
 
         {feedback.length > 0 ? (
-          <div className="space-y-6 mt-6">
+          <div className="space-y-4 mt-4">
             {feedback.map((item, index) => (
-              <div key={index} className="flex gap-4">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={item.userImageUrl} alt={item.userName} />
-                  <AvatarFallback>
-                    {item.userName.split(' ').map(n => n[0]).join('')}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <p className="font-medium">{item.userName}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatCreatedAt(item.createdAt)}
+              <div key={index} className="bg-card rounded-lg p-4 shadow-sm">
+                <div className="flex items-start gap-3">
+                  {item.userImageUrl ? (
+                    <Image
+                      src={item.userImageUrl}
+                      alt={item.userName || "User"}
+                      width={40}
+                      height={40}
+                      className="rounded-full object-cover h-10 w-10"
+                    />
+                  ) : (
+                    <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground">
+                      {item.userName?.charAt(0) || "A"}
+                    </div>
+                  )}
+                  
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                      <h4 className="font-medium text-sm">
+                        {item.userName || "Anonymous"}
+                      </h4>
+                      <span className="text-xs text-muted-foreground">
+                        {formatCreatedAt(item.createdAt)}
+                      </span>
+                    </div>
+                    
+                    <p className="mt-1 text-sm text-muted-foreground break-words whitespace-pre-wrap overflow-hidden">
+                      {item.comment}
                     </p>
                   </div>
-                  <p className="text-sm text-muted-foreground whitespace-pre-wrap">{item.comment}</p>
                 </div>
               </div>
             ))}
