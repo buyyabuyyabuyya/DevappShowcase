@@ -325,9 +325,23 @@ export function EditAppForm({ app }: EditAppFormProps) {
               <FormControl>
                 <Textarea 
                   placeholder="Describe your application..."
+                  className="resize-y min-h-[120px]"
                   {...field}
+                  maxLength={isProUser ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH}
                 />
               </FormControl>
+              <div className="flex justify-between items-center mt-1">
+                <FormDescription>
+                  Explain what your app does, its features, and why users should try it.
+                </FormDescription>
+                <div className={`text-xs ${
+                  field.value.length > (isProUser ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH * 0.9 : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH * 0.9) 
+                    ? "text-destructive font-medium" 
+                    : "text-muted-foreground"
+                }`}>
+                  {field.value.length}/{isProUser ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH}
+                </div>
+              </div>
               <FormMessage />
             </FormItem>
           )}
