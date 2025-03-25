@@ -13,21 +13,31 @@ interface RatingInput {
 
 export async function rateApp({ appId, type, rating }: RatingInput) {
   try {
+    console.log("[RatingAction] Starting with appId:", appId, "type:", type, "rating:", rating);
     const { userId } = auth();
     if (!userId) throw new Error("Unauthorized");
 
     // Convert to the format expected by Firestore implementation
     const result = await firestoreRateApp({
       appId,
-      ideaRating: type === 'idea' ? rating : 0,
-      productRating: type === 'product' ? rating : 0,
+      ideaRating: type === 'idea' ? rating : null,
+      productRating: type === 'product' ? rating : null,
       provideFeedback: false
     });
 
+    console.log("[RatingAction] Firestore result:", result);
+    
+    if (result.success) {
+      revalidatePath(`/apps/${appId}`);
+    }
+
     return result;
   } catch (error) {
-    console.error("Error rating app:", error);
-    return { success: false, error: 'Failed to update rating' };
+    console.error("[RatingAction] Error:", error);
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Failed to update rating' 
+    };
   }
 }
 

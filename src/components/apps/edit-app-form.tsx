@@ -160,41 +160,47 @@ export function EditAppForm({ app }: EditAppFormProps) {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Add immediate console log to verify the function is being called
-      console.log("[EditForm] Submit button clicked");
+      console.log("[EditForm] Submit handler called directly");
       
       if (isSubmitting) {
-        console.log("[EditForm] Already submitting, preventing double submission");
+        console.log("[EditForm] Already submitting, ignoring");
         return;
       }
 
       setIsSubmitting(true);
-      console.log("[EditForm] Starting submission with values:", values);
+      console.log("[EditForm] Setting isSubmitting to true");
+      console.log("[EditForm] Form values:", values);
 
       // Convert files to base64 before sending
       let iconBase64: string | undefined;
       let imageBase64Array: string[] = [];
 
-      if (iconFile) {
-        console.log("[EditForm] Converting icon file to base64");
-        const buffer = await iconFile.arrayBuffer();
-        iconBase64 = `data:${iconFile.type};base64,${Buffer.from(buffer).toString('base64')}`;
-      }
-
-      if (imageFiles.length > 0) {
-        console.log("[EditForm] Converting image files to base64");
-        for (const file of imageFiles) {
-          const buffer = await file.arrayBuffer();
-          const base64 = `data:${file.type};base64,${Buffer.from(buffer).toString('base64')}`;
-          imageBase64Array.push(base64);
+      try {
+        if (iconFile) {
+          console.log("[EditForm] Processing icon file");
+          const buffer = await iconFile.arrayBuffer();
+          iconBase64 = `data:${iconFile.type};base64,${Buffer.from(buffer).toString('base64')}`;
         }
+
+        if (imageFiles.length > 0) {
+          console.log("[EditForm] Processing image files, count:", imageFiles.length);
+          for (const file of imageFiles) {
+            const buffer = await file.arrayBuffer();
+            const base64 = `data:${file.type};base64,${Buffer.from(buffer).toString('base64')}`;
+            imageBase64Array.push(base64);
+          }
+        }
+      } catch (fileError) {
+        console.error("[EditForm] Error processing files:", fileError);
       }
 
       // Create a clean copy of values based on form schema
-      console.log("[EditForm] Creating clean values object");
+      console.log("[EditForm] Creating clean data object");
+      
+      // Simplify the data we send to avoid any serialization issues
       const cleanValues = {
-        name: values.name,
-        description: values.description,
+        name: values.name || "",
+        description: values.description || "",
         appType: values.appType,
         category: values.category,
         liveUrl: values.liveUrl || "",
@@ -207,7 +213,7 @@ export function EditAppForm({ app }: EditAppFormProps) {
       };
 
       // Prepare image URLs
-      console.log("[EditForm] Preparing image URLs");
+      console.log("[EditForm] Filtering existing images");
       const validExistingImages = existingImages.filter(url => 
         typeof url === 'string' && url.trim().length > 0
       );
@@ -221,33 +227,45 @@ export function EditAppForm({ app }: EditAppFormProps) {
       // Use appId with fallbacks
       const appId = app.appId || app.id || app._id;
       console.log("[EditForm] Using appId:", appId);
-      console.log("[EditForm] Sending update with data:", JSON.stringify(updatedValues, null, 2));
+      console.log("[EditForm] Data prepared, calling updateApp");
       
-      const response = await updateApp(appId, updatedValues);
-      console.log("[EditForm] Update response:", response);
-      
-      if (!response.success) {
-        console.error("[EditForm] Update failed:", response.error);
-        throw new Error(response.error || "Failed to update application");
+      try {
+        const response = await updateApp(appId, updatedValues);
+        console.log("[EditForm] Server action response:", response);
+        
+        if (!response.success) {
+          console.error("[EditForm] Update failed with error:", response.error);
+          throw new Error(response.error || "Failed to update application");
+        }
+
+        console.log("[EditForm] Update successful, showing toast");
+        toast({
+          title: "Success",
+          description: "Your app has been updated successfully.",
+        });
+
+        console.log("[EditForm] Navigating to dashboard");
+        // Separate the navigation to avoid race conditions
+        setTimeout(() => {
+          router.push('/dashboard');
+          router.refresh();
+        }, 500);
+        
+      } catch (apiError) {
+        console.error("[EditForm] API call error:", apiError);
+        throw apiError;
       }
-
-      toast({
-        title: "Success",
-        description: "Your app has been updated successfully.",
-      });
-
-      // Change the navigation order to ensure state is properly reset
-      await router.push('/dashboard');
-      router.refresh();
     } catch (error) {
-      console.error("[EditForm] Update error:", error);
+      console.error("[EditForm] Top-level error:", error);
       console.error("[EditForm] Error stack:", error instanceof Error ? error.stack : 'No stack trace');
+      
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to update application. Please try again.",
         variant: "destructive"
       });
     } finally {
+      console.log("[EditForm] Setting isSubmitting to false");
       setIsSubmitting(false);
     }
   };
@@ -276,8 +294,11 @@ export function EditAppForm({ app }: EditAppFormProps) {
     <Form {...form}>
       <form 
         onSubmit={(e) => {
-          console.log("[EditForm] Form submission started");
-          form.handleSubmit(handleSubmit)(e);
+          e.preventDefault(); // Prevent default form submission
+          console.log("[EditForm] Form submission prevented default");
+          
+          // Call handleSubmit directly with the current form values
+          handleSubmit(form.getValues());
         }} 
         className="space-y-6"
       >
@@ -620,10 +641,13 @@ export function EditAppForm({ app }: EditAppFormProps) {
             Cancel
           </Button>
           <Button 
-            type="submit" 
+            type="button" 
             disabled={isSubmitting} 
             className="flex-1"
-            onClick={() => console.log("[EditForm] Submit button clicked directly")}
+            onClick={() => {
+              console.log("[EditForm] Submit button clicked manually");
+              handleSubmit(form.getValues());
+            }}
           >
             {isSubmitting ? (
               <>
