@@ -160,6 +160,14 @@ export function EditAppForm({ app }: EditAppFormProps) {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      // Add immediate console log to verify the function is being called
+      console.log("[EditForm] Submit button clicked");
+      
+      if (isSubmitting) {
+        console.log("[EditForm] Already submitting, preventing double submission");
+        return;
+      }
+
       setIsSubmitting(true);
       console.log("[EditForm] Starting submission with values:", values);
 
@@ -228,8 +236,9 @@ export function EditAppForm({ app }: EditAppFormProps) {
         description: "Your app has been updated successfully.",
       });
 
+      // Change the navigation order to ensure state is properly reset
+      await router.push('/dashboard');
       router.refresh();
-      router.push('/dashboard');
     } catch (error) {
       console.error("[EditForm] Update error:", error);
       console.error("[EditForm] Error stack:", error instanceof Error ? error.stack : 'No stack trace');
@@ -241,11 +250,37 @@ export function EditAppForm({ app }: EditAppFormProps) {
     } finally {
       setIsSubmitting(false);
     }
-  }
+  };
+
+  // Add this useEffect to reset form state when app prop changes
+  useEffect(() => {
+    console.log("[EditForm] App data changed, resetting form");
+    form.reset({
+      name: app.name,
+      description: app.description,
+      appType: app.appType,
+      category: app.category,
+      repoUrl: app.repoUrl || "",
+      liveUrl: app.liveUrl,
+      iconUrl: app.iconUrl || "",
+      youtubeUrl: app.youtubeUrl || "",
+      imageUrls: app.imageUrls || [],
+      apiEndpoint: app.apiEndpoint,
+      apiDocs: app.apiDocs,
+      apiType: app.apiType,
+      isPromoted: app.isPromoted,
+    });
+  }, [app, form]);
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form 
+        onSubmit={(e) => {
+          console.log("[EditForm] Form submission started");
+          form.handleSubmit(handleSubmit)(e);
+        }} 
+        className="space-y-6"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -580,7 +615,7 @@ export function EditAppForm({ app }: EditAppFormProps) {
           <Button 
             type="button" 
             variant="outline" 
-            onClick={() => router.push(`/apps/${app._id}`)}
+            onClick={() => router.push(`/apps/${app.appId || app.id || app._id}`)}
           >
             Cancel
           </Button>
@@ -588,6 +623,7 @@ export function EditAppForm({ app }: EditAppFormProps) {
             type="submit" 
             disabled={isSubmitting} 
             className="flex-1"
+            onClick={() => console.log("[EditForm] Submit button clicked directly")}
           >
             {isSubmitting ? (
               <>
