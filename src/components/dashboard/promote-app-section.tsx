@@ -13,7 +13,7 @@ interface PromoFeature {
 }
 
 // Use the direct Stripe URL
-const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
+const STRIPE_URL = "https://buy.stripe.com/test_eVadRDbbW9ta3lK5kl";
 
 const promoFeatures: PromoFeature[] = [
   { feature: "Featured placement on homepage", included: true },

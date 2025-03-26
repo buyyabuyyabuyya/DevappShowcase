@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Loader2 } from "lucide-react";
 import { upgradeToProUser } from "@/lib/firestore/users";
 import { useProStatus } from "@/context/pro-status-provider";
+import { useRouter } from "next/navigation";
 
 // Direct Stripe URL as fallback
-const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
+const STRIPE_URL = "https://buy.stripe.com/test_eVadRDbbW9ta3lK5kl";
 
 interface UpgradeButtonProps {
   variant?: "default" | "outline" | "secondary";
@@ -26,6 +27,7 @@ export function UpgradeButton({
 }: UpgradeButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { isPro } = useProStatus();
+  const router = useRouter();
 
   // Don't render if user is already Pro
   if (isPro) return null;
@@ -39,11 +41,24 @@ export function UpgradeButton({
 
     setIsLoading(true);
     try {
-      // Just use the direct Stripe URL instead of the upgradeToProUser function
-      // which requires a userId and doesn't return a URL
-      window.location.href = STRIPE_URL;
+      // Call our checkout API endpoint instead of using a direct URL
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      
+      const data = await response.json();
+      
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL returned');
+      }
     } catch (error) {
       console.error("Failed to create checkout session:", error);
+      // Fallback to direct URL if API fails
       window.location.href = STRIPE_URL;
     } finally {
       setIsLoading(false);
@@ -54,11 +69,16 @@ export function UpgradeButton({
     <Button 
       variant={variant} 
       size={size} 
-      onClick={() => window.open(STRIPE_URL, '_blank')}
+      onClick={handleUpgrade}
       disabled={isLoading}
       className={className}
     >
-      {children || (
+      {isLoading ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Loading...
+        </>
+      ) : children || (
         <>
           Upgrade to Pro {variant !== "outline" && <Sparkles className="ml-2 h-4 w-4" />}
         </>

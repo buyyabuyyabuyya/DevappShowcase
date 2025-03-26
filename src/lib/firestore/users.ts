@@ -224,25 +224,71 @@ export async function updateUserSubscriptionStatus({
   currentPeriodEnd: Date;
 }) {
   try {
-    // Find the user with this Stripe customer ID
-    const usersRef = collection(db, 'users');
-    const q = query(usersRef, where("stripeCustomerId", "==", stripeCustomerId));
-    const querySnapshot = await getDocs(q);
+    console.log(`Looking for user with Stripe ID: ${stripeCustomerId}`);
     
-    if (querySnapshot.empty) {
-      return { success: false, error: "No user found with this Stripe customer ID" };
+    // 1. First try to find the user by Stripe customer ID
+    const userSnapshot = await getDocs(
+      query(collection(db, 'users'), where('stripeCustomerId', '==', stripeCustomerId))
+    );
+    
+    if (userSnapshot.empty) {
+      console.error(`No user found with Stripe customer ID: ${stripeCustomerId}`);
+      
+      // 2. If no user found by Stripe ID, you could try to find by Clerk ID
+      // This is a fallback if the Stripe customer ID wasn't properly stored
+      const clerkUserResponse = await fetch(
+        `https://api.clerk.dev/v1/customers/${stripeCustomerId}/metadata`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+          },
+        }
+      );
+      
+      if (!clerkUserResponse.ok) {
+        return { success: false, error: 'No user found with this Stripe customer ID' };
+      }
+      
+      const clerkUserData = await clerkUserResponse.json();
+      const clerkId = clerkUserData.metadata.clerkId;
+      
+      if (!clerkId) {
+        return { success: false, error: 'No Clerk user ID found in Stripe metadata' };
+      }
+      
+      // Now try to find the user by Clerk ID
+      const clerkUserSnapshot = await getDocs(
+        query(collection(db, 'users'), where('clerkId', '==', clerkId))
+      );
+      
+      if (clerkUserSnapshot.empty) {
+        return { success: false, error: 'No user found for the associated Clerk ID' };
+      }
+      
+      // Update the user with their Stripe customer ID for future use
+      const userDoc = clerkUserSnapshot.docs[0];
+      await updateDoc(doc(db, 'users', userDoc.id), {
+        stripeCustomerId,
+        isPro: isActive,
+        subscriptionId,
+        subscriptionExpiresAt: currentPeriodEnd,
+        updatedAt: serverTimestamp()
+      });
+      
+      console.log(`User subscription updated with Clerk ID fallback: ${userDoc.id}`);
+      return { success: true };
     }
-
-    const userDoc = querySnapshot.docs[0];
     
-    // Update subscription status
+    // Normal path - user found by Stripe customer ID
+    const userDoc = userSnapshot.docs[0];
     await updateDoc(doc(db, 'users', userDoc.id), {
       isPro: isActive,
       subscriptionId,
-      subscriptionExpiresAt: Timestamp.fromDate(currentPeriodEnd),
+      subscriptionExpiresAt: currentPeriodEnd,
       updatedAt: serverTimestamp()
     });
     
+    console.log(`User subscription updated: ${userDoc.id}`);
     return { success: true };
   } catch (error) {
     console.error("Error updating subscription status:", error);
