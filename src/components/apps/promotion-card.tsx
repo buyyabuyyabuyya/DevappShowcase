@@ -13,7 +13,7 @@ import { useProStatus } from "@/context/pro-status-provider";
 import { togglePromoteApp } from "@/app/actions/toggle-promote-app";
 
 // Direct Stripe URL
-const STRIPE_URL = "https://buy.stripe.com/test_eVadRDbbW9ta3lK5kl";
+const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
 
 interface PromotionCardProps {
   appId: string;

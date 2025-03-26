@@ -4,7 +4,7 @@ import { getUserByClerkId } from "@/lib/firestore/users";
 import { stripe } from "@/lib/stripe";
 
 // Define the price ID for your Pro subscription
-const PRO_PRICE_ID = "prod_RwNEdcBUNMAWi3"; // Replace with your actual Stripe price ID
+const PRO_PRICE_ID = "prod_RwJKcifWtNr3nc"; // Replace with your actual Stripe price ID
 
 export async function POST(request: NextRequest) {
   try {
