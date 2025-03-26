@@ -57,14 +57,28 @@ export default function SubscriptionPage() {
               </span>
             </div>
             
-            {isPro && subscriptionExpiresAt && (
-              <div className="flex flex-col">
-                <span className="text-muted-foreground">Next billing date</span>
-                <span className="font-medium">
-                  {subscriptionExpiresAt.toLocaleDateString()}
-                </span>
-              </div>
-            )}
+            {isPro && subscriptionExpiresAt ? (
+              <>
+                <div className="mb-4">
+                  <h3 className="text-sm font-medium text-muted-foreground">Next billing date</h3>
+                  <p className="text-lg font-medium">
+                    {subscriptionExpiresAt instanceof Date 
+                      ? new Intl.DateTimeFormat('en-US', { 
+                          month: 'long', 
+                          day: 'numeric', 
+                          year: 'numeric' 
+                        }).format(subscriptionExpiresAt)
+                      : typeof subscriptionExpiresAt === 'string' && subscriptionExpiresAt
+                        ? new Intl.DateTimeFormat('en-US', { 
+                            month: 'long', 
+                            day: 'numeric', 
+                            year: 'numeric' 
+                          }).format(new Date(subscriptionExpiresAt))
+                        : 'Invalid Date'}
+                  </p>
+                </div>
+              </>
+            ) : null}
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
