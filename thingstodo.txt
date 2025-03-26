@@ -14,6 +14,27 @@ make the IMAGES of the Featured Applications get them from the MONGODB base64 pi
 
 
 
+make it where users can edit there feedback post or delete it
+
+change back the STRIPE to prod keys and URL's see the UNIX COMMANDS file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

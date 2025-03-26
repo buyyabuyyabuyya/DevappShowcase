@@ -2,7 +2,7 @@ import { db } from '../firebase';
 import { 
   doc, getDoc, updateDoc, arrayUnion, 
   increment, serverTimestamp, collection, 
-  addDoc, Timestamp, query, where, orderBy, getDocs
+  addDoc, Timestamp, query, where, orderBy, getDocs, deleteDoc
 } from 'firebase/firestore';
 import { auth } from '@clerk/nextjs/server';
 import { getUserByClerkId } from './users';
@@ -218,5 +218,110 @@ export async function getAppFeedback(appId: string) {
   } catch (error) {
     console.error("Error fetching app feedback:", error);
     return { success: false, error: "Failed to fetch feedback" };
+  }
+}
+
+export async function editFeedback({
+  appId,
+  feedbackId,
+  userId,
+  text
+}: {
+  appId: string;
+  feedbackId: string;
+  userId: string;
+  text: string;
+}) {
+  try {
+    console.log(`Editing feedback: appId=${appId}, feedbackId=${feedbackId}, userId=${userId}`);
+    
+    // Get the feedback document first to verify ownership
+    const feedbackRef = doc(db, 'feedback', feedbackId);
+    const feedbackDoc = await getDoc(feedbackRef);
+    
+    if (!feedbackDoc.exists()) {
+      console.error(`Feedback not found: ${feedbackId}`);
+      return { success: false, error: 'Feedback not found' };
+    }
+    
+    const feedbackData = feedbackDoc.data();
+    
+    // Ensure the user owns this feedback
+    if (feedbackData.userId !== userId) {
+      console.error(`User ${userId} attempted to edit feedback they don't own`);
+      return { success: false, error: 'You can only edit your own feedback' };
+    }
+    
+    // Verify the feedback belongs to the right app
+    if (feedbackData.appId !== appId) {
+      console.error(`Feedback ${feedbackId} does not belong to app ${appId}`);
+      return { success: false, error: 'Feedback does not belong to this app' };
+    }
+    
+    // Update the feedback text
+    await updateDoc(feedbackRef, {
+      comment: text, // Update the comment field that's used in the collection
+      updatedAt: serverTimestamp()
+    });
+    
+    console.log(`Feedback edited successfully: ${feedbackId}`);
+    revalidatePath(`/apps/${appId}`);
+    return { success: true };
+  } catch (error) {
+    console.error("Error editing feedback:", error);
+    return { success: false, error: "Failed to edit feedback" };
+  }
+}
+
+export async function deleteFeedback({
+  appId,
+  feedbackId,
+  userId
+}: {
+  appId: string;
+  feedbackId: string;
+  userId: string;
+}) {
+  try {
+    console.log(`Deleting feedback: appId=${appId}, feedbackId=${feedbackId}, userId=${userId}`);
+    
+    // Get the feedback document first to verify ownership
+    const feedbackRef = doc(db, 'feedback', feedbackId);
+    const feedbackDoc = await getDoc(feedbackRef);
+    
+    if (!feedbackDoc.exists()) {
+      console.error(`Feedback not found: ${feedbackId}`);
+      return { success: false, error: 'Feedback not found' };
+    }
+    
+    const feedbackData = feedbackDoc.data();
+    
+    // Ensure the user owns this feedback
+    if (feedbackData.userId !== userId) {
+      console.error(`User ${userId} attempted to delete feedback they don't own`);
+      return { success: false, error: 'You can only delete your own feedback' };
+    }
+    
+    // Verify the feedback belongs to the right app
+    if (feedbackData.appId !== appId) {
+      console.error(`Feedback ${feedbackId} does not belong to app ${appId}`);
+      return { success: false, error: 'Feedback does not belong to this app' };
+    }
+    
+    // Delete the feedback
+    await deleteDoc(feedbackRef);
+    
+    // Update app document to decrement feedback count
+    const appRef = doc(db, 'apps', appId);
+    await updateDoc(appRef, {
+      "ratings.feedback.count": increment(-1)
+    });
+    
+    console.log(`Feedback deleted successfully: ${feedbackId}`);
+    revalidatePath(`/apps/${appId}`);
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting feedback:", error);
+    return { success: false, error: "Failed to delete feedback" };
   }
 } 
