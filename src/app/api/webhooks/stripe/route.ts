@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
 import { updateUserSubscriptionStatus } from "@/lib/firestore/users";
 import { headers } from 'next/headers';
-import { getDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { getDoc, doc, updateDoc, serverTimestamp, getDocs, query, collection, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { stripe } from "@/lib/stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+import {Stripe} from 'stripe'
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
@@ -44,19 +44,52 @@ export async function POST(req: Request) {
         const session = event.data.object as Stripe.Checkout.Session;
         console.log("Checkout session completed with full data:", JSON.stringify(session));
         console.log("Customer ID:", session.customer);
+        console.log("Customer Email:", session.customer_email);
         console.log("Metadata:", session.metadata);
-        
-        // Get the clerk ID from the metadata
-        const clerkId = session.metadata?.clerkId;
         
         if (session.mode === "subscription" && session.subscription) {
           const subscription = await stripe.subscriptions.retrieve(
             session.subscription as string
           );
           
-          // If we have a clerkId in metadata, we should update the user directly
+          // Try to find the user by email first, since we know the email is set when the user signs up
+          const customerEmail = session.customer_email;
+          
+          if (customerEmail) {
+            console.log(`Looking for user with email: ${customerEmail}`);
+            
+            // Find user by email
+            const userSnapshot = await getDocs(
+              query(collection(db, 'users'), where('email', '==', customerEmail))
+            );
+            
+            if (!userSnapshot.empty) {
+              // User found by email
+              const userDoc = userSnapshot.docs[0];
+              const userData = userDoc.data();
+              
+              console.log(`User found by email: ${userDoc.id}`);
+              
+              // Update user with Stripe info
+              await updateDoc(doc(db, 'users', userDoc.id), {
+                stripeCustomerId: session.customer as string,
+                isPro: subscription.status === "active",
+                subscriptionId: subscription.id,
+                subscriptionExpiresAt: new Date(subscription.current_period_end * 1000),
+                updatedAt: serverTimestamp()
+              });
+              
+              console.log(`User subscription updated via email match: ${userDoc.id}`);
+              return NextResponse.json({ received: true });
+            } else {
+              console.log(`No user found with email: ${customerEmail}`);
+            }
+          }
+          
+          // Fall back to the metadata if available
+          const clerkId = session.metadata?.clerkId;
           if (clerkId) {
-            // First, check if user exists
+            // Try to find user by Clerk ID
             const userDoc = await getDoc(doc(db, 'users', clerkId));
             
             if (userDoc.exists()) {
@@ -69,12 +102,12 @@ export async function POST(req: Request) {
                 updatedAt: serverTimestamp()
               });
               
-              console.log(`User updated directly via clerkId: ${clerkId}`);
+              console.log(`User updated via clerkId: ${clerkId}`);
               return NextResponse.json({ received: true });
             }
           }
           
-          // Fall back to the existing logic if no clerkId or user not found
+          // Last resort: try to find by Stripe customer ID (original approach)
           const result = await updateUserSubscriptionStatus({
             stripeCustomerId: session.customer as string,
             isActive: subscription.status === "active",
