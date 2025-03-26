@@ -62,19 +62,13 @@ export default function SubscriptionPage() {
                 <div className="mb-4">
                   <h3 className="text-sm font-medium text-muted-foreground">Next billing date</h3>
                   <p className="text-lg font-medium">
-                    {subscriptionExpiresAt instanceof Date 
+                    {subscriptionExpiresAt instanceof Date && !isNaN(subscriptionExpiresAt.getTime())
                       ? new Intl.DateTimeFormat('en-US', { 
                           month: 'long', 
                           day: 'numeric', 
-                          year: 'numeric' 
+                          year: 'numeric'
                         }).format(subscriptionExpiresAt)
-                      : typeof subscriptionExpiresAt === 'string' && subscriptionExpiresAt
-                        ? new Intl.DateTimeFormat('en-US', { 
-                            month: 'long', 
-                            day: 'numeric', 
-                            year: 'numeric' 
-                          }).format(new Date(subscriptionExpiresAt))
-                        : 'Invalid Date'}
+                      : 'No date available'}
                   </p>
                 </div>
               </>

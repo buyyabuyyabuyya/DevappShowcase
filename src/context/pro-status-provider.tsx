@@ -53,8 +53,18 @@ export function ProStatusProvider({
       
       setIsPro(!!data.isPro);
       
+      // Handle Firestore timestamp format
       if (data.subscriptionExpiresAt) {
-        setSubscriptionExpiresAt(new Date(data.subscriptionExpiresAt));
+        if (typeof data.subscriptionExpiresAt === 'string') {
+          // Handle string timestamp
+          setSubscriptionExpiresAt(new Date(data.subscriptionExpiresAt));
+        } else if (data.subscriptionExpiresAt.seconds) {
+          // Handle Firestore timestamp format {seconds: number, nanoseconds: number}
+          setSubscriptionExpiresAt(new Date(data.subscriptionExpiresAt.seconds * 1000));
+        } else {
+          // Handle normal date object
+          setSubscriptionExpiresAt(new Date(data.subscriptionExpiresAt));
+        }
       } else {
         setSubscriptionExpiresAt(null);
       }
