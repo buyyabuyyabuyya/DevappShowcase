@@ -1,4 +1,4 @@
-                "use client";
+"use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -27,13 +27,14 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { appTypes, categories, APP_LIMITS } from "@/lib/constants";
 import { Loader2, UploadCloud, X } from "lucide-react";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
 
 // Add this constant at the top of the file
 const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
+const MAX_SCREENSHOTS = 5;
 
 //need to re-deploy
 //need to re-deploy
@@ -54,6 +55,8 @@ export function EditAppForm({ app }: EditAppFormProps) {
   const [existingImages, setExistingImages] = useState<string[]>(app.imageUrls || []);
   const [isProUser, setIsProUser] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDraggingIcon, setIsDraggingIcon] = useState(false);
+  const [isDraggingScreenshots, setIsDraggingScreenshots] = useState(false);
 
   useEffect(() => {
     async function checkUserStatus() {
@@ -111,33 +114,45 @@ export function EditAppForm({ app }: EditAppFormProps) {
     }
   }, [isProUser, form]);
 
+  // Updated to handle File directly
+  function handleIconFile(file: File) {
+    setIconFile(file);
+    
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      setIconPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Handle input change event
   function handleIconChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-      setIconFile(file);
-      
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = () => {
-        setIconPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      handleIconFile(file);
     }
   }
 
+  // Updated to handle File[] directly
+  function handleImageFiles(files: File[]) {
+    setImageFiles((prev) => [...prev, ...files]);
+    
+    // Create previews
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImagePreviews((prev) => [...prev, reader.result as string]);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Handle input change event
   function handleImagesChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
       const files = Array.from(e.target.files);
-      setImageFiles((prev) => [...prev, ...files]);
-      
-      // Create previews
-      files.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          setImagePreviews((prev) => [...prev, reader.result as string]);
-        };
-        reader.readAsDataURL(file);
-      });
+      handleImageFiles(files);
     }
   }
 
@@ -290,6 +305,64 @@ export function EditAppForm({ app }: EditAppFormProps) {
     });
   }, [app, form]);
 
+  // Create these handlers for the icon upload
+  const handleIconDragEnter = useCallback(() => {
+    setIsDraggingIcon(true);
+  }, []);
+
+  const handleIconDragLeave = useCallback(() => {
+    setIsDraggingIcon(false);
+  }, []);
+
+  const handleIconDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingIcon(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith("image/")) {
+        handleIconFile(file);
+      } else {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload an image file for the app icon",
+          variant: "destructive",
+        });
+      }
+    }
+  }, []);
+
+  // Create these handlers for the screenshots upload
+  const handleScreenshotsDragEnter = useCallback(() => {
+    setIsDraggingScreenshots(true);
+  }, []);
+
+  const handleScreenshotsDragLeave = useCallback(() => {
+    setIsDraggingScreenshots(false);
+  }, []);
+
+  const handleScreenshotsDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingScreenshots(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const files = Array.from(e.dataTransfer.files);
+      const imageFiles = files.filter(file => file.type.startsWith("image/"));
+      
+      if (imageFiles.length > 0) {
+        handleImageFiles(imageFiles);
+      } else {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload image files for screenshots",
+          variant: "destructive",
+        });
+      }
+    }
+  }, []);
+
   return (
     <Form {...form}>
       <form 
@@ -405,49 +478,65 @@ export function EditAppForm({ app }: EditAppFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>App Icon</FormLabel>
-              <div className="space-y-2">
-                {iconPreview ? (
-                  <div className="relative w-24 h-24">
-                    <Image 
-                      src={iconPreview} 
-                      alt="App icon" 
-                      width={96} 
-                      height={96} 
-                      className="rounded-lg object-cover"
-                    />
-                    <Button 
-                      type="button" 
-                      variant="destructive" 
-                      size="icon" 
-                      className="absolute -top-2 -right-2 h-6 w-6"
-                      onClick={removeIcon}
+              <FormControl>
+                <div 
+                  className={`relative ${
+                    isDraggingIcon ? "border-primary border-2 rounded-lg p-2" : ""
+                  }`}
+                  onDragEnter={handleIconDragEnter}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onDragLeave={handleIconDragLeave}
+                  onDrop={handleIconDrop}
+                >
+                  <Input
+                    ref={iconInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="sr-only"
+                    onChange={handleIconChange}
+                  />
+                  {iconPreview ? (
+                    <div className="relative inline-block">
+                      <Image
+                        src={iconPreview}
+                        alt="App icon preview"
+                        width={100}
+                        height={100}
+                        className="rounded-lg object-cover border"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="icon"
+                        className="absolute -top-2 -right-2 h-6 w-6"
+                        onClick={() => {
+                          setIconPreview(null);
+                          setIconFile(null);
+                          field.onChange('');
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => iconInputRef.current?.click()}
+                      className="w-full h-24 border-dashed"
                     >
-                      <X className="h-4 w-4" />
+                      <UploadCloud className="mr-2 h-4 w-4" />
+                      {isDraggingIcon ? "Drop icon here" : "Upload App Icon"}
                     </Button>
-                  </div>
-                ) : (
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    onClick={() => iconInputRef.current?.click()}
-                    className="w-24 h-24 border-dashed"
-                  >
-                    <UploadCloud className="h-6 w-6" />
-                  </Button>
-                )}
-                <FormControl>
-                  <Input value={field.value} hidden />
-                </FormControl>
-                <input 
-                  type="file" 
-                  ref={iconInputRef} 
-                  className="hidden" 
-                  accept="image/*"
-                  onChange={handleIconChange}
-                />
-              </div>
+                  )}
+                  <input type="hidden" value={field.value || ''} />
+                </div>
+              </FormControl>
               <FormDescription>
-                A square image representing your app (recommended size: 512x512px)
+                Upload a square image for your app icon.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -459,55 +548,66 @@ export function EditAppForm({ app }: EditAppFormProps) {
           name="imageUrls"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>App Screenshots</FormLabel>
-              <div className="space-y-2">
-                {imagePreviews.length > 0 && (
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    {imagePreviews.map((preview, index) => (
-                      <div key={index} className="relative">
-                        <Image 
-                          src={preview} 
-                          alt={`Screenshot ${index + 1}`}
-                          width={300}
-                          height={200}
-                          className="rounded-lg object-cover border aspect-video"
-                        />
-                        <Button 
-                          type="button" 
-                          variant="destructive" 
-                          size="icon" 
-                          className="absolute -top-2 -right-2 h-6 w-6"
-                          onClick={() => removeImage(index)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => imagesInputRef.current?.click()}
-                  className="w-full h-24 border-dashed"
+              <FormLabel>Screenshots</FormLabel>
+              <FormControl>
+                <div
+                  className={`${
+                    isDraggingScreenshots ? "border-primary border-2 rounded-lg p-2" : ""
+                  }`}
+                  onDragEnter={handleScreenshotsDragEnter}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onDragLeave={handleScreenshotsDragLeave}
+                  onDrop={handleScreenshotsDrop}
                 >
-                  <UploadCloud className="mr-2 h-4 w-4" />
-                  Upload Screenshots
-                </Button>
-                <FormControl>
-                  <Input value={field.value?.join(',')} hidden />
-                </FormControl>
-                <input 
-                  type="file" 
-                  ref={imagesInputRef} 
-                  className="hidden" 
-                  accept="image/*"
-                  multiple
-                  onChange={handleImagesChange}
-                />
-              </div>
+                  <Input
+                    ref={imagesInputRef}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="sr-only"
+                    onChange={handleImagesChange}
+                  />
+                  {imagePreviews.length > 0 && (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                      {imagePreviews.map((preview, index) => (
+                        <div key={index} className="relative">
+                          <Image
+                            src={preview}
+                            alt={`Screenshot ${index + 1}`}
+                            width={300}
+                            height={200}
+                            className="rounded-lg object-cover border aspect-video"
+                          />
+                          <Button 
+                            type="button" 
+                            variant="destructive" 
+                            size="icon" 
+                            className="absolute -top-2 -right-2 h-6 w-6"
+                            onClick={() => removeImage(index)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => imagesInputRef.current?.click()}
+                    className="w-full h-24 border-dashed"
+                  >
+                    <UploadCloud className="mr-2 h-4 w-4" />
+                    {isDraggingScreenshots ? "Drop screenshots here" : "Upload Screenshots"}
+                  </Button>
+                  <input type="hidden" value={Array.isArray(field.value) ? field.value.join(',') : ''} />
+                </div>
+              </FormControl>
               <FormDescription>
-                Add screenshots of your application (recommended: 16:9 aspect ratio)
+                Upload up to {MAX_SCREENSHOTS} screenshots of your app.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -650,30 +750,22 @@ export function EditAppForm({ app }: EditAppFormProps) {
           <Button 
             type="button" 
             variant="outline" 
-            onClick={() => router.push(`/apps/${app.appId || app.id || app._id}`)}
+            onClick={() => router.push(`/apps/${app.id || app.appId}`)}
           >
             Cancel
           </Button>
-          <Button 
-            type="button" 
-            disabled={isSubmitting} 
-            className="flex-1"
-            onClick={() => {
-              console.log("[EditForm] Submit button clicked manually");
-              handleSubmit(form.getValues());
-            }}
-          >
+          <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Updating...
-                <Loader2 className="ml-2 h-4 w-4 animate-spin" />
               </>
             ) : (
-              "Update Application"
+              "Update App"
             )}
           </Button>
         </div>
       </form>
     </Form>
   );
-} 
+}

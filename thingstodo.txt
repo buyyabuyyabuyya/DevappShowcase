@@ -100,3 +100,43 @@ Done through rotations:
 - Red-black trees may be better for frequent modifications
 
 AVL trees are ideal when lookup speed is critical and modifications are less frequent.
+
+
+
+
+
+
+
+Functional Requirements:
+
+  The primary goal of a Use Case model is to describe the system's intended functionality from actors' (users or other systems) perspectives.
+  Use cases define the specific actions that actors are able to perform with the system, describing event sequences and interactions.
+  The PowerPoint emphasizes this by stating that a use case "defines a set of use-case instances, where each instance is a sequence of actions a system performs that yields an observable result of value to a particular actor."
+  Examples in the PowerPoint, like "Register for Courses" and "Login," are direct functions the system must perform.
+
+Non-Functional Requirements:
+
+  Although Use Case models don't state non-functional requirements, they do set a context within which non-functional requirements are applied.
+  According to the PowerPoint, "The nonfunctional requirements and functional requirements not covered by the use cases are incorporated into the supplementary specifications."
+  That is, non-functional requirements (e.g., performance, security, usability) are documented separately but are linked to functions described in the Use Case model.
+  The PowerPoint gives examples of non-functional requirements:
+      Functionality
+      Usability
+      Reliability
+      Performance
+      Supportability
+      Design constraints
+
+Example:
+
+Consider the use case "View Report Card" from the PowerPoint:
+
+  Functional Requirement: The Use Case model would specify the things that happen when a student looks at his/her report card (e.g., log in, select the report card option, display the grades).
+  Non-Functional Requirement:
+      A sample non-functional requirement for "View Report Card" would be: "The report card should be shown within 2 seconds of the student's request" (Performance).
+      This non-functional requirement does not change the steps of the use case, but puts a quality constraint on how that functionality has to be done.
+
+Summary:
+
+  The Use Case model deals mainly with specifying the system's functional behaviour.
+  Non-functional requirements are important but tend to be formulated in other specifications referring to the use cases as a point of reference to make sure that the functions are offered with the desired qualities.
