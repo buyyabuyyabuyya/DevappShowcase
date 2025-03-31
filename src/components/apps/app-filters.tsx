@@ -32,9 +32,16 @@ export function AppFilters() {
   const searchParams = useSearchParams();
 
   function onFilterChange(value: string, type: 'sort' | 'type') {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set(type, value.toLowerCase());
-    router.push(`/apps?${params.toString()}`);
+    if (type === 'type' && value.toLowerCase() === 'all') {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete('type');
+      const queryString = params.toString();
+      router.push(queryString ? `/apps?${queryString}` : '/apps');
+    } else {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(type, value.toLowerCase());
+      router.push(`/apps?${params.toString()}`);
+    }
   }
 
   return (
