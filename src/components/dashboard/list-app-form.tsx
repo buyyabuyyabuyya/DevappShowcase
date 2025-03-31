@@ -39,7 +39,6 @@ import Link from "next/link";
 import { useProStatus } from "@/context/pro-status-provider";
 
 const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
-const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
 
 export function ListAppForm() {
   const router = useRouter();
@@ -52,6 +51,10 @@ export function ListAppForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const { isPro } = useProStatus();
+
+  const MAX_FILE_SIZE = isPro 
+    ? APP_LIMITS.PRO_USER.MAX_FILE_SIZE 
+    : APP_LIMITS.FREE_USER.MAX_FILE_SIZE;
 
   const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -140,7 +143,9 @@ export function ListAppForm() {
     if (file.size > MAX_FILE_SIZE) {
       toast({
         title: "File too large",
-        description: "Image must be less than 1MB",
+        description: isPro 
+          ? "Image must be less than 3MB for PRO users" 
+          : "Image must be less than 1MB. Upgrade to PRO for larger file uploads (up to 3MB).",
         variant: "destructive"
       });
       return;
@@ -168,7 +173,9 @@ export function ListAppForm() {
       if (file.size > MAX_FILE_SIZE) {
         toast({
           title: "File too large",
-          description: `${file.name} must be less than 1MB`,
+          description: isPro 
+            ? `${file.name} must be less than 3MB for PRO users`
+            : `${file.name} must be less than 1MB. Upgrade to PRO for larger file uploads (up to 3MB).`,
           variant: "destructive"
         });
         return false;
@@ -502,7 +509,9 @@ export function ListAppForm() {
                       Click to upload screenshots
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Images must be less than 1MB in size
+                      {isPro 
+                        ? "Images must be less than 3MB in size (PRO)"
+                        : "Images must be less than 1MB in size. Upgrade to PRO for larger uploads."}
                     </p>
                   </div>
                   <input
@@ -539,7 +548,11 @@ export function ListAppForm() {
                 </div>
               </FormControl>
               <FormDescription>
-                Add screenshots of your application (recommended: 16:9 aspect ratio, max 1MB per image)
+                Add screenshots of your application (recommended: 16:9 aspect ratio, 
+                {isPro 
+                  ? "max 3MB per image" 
+                  : "max 1MB per image. Upgrade to PRO for larger uploads."}
+                )
               </FormDescription>
               <FormMessage />
             </FormItem>

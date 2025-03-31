@@ -31,9 +31,13 @@ import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/components/ui/use-toast";
 
 // Add this constant at the top of the file
 const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
+
+// Add this constant at the top of the file
+const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
 
 //need to re-deploy
 //need to re-deploy
@@ -45,6 +49,7 @@ interface EditAppFormProps {
 
 export function EditAppForm({ app }: EditAppFormProps) {
   const router = useRouter();
+  const { toast } = useToast();
   const iconInputRef = useRef<HTMLInputElement>(null);
   const imagesInputRef = useRef<HTMLInputElement>(null);
   const [iconFile, setIconFile] = useState<File | null>(null);
@@ -55,6 +60,11 @@ export function EditAppForm({ app }: EditAppFormProps) {
   const [isProUser, setIsProUser] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Add dynamic file size limit based on user status
+  const MAX_FILE_SIZE = isProUser 
+    ? APP_LIMITS.PRO_USER.MAX_FILE_SIZE 
+    : APP_LIMITS.FREE_USER.MAX_FILE_SIZE;
+
   useEffect(() => {
     async function checkUserStatus() {
       const response = await fetch('/api/user-status');
@@ -63,7 +73,7 @@ export function EditAppForm({ app }: EditAppFormProps) {
     }
     checkUserStatus();
   }, []);
-//git push oringi main
+
   const formSchema = z.object({
     name: z.string().min(2).max(50),
     description: z.string()
@@ -114,6 +124,28 @@ export function EditAppForm({ app }: EditAppFormProps) {
   function handleIconChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
+      
+      // Add file validation
+      if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload a PNG, JPEG, or WebP image",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (file.size > MAX_FILE_SIZE) {
+        toast({
+          title: "File too large",
+          description: isProUser 
+            ? "Image must be less than 3MB for PRO users" 
+            : "Image must be less than 1MB. Upgrade to PRO for larger file uploads (up to 3MB).",
+          variant: "destructive"
+        });
+        return;
+      }
+      
       setIconFile(file);
       
       // Create preview
@@ -128,10 +160,36 @@ export function EditAppForm({ app }: EditAppFormProps) {
   function handleImagesChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
       const files = Array.from(e.target.files);
-      setImageFiles((prev) => [...prev, ...files]);
+      
+      // Add file validation
+      const validFiles = files.filter(file => {
+        if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+          toast({
+            title: "Invalid file type",
+            description: `${file.name} must be PNG, JPEG, or WebP`,
+            variant: "destructive"
+          });
+          return false;
+        }
+        if (file.size > MAX_FILE_SIZE) {
+          toast({
+            title: "File too large",
+            description: isProUser 
+              ? `${file.name} must be less than 3MB for PRO users`
+              : `${file.name} must be less than 1MB. Upgrade to PRO for larger file uploads (up to 3MB).`,
+            variant: "destructive"
+          });
+          return false;
+        }
+        return true;
+      });
+      
+      if (validFiles.length === 0) return;
+      
+      setImageFiles((prev) => [...prev, ...validFiles]);
       
       // Create previews
-      files.forEach((file) => {
+      validFiles.forEach((file) => {
         const reader = new FileReader();
         reader.onload = () => {
           setImagePreviews((prev) => [...prev, reader.result as string]);
@@ -507,7 +565,11 @@ export function EditAppForm({ app }: EditAppFormProps) {
                 />
               </div>
               <FormDescription>
-                Add screenshots of your application (recommended: 16:9 aspect ratio)
+                Add screenshots of your application (recommended: 16:9 aspect ratio, 
+                {isProUser 
+                  ? "max 3MB per image" 
+                  : "max 1MB per image. Upgrade to PRO for larger uploads (up to 3MB)."}
+                )
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -676,4 +738,4 @@ export function EditAppForm({ app }: EditAppFormProps) {
       </form>
     </Form>
   );
-} 
+}
