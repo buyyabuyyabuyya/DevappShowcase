@@ -33,8 +33,8 @@ export function AppFilters() {
 
   function onFilterChange(value: string, type: 'sort' | 'type') {
     const params = new URLSearchParams(searchParams.toString());
-    params.set(type, value);
-    router.push(`/?${params.toString()}`);
+    params.set(type, value.toLowerCase());
+    router.push(`/apps?${params.toString()}`);
   }
 
   return (

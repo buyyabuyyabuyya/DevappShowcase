@@ -7,17 +7,27 @@ import { Button } from "@/components/ui/button";
 
 interface AppGridProps {
   apps: App[];
+  sort?: string;
 }
 
-export function AppGrid({ apps }: AppGridProps) {
-  // Sort apps to show promoted ones first
+export function AppGrid({ apps, sort = 'recent' }: AppGridProps) {
+  // Sort apps to show promoted ones first, then by specified sort method
   const sortedApps = [...apps].sort((a, b) => {
     // Promoted apps come first
     if (a.isPromoted && !b.isPromoted) return -1;
     if (!a.isPromoted && b.isPromoted) return 1;
     
-    // Then sort by creation date (newest first)
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    // Then sort by specified method
+    if (sort === 'likes') {
+      // Sort by likes count (highest first)
+      return (b.likes?.count || 0) - (a.likes?.count || 0);
+    } else if (sort === 'name') {
+      // Sort by name (A-Z)
+      return (a.name || '').localeCompare(b.name || '');
+    } else {
+      // Default: sort by creation date (newest first)
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    }
   });
 
   return (

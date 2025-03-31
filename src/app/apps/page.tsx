@@ -1,5 +1,5 @@
 import { getApps } from "@/lib/firestore/apps";
-import { AppGrid } from "@/components/apps/app-grid";
+import { AppGrid } from "@/components/shared/app-grid";
 import { AppFilters } from "@/components/apps/app-filters";
 
 interface AppsPageProps {
@@ -8,11 +8,12 @@ interface AppsPageProps {
     featured?: string;
     category?: string;
     search?: string;
+    sort?: string;
   };
 }
 
 export default async function AppsPage({ searchParams }: AppsPageProps) {
-  const { type, featured, category, search } = searchParams;
+  const { type, featured, category, search, sort = 'recent' } = searchParams;
   
   // Get all apps
   const response = await getApps();
@@ -50,7 +51,7 @@ export default async function AppsPage({ searchParams }: AppsPageProps) {
       
       <AppFilters />
       
-      <AppGrid apps={filteredApps} />
+      <AppGrid apps={filteredApps} sort={sort} />
     </div>
   );
 } 

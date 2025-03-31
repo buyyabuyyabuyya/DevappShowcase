@@ -21,7 +21,7 @@ const APP_LIMITS = {
   }
 };
 
-export async function getApps(options = {}) {
+export async function getApps(options: { sort?: string } = {}) {
   try {
     const appsRef = collection(db, 'apps');
     const q = query(appsRef, orderBy('createdAt', 'desc'));
