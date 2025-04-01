@@ -72,8 +72,11 @@ export async function compressImage(
   maxSizeInBytes: number = 700 * 1024, // Default to 700KB
   quality: number = 0.7
 ): Promise<File> {
+  console.log(`[ImageCompression] Starting compression for ${file.name}, size: ${(file.size / 1024).toFixed(1)}KB, target: ${(maxSizeInBytes / 1024).toFixed(1)}KB`);
+  
   // If file is already smaller than max size, return it as is
   if (file.size <= maxSizeInBytes) {
+    console.log(`[ImageCompression] Image already small enough, skipping compression`);
     return file;
   }
 
@@ -85,6 +88,7 @@ export async function compressImage(
   const ctx = canvas.getContext('2d');
   
   if (!ctx) {
+    console.error('[ImageCompression] Could not get canvas context');
     throw new Error('Could not get canvas context');
   }
   
@@ -105,16 +109,22 @@ export async function compressImage(
   let width = img.width;
   let height = img.height;
   
-  // If image is very large, scale it down
-  const MAX_DIMENSION = 1920; // Maximum width/height
+  console.log(`[ImageCompression] Original dimensions: ${width}x${height}`);
+  
+  // Start with a scale down if image is large
+  let scaleFactor = 1.0;
+  const MAX_DIMENSION = 1600; // Maximum width/height (reduced from 1920)
+  
   if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
     if (width > height) {
-      height = Math.round((height * MAX_DIMENSION) / width);
-      width = MAX_DIMENSION;
+      scaleFactor = MAX_DIMENSION / width;
     } else {
-      width = Math.round((width * MAX_DIMENSION) / height);
-      height = MAX_DIMENSION;
+      scaleFactor = MAX_DIMENSION / height;
     }
+    
+    width = Math.round(width * scaleFactor);
+    height = Math.round(height * scaleFactor);
+    console.log(`[ImageCompression] Scaled initial dimensions to: ${width}x${height}, scaleFactor: ${scaleFactor.toFixed(2)}`);
   }
   
   // Set canvas dimensions
@@ -130,29 +140,43 @@ export async function compressImage(
   let currentQuality = quality;
   
   const mimeType = file.type || 'image/jpeg';
+  console.log(`[ImageCompression] Using mime type: ${mimeType}`);
   
-  while (currentQuality > 0.1) {
+  // First compression attempt
+  compressedBlob = await new Promise<Blob | null>(resolve => {
+    canvas.toBlob(resolve, mimeType, currentQuality);
+  });
+  
+  if (compressedBlob) {
+    console.log(`[ImageCompression] Initial compression at quality ${currentQuality.toFixed(1)}: ${(compressedBlob.size / 1024).toFixed(1)}KB`);
+  }
+  
+  // Try quality reduction loop
+  while (currentQuality > 0.1 && (!compressedBlob || compressedBlob.size > maxSizeInBytes)) {
+    currentQuality -= 0.1;
+    console.log(`[ImageCompression] Trying quality: ${currentQuality.toFixed(1)}`);
+    
     // Convert canvas to blob
     compressedBlob = await new Promise<Blob | null>(resolve => {
       canvas.toBlob(resolve, mimeType, currentQuality);
     });
     
-    // If blob is null or still too large, reduce quality and try again
-    if (!compressedBlob || compressedBlob.size > maxSizeInBytes) {
-      currentQuality -= 0.1;
-    } else {
-      break;
+    if (compressedBlob) {
+      console.log(`[ImageCompression] Compressed size at quality ${currentQuality.toFixed(1)}: ${(compressedBlob.size / 1024).toFixed(1)}KB`);
     }
   }
   
   // If we couldn't compress enough with quality, try reducing dimensions
   if (!compressedBlob || compressedBlob.size > maxSizeInBytes) {
-    let scaleFactor = 0.9;
+    console.log(`[ImageCompression] Quality reduction wasn't enough, trying dimension reduction`);
+    scaleFactor = 0.8; // Start with more aggressive scaling
     
-    while (scaleFactor > 0.3) {
+    while (scaleFactor > 0.1) {
       // Reduce dimensions
       width = Math.floor(width * scaleFactor);
       height = Math.floor(height * scaleFactor);
+      
+      console.log(`[ImageCompression] Trying dimensions: ${width}x${height}, scaleFactor: ${scaleFactor.toFixed(2)}`);
       
       // Update canvas size
       canvas.width = width;
@@ -162,29 +186,75 @@ export async function compressImage(
       ctx.clearRect(0, 0, width, height);
       ctx.drawImage(img, 0, 0, width, height);
       
-      // Try to get a blob
+      // Try to get a blob with medium quality
       compressedBlob = await new Promise<Blob | null>(resolve => {
-        canvas.toBlob(resolve, mimeType, 0.7); // Use decent quality
+        canvas.toBlob(resolve, mimeType, 0.5); // Use lower quality (0.5 instead of 0.7)
       });
+      
+      if (compressedBlob) {
+        console.log(`[ImageCompression] Size after dimension reduction: ${(compressedBlob.size / 1024).toFixed(1)}KB`);
+      }
       
       // If small enough, break the loop
       if (compressedBlob && compressedBlob.size <= maxSizeInBytes) {
         break;
       }
       
-      // Otherwise reduce scale more
-      scaleFactor -= 0.1;
+      // Otherwise reduce scale more aggressively
+      scaleFactor -= 0.2; // More aggressive reduction (0.2 instead of 0.1)
+    }
+  }
+  
+  // If we still couldn't compress enough, try converting to JPEG if it's not already
+  if ((!compressedBlob || compressedBlob.size > maxSizeInBytes) && mimeType !== 'image/jpeg') {
+    console.log(`[ImageCompression] Trying format conversion to JPEG`);
+    
+    compressedBlob = await new Promise<Blob | null>(resolve => {
+      canvas.toBlob(resolve, 'image/jpeg', 0.4); // Use low quality JPEG
+    });
+    
+    if (compressedBlob) {
+      console.log(`[ImageCompression] Size after JPEG conversion: ${(compressedBlob.size / 1024).toFixed(1)}KB`);
+    }
+  }
+  
+  // Final aggressive reduction if still not small enough
+  if (!compressedBlob || compressedBlob.size > maxSizeInBytes) {
+    console.log(`[ImageCompression] Final aggressive reduction`);
+    
+    // Drastically reduce dimensions
+    width = Math.floor(width * 0.5);
+    height = Math.floor(height * 0.5);
+    
+    console.log(`[ImageCompression] Final dimensions: ${width}x${height}`);
+    
+    canvas.width = width;
+    canvas.height = height;
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(img, 0, 0, width, height);
+    
+    compressedBlob = await new Promise<Blob | null>(resolve => {
+      canvas.toBlob(resolve, 'image/jpeg', 0.3); // Very low quality JPEG
+    });
+    
+    if (compressedBlob) {
+      console.log(`[ImageCompression] Final size: ${(compressedBlob.size / 1024).toFixed(1)}KB`);
     }
   }
   
   // If we still couldn't compress enough, throw an error
   if (!compressedBlob || compressedBlob.size > maxSizeInBytes) {
+    console.error(`[ImageCompression] Failed to compress image below target size`);
     throw new Error('Could not compress image to target size');
   }
   
+  console.log(`[ImageCompression] Successfully compressed from ${(file.size / 1024).toFixed(1)}KB to ${(compressedBlob.size / 1024).toFixed(1)}KB`);
+  
   // Create a new file from the blob
-  return new File([compressedBlob], file.name, {
-    type: mimeType,
+  const compressedFile = new File([compressedBlob], file.name, {
+    type: compressedBlob.type,
     lastModified: Date.now()
   });
+  
+  return compressedFile;
 } 

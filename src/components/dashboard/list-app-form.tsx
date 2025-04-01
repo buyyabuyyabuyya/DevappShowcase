@@ -52,10 +52,18 @@ export function ListAppForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const { isPro } = useProStatus();
+  const [totalDocSize, setTotalDocSize] = useState<number>(0);
 
+  // Set a lower size limit for images to account for other fields in the document
+  // Firestore has a 1MB document size limit
+  const FIRESTORE_DOC_LIMIT = 1 * 1024 * 1024; // 1MB
+  const METADATA_ESTIMATE = 10 * 1024; // 10KB estimate for other fields
+  const MAX_TOTAL_IMAGES_SIZE = FIRESTORE_DOC_LIMIT - METADATA_ESTIMATE;
+  
+  // For individual file size limit, use a more conservative value
   const MAX_FILE_SIZE = isPro 
-    ? APP_LIMITS.PRO_USER.MAX_FILE_SIZE 
-    : APP_LIMITS.FREE_USER.MAX_FILE_SIZE;
+    ? Math.min(APP_LIMITS.PRO_USER.MAX_FILE_SIZE, 500 * 1024) // Max 500KB per file for PRO
+    : Math.min(APP_LIMITS.FREE_USER.MAX_FILE_SIZE, 300 * 1024); // Max 300KB per file for FREE
 
   const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -119,6 +127,46 @@ export function ListAppForm() {
     checkUserStatus();
   }, []);
 
+  useEffect(() => {
+    // Calculate total document size whenever image previews change
+    let totalSize = 0;
+    
+    // Estimate size of text fields
+    const textFieldsSize = 
+      (form.getValues('name')?.length || 0) + 
+      (form.getValues('description')?.length || 0) +
+      (form.getValues('repoUrl')?.length || 0) +
+      (form.getValues('liveUrl')?.length || 0) +
+      (form.getValues('youtubeUrl')?.length || 0);
+    
+    totalSize += textFieldsSize;
+    
+    // Add size of icon
+    if (iconPreview) {
+      // For base64 strings, each character is approximately 1 byte
+      totalSize += iconPreview.length;
+    }
+    
+    // Add size of all images
+    imagePreviews.forEach(img => {
+      totalSize += img.length;
+    });
+    
+    setTotalDocSize(totalSize);
+    
+    // Log the estimated document size
+    const docSizeKB = (totalSize / 1024).toFixed(1);
+    const docSizeMB = (totalSize / (1024 * 1024)).toFixed(2);
+    const percentOfLimit = ((totalSize / FIRESTORE_DOC_LIMIT) * 100).toFixed(1);
+    
+    console.log(`[DocSize] Estimated doc size: ${docSizeKB}KB (${docSizeMB}MB) - ${percentOfLimit}% of Firestore limit`);
+    
+    // Warn if approaching Firestore limit
+    if (totalSize > FIRESTORE_DOC_LIMIT * 0.8) {
+      console.warn(`[DocSize] WARNING: Document size is approaching Firestore limit (${percentOfLimit}%)`);
+    }
+  }, [iconPreview, imagePreviews, form]);
+
   async function convertFileToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -142,18 +190,36 @@ export function ListAppForm() {
     }
 
     try {
+      console.log(`[IconUpload] Processing icon: ${file.name}, size: ${(file.size / 1024).toFixed(1)}KB`);
+      
+      // Check if adding this file would exceed the total limit
+      if (totalDocSize + file.size > MAX_TOTAL_IMAGES_SIZE) {
+        console.warn(`[IconUpload] Adding this icon might exceed Firestore document limit`);
+        toast({
+          title: "Document size limit",
+          description: "You're approaching Firestore's document size limit. This icon will be heavily compressed.",
+          variant: "destructive"
+        });
+      }
+      
       let processedFile = file;
       
-      // Check if compression is needed
+      // If file is larger than our limit, compress it
       if (file.size > MAX_FILE_SIZE) {
         toast({
           title: "Compressing image...",
           description: "Your image is being automatically compressed to meet size requirements",
         });
         
-        // Compress the image
-        processedFile = await compressImage(file, MAX_FILE_SIZE);
+        // Compress the image more aggressively than the individual limit if we're near total limit
+        const targetSize = totalDocSize > MAX_TOTAL_IMAGES_SIZE / 2 ? 
+          Math.min(MAX_FILE_SIZE, 200 * 1024) : // More aggressive 200KB if near limit
+          MAX_FILE_SIZE;
         
+        console.log(`[IconUpload] Compressing to target size: ${(targetSize / 1024).toFixed(1)}KB`);
+        processedFile = await compressImage(file, targetSize);
+        
+        console.log(`[IconUpload] Compression complete: ${(processedFile.size / 1024).toFixed(1)}KB`);
         toast({
           title: "Image compressed successfully",
           description: `Reduced from ${(file.size / 1024).toFixed(1)}KB to ${(processedFile.size / 1024).toFixed(1)}KB`,
@@ -161,12 +227,15 @@ export function ListAppForm() {
       }
       
       // Convert to base64 and update form
+      console.log(`[IconUpload] Converting to base64`);
       const base64 = await convertFileToBase64(processedFile);
+      
+      console.log(`[IconUpload] Base64 size: ${(base64.length / 1024).toFixed(1)}KB`);
       setIconFile(processedFile);
       setIconPreview(base64);
       form.setValue("iconUrl", base64, { shouldValidate: true });
     } catch (error) {
-      console.error("Error processing image:", error);
+      console.error("[IconUpload] Error processing image:", error);
       toast({
         title: "Image too complex",
         description: "This image couldn't be compressed enough. Please use a smaller or simpler image.",
@@ -179,6 +248,8 @@ export function ListAppForm() {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
 
+    console.log(`[ImageUpload] Processing ${files.length} images. Current doc size: ${(totalDocSize / 1024).toFixed(1)}KB`);
+    
     // First filter out invalid file types
     const validTypeFiles = files.filter(file => {
       if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
@@ -193,6 +264,20 @@ export function ListAppForm() {
     });
 
     if (validTypeFiles.length === 0) return;
+    
+    // Calculate total size of new files
+    const totalNewSize = validTypeFiles.reduce((sum, file) => sum + file.size, 0);
+    console.log(`[ImageUpload] Total size of new images: ${(totalNewSize / 1024).toFixed(1)}KB`);
+    
+    // Check if adding these files would exceed or approach the Firestore limit
+    if (totalDocSize + totalNewSize > MAX_TOTAL_IMAGES_SIZE * 0.7) {
+      console.warn(`[ImageUpload] Adding these images might exceed Firestore document size limit`);
+      toast({
+        title: "Document size limit",
+        description: "You're approaching Firestore's size limit. Only a few images can be added with heavy compression.",
+        variant: "destructive"
+      });
+    }
 
     try {
       // Show compression toast if any files need compression
@@ -204,11 +289,26 @@ export function ListAppForm() {
         });
       }
 
-      // Process each file (compress if needed)
+      // Calculate how much space we have left for new images
+      const spaceRemaining = MAX_TOTAL_IMAGES_SIZE - totalDocSize;
+      const filesCount = validTypeFiles.length;
+      
+      // Distribute available space among files, with a max per file
+      const maxSizePerFile = Math.min(
+        MAX_FILE_SIZE, 
+        Math.floor(spaceRemaining / filesCount) * 0.8 // Use 80% of available space per file as buffer
+      );
+      
+      console.log(`[ImageUpload] Space remaining: ${(spaceRemaining / 1024).toFixed(1)}KB, allocated ${(maxSizePerFile / 1024).toFixed(1)}KB per file`);
+
+      // Process each file (compress if needed) with dynamic target sizes
       const processedFiles = await Promise.all(
-        validTypeFiles.map(async (file) => {
-          if (file.size > MAX_FILE_SIZE) {
-            return compressImage(file, MAX_FILE_SIZE);
+        validTypeFiles.map(async (file, index) => {
+          console.log(`[ImageUpload] Processing image ${index+1}/${filesCount}: ${file.name}, size: ${(file.size / 1024).toFixed(1)}KB`);
+          
+          if (file.size > maxSizePerFile) {
+            console.log(`[ImageUpload] Image ${index+1} needs compression to ${(maxSizePerFile / 1024).toFixed(1)}KB`);
+            return compressImage(file, maxSizePerFile);
           }
           return file;
         })
@@ -219,6 +319,7 @@ export function ListAppForm() {
         const originalSize = validTypeFiles.reduce((sum, file) => sum + file.size, 0) / 1024;
         const compressedSize = processedFiles.reduce((sum, file) => sum + file.size, 0) / 1024;
         
+        console.log(`[ImageUpload] Compression complete. Original: ${originalSize.toFixed(1)}KB, Compressed: ${compressedSize.toFixed(1)}KB`);
         toast({
           title: "Images compressed successfully",
           description: `Reduced from ${originalSize.toFixed(1)}KB to ${compressedSize.toFixed(1)}KB total`,
@@ -226,18 +327,25 @@ export function ListAppForm() {
       }
 
       // Convert to base64 array
+      console.log(`[ImageUpload] Converting ${processedFiles.length} files to base64`);
       const base64Array = await Promise.all(
-        processedFiles.map(convertFileToBase64)
+        processedFiles.map(async (file) => {
+          const base64 = await convertFileToBase64(file);
+          console.log(`[ImageUpload] File ${file.name}: Base64 size ${(base64.length / 1024).toFixed(1)}KB`);
+          return base64;
+        })
       );
 
       // Update state and form
       setImageFiles(prev => [...prev, ...processedFiles]);
       setImagePreviews(prev => [...prev, ...base64Array]);
-      form.setValue("imageUrls", [...form.getValues("imageUrls"), ...base64Array], { 
-        shouldValidate: true 
-      });
+      
+      const newImageUrls = [...form.getValues("imageUrls"), ...base64Array];
+      form.setValue("imageUrls", newImageUrls, { shouldValidate: true });
+      
+      console.log(`[ImageUpload] Update complete. Total images: ${newImageUrls.length}`);
     } catch (error) {
-      console.error("Error processing images:", error);
+      console.error("[ImageUpload] Error processing images:", error);
       toast({
         title: "Some images couldn't be processed",
         description: "Please try with smaller or simpler images",
@@ -262,6 +370,30 @@ export function ListAppForm() {
       setIsSubmitting(true);
       console.log("Starting submission with values:", values);
       
+      // Calculate final document size
+      let totalSize = 
+        (values.name?.length || 0) +
+        (values.description?.length || 0) +
+        (values.repoUrl?.length || 0) +
+        (values.liveUrl?.length || 0) +
+        (values.youtubeUrl?.length || 0) +
+        (values.iconUrl?.length || 0);
+      
+      values.imageUrls?.forEach(url => {
+        totalSize += url.length;
+      });
+      
+      const docSizeKB = (totalSize / 1024).toFixed(1);
+      const docSizeMB = (totalSize / (1024 * 1024)).toFixed(2);
+      const percentOfLimit = ((totalSize / FIRESTORE_DOC_LIMIT) * 100).toFixed(1);
+      
+      console.log(`[Submission] Final doc size: ${docSizeKB}KB (${docSizeMB}MB) - ${percentOfLimit}% of Firestore limit`);
+      
+      if (totalSize > FIRESTORE_DOC_LIMIT) {
+        console.error(`[Submission] ERROR: Document exceeds Firestore's 1MB limit: ${docSizeMB}MB`);
+        throw new Error(`Document size (${docSizeMB}MB) exceeds Firestore's 1MB limit. Please reduce the number of images or their size.`);
+      }
+      
       const formData = {
         ...values,
         pricingModel: values.pricing,
@@ -270,7 +402,7 @@ export function ListAppForm() {
         apiDocs: values.appType === 'api' ? values.apiDocs : undefined,
       };
       
-      console.log("Sending data to createApp:", formData);
+      console.log("Sending data to createApp with payload size:", (JSON.stringify(formData).length / 1024).toFixed(1) + "KB");
       const result = await createApp(formData);
       console.log("Received response:", result);
       
