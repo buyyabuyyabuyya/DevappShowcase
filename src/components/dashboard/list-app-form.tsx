@@ -143,9 +143,7 @@ export function ListAppForm() {
     if (file.size > MAX_FILE_SIZE) {
       toast({
         title: "File too large",
-        description: isPro 
-          ? "Image must be less than 3MB for PRO users" 
-          : "Image must be less than 1MB. Upgrade to PRO for larger file uploads (up to 3MB).",
+        description: "Image must be less than 2MB.",
         variant: "destructive"
       });
       return;
@@ -173,9 +171,7 @@ export function ListAppForm() {
       if (file.size > MAX_FILE_SIZE) {
         toast({
           title: "File too large",
-          description: isPro 
-            ? `${file.name} must be less than 3MB for PRO users`
-            : `${file.name} must be less than 1MB. Upgrade to PRO for larger file uploads (up to 3MB).`,
+          description: "Image must be less than 2MB.",
           variant: "destructive"
         });
         return false;
@@ -511,7 +507,7 @@ export function ListAppForm() {
                     <p className="text-xs text-muted-foreground mt-1">
                       {isPro 
                         ? "Images must be less than 3MB in size (PRO)"
-                        : "Images must be less than 1MB in size. Upgrade to PRO for larger uploads."}
+                        : "Images must be less than 2MB in size. Upgrade to PRO for larger uploads."}
                     </p>
                   </div>
                   <input

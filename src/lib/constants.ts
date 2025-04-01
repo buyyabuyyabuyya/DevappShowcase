@@ -25,7 +25,7 @@ export const APP_LIMITS = {
   FREE_USER: {
     MAX_APPS: 3,
     DESCRIPTION_MAX_LENGTH: 500,
-    MAX_FILE_SIZE: 1 * 1024 * 1024 // 1MB
+    MAX_FILE_SIZE: 3 * 1024 * 1024 // 3MB
   },
   PRO_USER: {
     MAX_APPS: Infinity,
