@@ -32,6 +32,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
+import { compressImage } from "@/lib/utils";
 
 // Add this constant at the top of the file
 const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
@@ -135,23 +136,43 @@ export function EditAppForm({ app }: EditAppFormProps) {
         return;
       }
 
-      if (file.size > MAX_FILE_SIZE) {
-        toast({
-          title: "File too large",
-          description: "Image must be less than 3MB.",
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      setIconFile(file);
-      
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = () => {
-        setIconPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      // Process the image (compress if needed)
+      (async () => {
+        try {
+          let processedFile = file;
+          
+          if (file.size > MAX_FILE_SIZE) {
+            toast({
+              title: "Compressing image...",
+              description: "Your image is being automatically compressed to meet size requirements",
+            });
+            
+            // Compress the image
+            processedFile = await compressImage(file, MAX_FILE_SIZE);
+            
+            toast({
+              title: "Image compressed successfully",
+              description: `Reduced from ${(file.size / 1024).toFixed(1)}KB to ${(processedFile.size / 1024).toFixed(1)}KB`,
+            });
+          }
+          
+          setIconFile(processedFile);
+          
+          // Create preview
+          const reader = new FileReader();
+          reader.onload = () => {
+            setIconPreview(reader.result as string);
+          };
+          reader.readAsDataURL(processedFile);
+        } catch (error) {
+          console.error("Error processing image:", error);
+          toast({
+            title: "Image too complex",
+            description: "This image couldn't be compressed enough. Please use a smaller or simpler image.",
+            variant: "destructive"
+          });
+        }
+      })();
     }
   }
 
@@ -159,8 +180,8 @@ export function EditAppForm({ app }: EditAppFormProps) {
     if (e.target.files && e.target.files.length > 0) {
       const files = Array.from(e.target.files);
       
-      // Add file validation
-      const validFiles = files.filter(file => {
+      // First filter out invalid file types
+      const validTypeFiles = files.filter(file => {
         if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
           toast({
             title: "Invalid file type",
@@ -169,29 +190,63 @@ export function EditAppForm({ app }: EditAppFormProps) {
           });
           return false;
         }
-        if (file.size > MAX_FILE_SIZE) {
-          toast({
-            title: "File too large",
-            description: "Image must be less than 3MB.",
-            variant: "destructive"
-          });
-          return false;
-        }
         return true;
       });
       
-      if (validFiles.length === 0) return;
+      if (validTypeFiles.length === 0) return;
       
-      setImageFiles((prev) => [...prev, ...validFiles]);
-      
-      // Create previews
-      validFiles.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          setImagePreviews((prev) => [...prev, reader.result as string]);
-        };
-        reader.readAsDataURL(file);
-      });
+      // Process the images (compress if needed)
+      (async () => {
+        try {
+          // Check if any images need compression
+          const needCompression = validTypeFiles.some(file => file.size > MAX_FILE_SIZE);
+          if (needCompression) {
+            toast({
+              title: "Compressing images...",
+              description: "Your images are being automatically compressed to meet size requirements",
+            });
+          }
+
+          // Process each file (compress if needed)
+          const processedFiles = await Promise.all(
+            validTypeFiles.map(async (file) => {
+              if (file.size > MAX_FILE_SIZE) {
+                return compressImage(file, MAX_FILE_SIZE);
+              }
+              return file;
+            })
+          );
+
+          // Show success message if compression was done
+          if (needCompression) {
+            const originalSize = validTypeFiles.reduce((sum, file) => sum + file.size, 0) / 1024;
+            const compressedSize = processedFiles.reduce((sum, file) => sum + file.size, 0) / 1024;
+            
+            toast({
+              title: "Images compressed successfully",
+              description: `Reduced from ${originalSize.toFixed(1)}KB to ${compressedSize.toFixed(1)}KB total`,
+            });
+          }
+          
+          setImageFiles((prev) => [...prev, ...processedFiles]);
+          
+          // Create previews for each processed file
+          for (const file of processedFiles) {
+            const reader = new FileReader();
+            reader.onload = () => {
+              setImagePreviews((prev) => [...prev, reader.result as string]);
+            };
+            reader.readAsDataURL(file);
+          }
+        } catch (error) {
+          console.error("Error processing images:", error);
+          toast({
+            title: "Some images couldn't be processed",
+            description: "Please try with smaller or simpler images",
+            variant: "destructive"
+          });
+        }
+      })();
     }
   }
 
@@ -501,7 +556,8 @@ export function EditAppForm({ app }: EditAppFormProps) {
                 />
               </div>
               <FormDescription>
-                A square image representing your app (recommended size: 512x512px)
+                A square image representing your app (recommended size: 512x512px).
+                Large images will be automatically compressed.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -561,11 +617,8 @@ export function EditAppForm({ app }: EditAppFormProps) {
                 />
               </div>
               <FormDescription>
-                Add screenshots of your application (recommended: 16:9 aspect ratio, 
-                {isProUser 
-                  ? "max 3MB per image" 
-                  : "max 1MB per image. Upgrade to PRO for larger uploads (up to 3MB)."}
-                )
+                Add screenshots of your application (recommended: 16:9 aspect ratio).
+                Large images will be automatically compressed to meet size requirements.
               </FormDescription>
               <FormMessage />
             </FormItem>

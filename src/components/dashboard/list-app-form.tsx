@@ -37,6 +37,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { getUserProfile } from "@/lib/firestore/users";
 import Link from "next/link";
 import { useProStatus } from "@/context/pro-status-provider";
+import { compressImage } from "@/lib/utils";
 
 const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
 
@@ -140,26 +141,46 @@ export function ListAppForm() {
       return;
     }
 
-    if (file.size > MAX_FILE_SIZE) {
+    try {
+      let processedFile = file;
+      
+      // Check if compression is needed
+      if (file.size > MAX_FILE_SIZE) {
+        toast({
+          title: "Compressing image...",
+          description: "Your image is being automatically compressed to meet size requirements",
+        });
+        
+        // Compress the image
+        processedFile = await compressImage(file, MAX_FILE_SIZE);
+        
+        toast({
+          title: "Image compressed successfully",
+          description: `Reduced from ${(file.size / 1024).toFixed(1)}KB to ${(processedFile.size / 1024).toFixed(1)}KB`,
+        });
+      }
+      
+      // Convert to base64 and update form
+      const base64 = await convertFileToBase64(processedFile);
+      setIconFile(processedFile);
+      setIconPreview(base64);
+      form.setValue("iconUrl", base64, { shouldValidate: true });
+    } catch (error) {
+      console.error("Error processing image:", error);
       toast({
-        title: "File too large",
-        description: "Image must be less than 2MB.",
+        title: "Image too complex",
+        description: "This image couldn't be compressed enough. Please use a smaller or simpler image.",
         variant: "destructive"
       });
-      return;
     }
-
-    const base64 = await convertFileToBase64(file);
-    setIconFile(file);
-    setIconPreview(base64);
-    form.setValue("iconUrl", base64, { shouldValidate: true });
   }
 
   async function handleImagesChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
 
-    const validFiles = files.filter(file => {
+    // First filter out invalid file types
+    const validTypeFiles = files.filter(file => {
       if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
         toast({
           title: "Invalid file type",
@@ -168,26 +189,61 @@ export function ListAppForm() {
         });
         return false;
       }
-      if (file.size > MAX_FILE_SIZE) {
-        toast({
-          title: "File too large",
-          description: "Image must be less than 2MB.",
-          variant: "destructive"
-        });
-        return false;
-      }
       return true;
     });
 
-    const base64Array = await Promise.all(
-      validFiles.map(convertFileToBase64)
-    );
+    if (validTypeFiles.length === 0) return;
 
-    setImageFiles(prev => [...prev, ...validFiles]);
-    setImagePreviews(prev => [...prev, ...base64Array]);
-    form.setValue("imageUrls", [...form.getValues("imageUrls"), ...base64Array], { 
-      shouldValidate: true 
-    });
+    try {
+      // Show compression toast if any files need compression
+      const needCompression = validTypeFiles.some(file => file.size > MAX_FILE_SIZE);
+      if (needCompression) {
+        toast({
+          title: "Compressing images...",
+          description: "Your images are being automatically compressed to meet size requirements",
+        });
+      }
+
+      // Process each file (compress if needed)
+      const processedFiles = await Promise.all(
+        validTypeFiles.map(async (file) => {
+          if (file.size > MAX_FILE_SIZE) {
+            return compressImage(file, MAX_FILE_SIZE);
+          }
+          return file;
+        })
+      );
+
+      // Show success message if compression was done
+      if (needCompression) {
+        const originalSize = validTypeFiles.reduce((sum, file) => sum + file.size, 0) / 1024;
+        const compressedSize = processedFiles.reduce((sum, file) => sum + file.size, 0) / 1024;
+        
+        toast({
+          title: "Images compressed successfully",
+          description: `Reduced from ${originalSize.toFixed(1)}KB to ${compressedSize.toFixed(1)}KB total`,
+        });
+      }
+
+      // Convert to base64 array
+      const base64Array = await Promise.all(
+        processedFiles.map(convertFileToBase64)
+      );
+
+      // Update state and form
+      setImageFiles(prev => [...prev, ...processedFiles]);
+      setImagePreviews(prev => [...prev, ...base64Array]);
+      form.setValue("imageUrls", [...form.getValues("imageUrls"), ...base64Array], { 
+        shouldValidate: true 
+      });
+    } catch (error) {
+      console.error("Error processing images:", error);
+      toast({
+        title: "Some images couldn't be processed",
+        description: "Please try with smaller or simpler images",
+        variant: "destructive"
+      });
+    }
   }
 
   function removeImage(index: number) {
@@ -464,7 +520,7 @@ export function ListAppForm() {
                           Click to upload an icon
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
-                          Image must be less than 1MB in size
+                          Images will be automatically compressed if needed
                         </p>
                       </>
                     )}
@@ -544,11 +600,8 @@ export function ListAppForm() {
                 </div>
               </FormControl>
               <FormDescription>
-                Add screenshots of your application (recommended: 16:9 aspect ratio, 
-                {isPro 
-                  ? "max 3MB per image" 
-                  : "max 1MB per image. Upgrade to PRO for larger uploads."}
-                )
+                Add screenshots of your application (recommended: 16:9 aspect ratio). 
+                Large images will be automatically compressed to meet size requirements.
               </FormDescription>
               <FormMessage />
             </FormItem>
