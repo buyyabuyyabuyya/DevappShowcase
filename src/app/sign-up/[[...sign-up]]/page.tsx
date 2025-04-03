@@ -13,7 +13,6 @@ export default function SignUpPage() {
             headerSubtitle: "text-muted-foreground",
           }
         }}
-        redirectUrl="/dashboard"
         afterSignUpUrl="/dashboard"
         signInUrl="/sign-in"
       />
