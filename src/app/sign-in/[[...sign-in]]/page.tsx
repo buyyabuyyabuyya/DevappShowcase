@@ -15,7 +15,7 @@ export default function SignInPage() {
         afterSignInUrl="/dashboard"
         routing="path"
         path="/sign-in"
-        signUpUrl="/sign-up"
+        signUpUrl="https://accounts.devappshowcase.com/sign-up"
       />
     </div>
   );
