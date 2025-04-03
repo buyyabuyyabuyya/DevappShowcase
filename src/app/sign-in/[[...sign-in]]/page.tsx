@@ -13,6 +13,8 @@ export default function SignInPage() {
           }
         }}
         afterSignInUrl="/dashboard"
+        routing="path"
+        path="/sign-in"
         signUpUrl="/sign-up"
       />
     </div>
