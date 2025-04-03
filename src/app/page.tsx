@@ -55,10 +55,10 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
             {!userId && (
               <div className="flex gap-4 justify-center mb-8">
                 <Button asChild>
-                  <Link href="/sign-in">Sign In</Link>
+                  <Link href="https://accounts.devappshowcase.com/sign-in">Sign In</Link>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link href="/sign-up">Sign Up</Link>
+                  <Link href="https://accounts.devappshowcase.com/sign-up">Sign Up</Link>
                 </Button>
               </div>
             )}

@@ -45,10 +45,10 @@ export function AppHeader() {
           {!userId ? (
             <>
               <Button variant="outline" asChild>
-                <Link href="/sign-in">Sign In</Link>
+                <Link href="https://accounts.devappshowcase.com/sign-in">Sign In</Link>
               </Button>
               <Button asChild>
-                <Link href="/sign-up">Sign Up</Link>
+                <Link href="https://accounts.devappshowcase.com/sign-up">Sign Up</Link>
               </Button>
             </>
           ) : (
