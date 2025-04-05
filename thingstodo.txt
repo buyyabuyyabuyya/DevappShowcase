@@ -100,3 +100,22 @@ Done through rotations:
 - Red-black trees may be better for frequent modifications
 
 AVL trees are ideal when lookup speed is critical and modifications are less frequent.
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------
+
+
+
+
+fix the images and make it lesser aggressive when compressing 
+
