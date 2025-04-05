@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import './globals.css'
 import Script from "next/script";
 import { Toaster } from "@/components/ui/toaster";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -77,6 +78,7 @@ export default function RootLayout({
           >
             <AppHeader />
             {children}
+            <Analytics />
           </ThemeProvider>
           <Toaster />
         </body>
