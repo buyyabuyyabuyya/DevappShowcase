@@ -1,0 +1,81 @@
+# Listing Site Aggregator - Implementation Guide
+
+Please help me implement a listing site aggregator platform with the following tech stack:
+- Next.js with TypeScript
+- Clerk for authentication
+- Supabase for database
+- Chrome extension integration
+
+Follow these steps in order:
+
+## Step 1: Project Setup
+1. Create a new Next.js project with TypeScript, Tailwind CSS, and App Router
+2. Set up the folder structure according to best practices
+3. Initialize Git repository
+
+## Step 2: Authentication with Clerk
+1. Set up Clerk authentication
+2. Implement login, signup, and user profile pages
+3. Configure middleware for protected routes
+
+## Step 3: Supabase Database Integration
+1. Set up Supabase project locally
+2. Create the database schema as defined in cursor-rules.txt
+3. Implement the utility functions for database access
+4. Create admin client for privileged operations
+
+## Step 4: Core UI Components
+1. Build reusable UI components (Button, Card, Input, etc.)
+2. Implement the layout components (Sidebar, Navigation, etc.)
+3. Set up theming with dark/light mode support
+4. Create loading state components
+
+## Step 5: Dashboard Implementation
+1. Build the main dashboard page
+2. Create dashboard cards for key metrics
+3. Implement listing overview components
+4. Add connection status indicators
+
+## Step 6: Listing Management
+1. Create the listings page to display all user listings
+2. Implement listing creation form
+3. Build editing functionality for listings
+4. Add filtering and search capabilities
+
+## Step 7: Site Connection Management
+1. Implement the connected sites page
+2. Create site connection form
+3. Build connection status monitoring
+4. Implement site disconnection functionality
+
+## Step 8: Subscription Plans
+1. Set up the subscription page with plan comparison
+2. Implement Stripe integration for payments
+3. Create webhook endpoint for subscription events
+4. Add subscription status checks and limit enforcement
+
+## Step 9: Chrome Extension
+1. Set up the Chrome extension project structure
+2. Implement site detection and authentication token capture
+3. Create secure communication channel with main application
+4. Build popup UI for extension status
+
+## Step 10: API Routes and Data Synchronization
+1. Create API routes for listing management
+2. Implement synchronization logic for connected sites
+3. Set up webhook handlers for external events
+4. Add rate limiting and security measures
+
+## Step 11: Testing and Error Handling
+1. Implement error boundary components
+2. Add proper error handling throughout the application
+3. Create unit tests for critical functionality
+4. Implement end-to-end testing with Playwright or Cypress
+
+## Step 12: Documentation and Deployment
+1. Document the codebase and API endpoints
+2. Create user documentation and help pages
+3. Set up CI/CD pipeline
+4. Deploy to production with Cloudflare
+
+Start by implementing each step one at a time, and let me know if you need clarification on any specific part. The detailed specifications for each component are available in the cursor-rules.txt file. 

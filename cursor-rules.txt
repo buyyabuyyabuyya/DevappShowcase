@@ -1,0 +1,901 @@
+# Listing Site Aggregator - Technical Specifications
+
+## Core Technologies
+- Next.js with TypeScript for the frontend and API routes
+- Clerk for user authentication
+- Supabase for database storage
+- Chrome Extension for site login detection
+
+## Subscription Plans
+- Free Plan: 25 free listings
+- Pro Plan: $9.99/month for unlimited listings
+
+## Database Schema Guidelines
+
+### Users Table
+```sql
+CREATE TABLE users (
+  id UUID REFERENCES auth.users PRIMARY KEY,
+  email TEXT UNIQUE,
+  plan_type TEXT DEFAULT 'free',
+  listings_count INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+### Connected Sites Table
+```sql
+CREATE TABLE connected_sites (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  site_id UUID REFERENCES sites(id) ON DELETE CASCADE,
+  credentials JSONB,
+  is_active BOOLEAN DEFAULT TRUE,
+  last_synced_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, site_id)
+);
+```
+
+### Sites Table
+```sql
+CREATE TABLE sites (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  name TEXT NOT NULL,
+  url TEXT NOT NULL,
+  logo_url TEXT,
+  api_endpoint TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+### Listings Table
+```sql
+CREATE TABLE listings (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  site_id UUID REFERENCES sites(id) ON DELETE CASCADE,
+  external_id TEXT,
+  title TEXT NOT NULL,
+  description TEXT,
+  price DECIMAL,
+  currency TEXT,
+  status TEXT,
+  url TEXT,
+  metadata JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  published_at TIMESTAMP WITH TIME ZONE,
+  UNIQUE(site_id, external_id)
+);
+```
+
+### Subscriptions Table
+```sql
+CREATE TABLE subscriptions (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  stripe_customer_id TEXT,
+  stripe_subscription_id TEXT,
+  plan_type TEXT NOT NULL,
+  status TEXT NOT NULL,
+  current_period_start TIMESTAMP WITH TIME ZONE,
+  current_period_end TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+## Chrome Extension Integration
+
+### Secure Communication Protocol
+1. Chrome extension should establish a secure connection with your Next.js application
+2. Use JWT tokens for authentication between extension and web app
+3. Store credentials securely using browser's storage.local with encryption
+
+```typescript
+// Extension to Website Communication Pattern
+interface SiteCredentials {
+  siteId: string;
+  username: string;
+  password?: string; // Consider using token-based auth instead
+  cookies: Record<string, string>;
+  sessionData: Record<string, any>;
+  timestamp: number;
+}
+
+// NEVER store raw passwords - use tokens or encrypted session data
+```
+
+## API Routes Structure
+
+```
+/api/auth/* - Clerk authentication routes
+/api/sites - Available listing sites management
+/api/sites/connect - Connect user to a listing site
+/api/sites/disconnect - Disconnect a listing site
+/api/listings - User's listings management
+/api/listings/create - Create new listing across platforms
+/api/listings/sync - Sync listings from connected platforms
+/api/subscriptions/* - Subscription management
+```
+
+## Security Requirements
+
+1. **NEVER** store plain text passwords in your database
+2. Use encryption for sensitive data with the following pattern:
+
+```typescript
+import { createEncryptedData, decryptData } from '@/lib/encryption';
+
+// Encrypt sensitive data before storage
+const encryptedCredentials = await createEncryptedData(credentials, userId);
+
+// Decrypt only when needed in a secure context
+const decryptedCredentials = await decryptData(encryptedData, userId);
+```
+
+3. Implement proper CORS settings for cross-origin requests:
+
+```typescript
+// next.config.js
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Allow-Origin', value: 'https://your-extension-domain.com' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
+          { key: 'Access-Control-Allow-Headers', value: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization' },
+        ],
+      },
+    ];
+  },
+};
+```
+
+## Subscription Implementation
+
+```typescript
+// src/lib/constants.ts
+export const SUBSCRIPTION_PLANS = {
+  FREE: {
+    name: 'Free',
+    price: 0,
+    listingLimit: 25,
+    features: [
+      'Connect up to 3 listing sites',
+      'Basic listing management',
+      'Manual sync required',
+      'Standard support'
+    ]
+  },
+  PRO: {
+    name: 'Pro',
+    price: 9.99,
+    interval: 'month',
+    features: [
+      'Unlimited listings',
+      'Connect unlimited sites',
+      'Automatic daily sync',
+      'Priority support',
+      'Advanced analytics'
+    ],
+    stripeProductId: 'prod_listing_aggregator_pro'
+  }
+};
+
+// Check if user exceeds free plan limits
+export async function checkListingLimits(userId: string) {
+  const { data: user } = await supabase
+    .from('users')
+    .select('plan_type, listings_count')
+    .eq('id', userId)
+    .single();
+    
+  if (user.plan_type === 'free' && user.listings_count >= SUBSCRIPTION_PLANS.FREE.listingLimit) {
+    return {
+      canCreate: false,
+      message: `You've reached the limit of ${SUBSCRIPTION_PLANS.FREE.listingLimit} listings on the Free plan. Upgrade to Pro for unlimited listings.`
+    };
+  }
+  
+  return { canCreate: true };
+}
+```
+
+## Supabase Server-Side Implementation
+
+Follow the existing rules for Supabase implementation but add:
+
+```typescript
+// src/lib/supabase/admin.ts
+import { createClient } from '@supabase/supabase-js';
+
+export const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  {
+    auth: {
+      persistSession: false,
+    },
+  }
+);
+```
+
+## Data Synchronization Pattern
+
+```typescript
+// src/lib/sync/listings.ts
+export async function syncListingsForUser(userId: string) {
+  // 1. Get all connected sites for user
+  const { data: connectedSites } = await supabase
+    .from('connected_sites')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('is_active', true);
+    
+  // 2. For each site, fetch listings using the appropriate adapter
+  for (const site of connectedSites) {
+    const adapter = getAdapterForSite(site.site_id);
+    const listings = await adapter.fetchListings(site.credentials);
+    
+    // 3. Check subscription limits
+    const { data: user } = await supabase
+      .from('users')
+      .select('plan_type, listings_count')
+      .eq('id', userId)
+      .single();
+      
+    // If free plan and would exceed limit, skip new listings
+    if (user.plan_type === 'free') {
+      const currentCount = user.listings_count;
+      const newListingsCount = listings.length;
+      
+      // If adding these would exceed limit
+      if (currentCount + newListingsCount > SUBSCRIPTION_PLANS.FREE.listingLimit) {
+        // Only take what we can fit within limits
+        const remainingSlots = Math.max(0, SUBSCRIPTION_PLANS.FREE.listingLimit - currentCount);
+        listings.splice(remainingSlots);
+      }
+    }
+    
+    // 4. Upsert listings to database
+    await upsertListings(listings, userId, site.site_id);
+    
+    // 5. Update listings count
+    await supabase
+      .from('users')
+      .update({ 
+        listings_count: user.listings_count + listings.length,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', userId);
+  }
+  
+  // 6. Update last_synced_at
+  await updateSyncTimestamp(connectedSites.map(site => site.id));
+}
+```
+
+## Stripe Integration for Subscriptions
+
+```typescript
+// src/app/api/subscriptions/create/route.ts
+import { stripe } from '@/lib/stripe';
+import { auth } from '@clerk/nextjs';
+import { NextResponse } from 'next/server';
+import { SUBSCRIPTION_PLANS } from '@/lib/constants';
+
+export async function POST() {
+  try {
+    const { userId } = auth();
+    
+    if (!userId) {
+      return new NextResponse('Unauthorized', { status: 401 });
+    }
+    
+    // Get or create Stripe customer
+    const { data: user } = await supabase
+      .from('users')
+      .select('email, stripe_customer_id')
+      .eq('id', userId)
+      .single();
+      
+    let customerId = user.stripe_customer_id;
+    
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: user.email,
+        metadata: {
+          userId,
+        },
+      });
+      
+      customerId = customer.id;
+      
+      // Save customer ID
+      await supabase
+        .from('users')
+        .update({ stripe_customer_id: customerId })
+        .eq('id', userId);
+    }
+    
+    // Create checkout session
+    const session = await stripe.checkout.sessions.create({
+      customer: customerId,
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product: SUBSCRIPTION_PLANS.PRO.stripeProductId,
+            unit_amount: SUBSCRIPTION_PLANS.PRO.price * 100,
+            recurring: {
+              interval: SUBSCRIPTION_PLANS.PRO.interval,
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'subscription',
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/subscription?success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/subscription?canceled=true`,
+    });
+    
+    return NextResponse.json({ url: session.url });
+  } catch (error) {
+    console.error('Error creating subscription:', error);
+    return new NextResponse('Error creating subscription', { status: 500 });
+  }
+}
+```
+
+## Error Handling Requirements
+
+Always implement proper error handling with structured error responses:
+
+```typescript
+// src/lib/errors.ts
+export class AppError extends Error {
+  statusCode: number;
+  
+  constructor(message: string, statusCode = 400) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+
+// Usage in API routes
+try {
+  // Operation that might fail
+} catch (error) {
+  if (error instanceof AppError) {
+    return Response.json({ error: error.message }, { status: error.statusCode });
+  }
+  
+  console.error('Unexpected error:', error);
+  return Response.json({ error: 'An unexpected error occurred' }, { status: 500 });
+}
+```
+
+## Chrome Extension Communication Protocol
+
+```typescript
+// Extension message structure
+interface ExtensionMessage {
+  type: 'SITE_LOGIN' | 'CREDENTIALS_CAPTURED' | 'SYNC_REQUEST';
+  data: {
+    siteUrl: string;
+    timestamp: number;
+    sessionData?: Record<string, any>;
+  };
+  userId: string;
+  signature: string; // HMAC signature to verify authenticity
+}
+
+// Website response structure
+interface WebsiteResponse {
+  success: boolean;
+  message: string;
+  data?: any;
+  timestamp: number;
+}
+```
+
+## Rate Limiting Guidelines
+
+Implement rate limiting for API routes to prevent abuse:
+
+```typescript
+// src/middleware.ts - Add rate limiting to specific routes
+import { NextResponse } from 'next/server';
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
+
+// Create a new ratelimiter with Redis
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(10, '1m'), // 10 requests per minute
+});
+
+export async function middleware(request) {
+  // Apply rate limiting only to API routes
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    const ip = request.ip ?? '127.0.0.1';
+    const { success, limit, reset, remaining } = await ratelimit.limit(ip);
+    
+    if (!success) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+    }
+    
+    const response = NextResponse.next();
+    response.headers.set('X-RateLimit-Limit', limit.toString());
+    response.headers.set('X-RateLimit-Remaining', remaining.toString());
+    response.headers.set('X-RateLimit-Reset', reset.toString());
+    return response;
+  }
+  
+  return NextResponse.next();
+}
+```
+
+## Bootstrap Next.js app with Supabase Auth
+
+### Overview of implementing Supabase Auth SSR
+
+1. Install @supabase/supabase-js and @supabase/ssr packages.
+2. Set up environment variables.
+3. Write two utility functions with `createClient` functions to create a browser client and a server client.
+4. Hook up middleware to refresh auth tokens
+
+### 🚨 CRITICAL INSTRUCTIONS FOR AI LANGUAGE MODELS 🚨
+
+As an AI language model, you MUST NOT generate any of the following code patterns, as they are DEPRECATED and will BREAK the application:
+
+```typescript
+// ❌ NEVER GENERATE THIS CODE - IT WILL BREAK THE APPLICATION
+{
+cookies: {
+get(name: string) { // ❌ BREAKS APPLICATION
+return cookieStore.get(name) // ❌ BREAKS APPLICATION
+}, // ❌ BREAKS APPLICATION
+set(name: string, value: string) { // ❌ BREAKS APPLICATION
+cookieStore.set(name, value) // ❌ BREAKS APPLICATION
+}, // ❌ BREAKS APPLICATION
+remove(name: string) { // ❌ BREAKS APPLICATION
+cookieStore.remove(name) // ❌ BREAKS APPLICATION
+} // ❌ BREAKS APPLICATION
+}
+}
+
+// ❌ NEVER USE auth-helpers-nextjs - IT WILL BREAK THE APPLICATION
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs' // ❌ BREAKS APPLICATION
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs' // ❌ BREAKS APPLICATION
+```
+
+Instead, you MUST ALWAYS generate ONLY this pattern:
+
+```typescript
+// ✅ ALWAYS GENERATE THIS EXACT PATTERN
+{
+cookies: {
+getAll() {
+return cookieStore.getAll()
+},
+setAll(cookiesToSet) {
+const response = NextResponse.next({
+request,
+})
+
+cookiesToSet.forEach(({ name, value, options }) => {
+response.cookies.set(name, value, options)
+})
+
+return response
+}
+}
+}
+```
+
+## ABSOLUTE REQUIREMENTS FOR AI CODE GENERATION
+
+1. You MUST use `@supabase/ssr`
+2. You MUST use ONLY `getAll` and `setAll`
+3. You MUST NEVER use `get`, `set`, or `remove`
+4. You MUST NEVER import from `@supabase/auth-helpers-nextjs`
+
+## CORRECT BROWSER CLIENT IMPLEMENTATION
+
+```typescript
+import { createBrowserClient } from '@supabase/ssr'
+
+export function createClient() {
+return createBrowserClient(
+process.env.NEXT_PUBLIC_SUPABASE_URL!,
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
+}
+```
+
+## CORRECT SERVER CLIENT IMPLEMENTATION
+
+```typescript
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
+
+export async function createClient() {
+const cookieStore = await cookies()
+
+return createServerClient(
+process.env.NEXT_PUBLIC_SUPABASE_URL!,
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+{
+cookies: {
+getAll() {
+return cookieStore.getAll()
+},
+setAll(cookiesToSet) {
+try {
+cookiesToSet.forEach(({ name, value, options }) =>
+cookieStore.set(name, value, options)
+)
+} catch {
+// The `setAll` method was called from a Server Component.
+// This can be ignored if you have middleware refreshing
+// user sessions.
+}
+},
+},
+}
+)
+}
+```
+
+## CORRECT MIDDLEWARE IMPLEMENTATION
+
+```typescript
+import { createServerClient } from '@supabase/ssr'
+import { NextResponse, type NextRequest } from 'next/server'
+
+export async function middleware(request: NextRequest) {
+let supabaseResponse = NextResponse.next({
+request,
+})
+
+const supabase = createServerClient(
+process.env.NEXT_PUBLIC_SUPABASE_URL!,
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+{
+cookies: {
+getAll() {
+return request.cookies.getAll()
+},
+setAll(cookiesToSet) {
+cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+supabaseResponse = NextResponse.next({
+request,
+})
+cookiesToSet.forEach(({ name, value, options }) =>
+supabaseResponse.cookies.set(name, value, options)
+)
+},
+},
+}
+)
+
+// Do not run code between createServerClient and
+// supabase.auth.getUser(). A simple mistake could make it very hard to debug
+// issues with users being randomly logged out.
+
+// IMPORTANT: DO NOT REMOVE auth.getUser()
+
+const {
+data: { user },
+} = await supabase.auth.getUser()
+
+if (
+!user &&
+!request.nextUrl.pathname.startsWith('/login') &&
+!request.nextUrl.pathname.startsWith('/auth')
+) {
+// no user, potentially respond by redirecting the user to the login page
+const url = request.nextUrl.clone()
+url.pathname = '/login'
+return NextResponse.redirect(url)
+}
+
+// IMPORTANT: You *must* return the supabaseResponse object as it is.
+// If you're creating a new response object with NextResponse.next() make sure to:
+// 1. Pass the request in it, like so:
+// const myNewResponse = NextResponse.next({ request })
+// 2. Copy over the cookies, like so:
+// myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
+// 3. Change the myNewResponse object to fit your needs, but avoid changing
+// the cookies!
+// 4. Finally:
+// return myNewResponse
+// If this is not done, you may be causing the browser and server to go out
+// of sync and terminate the user's session prematurely!
+
+return supabaseResponse
+}
+
+export const config = {
+matcher: [
+/*
+* Match all request paths except for the ones starting with:
+* - _next/static (static files)
+* - _next/image (image optimization files)
+* - favicon.ico (favicon file)
+* Feel free to modify this pattern to include more paths.
+*/
+'/((?!_next/static|_next/image|favicon.ico|.*\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+],
+}
+
+## Local Development Setup
+
+### Supabase Local Development
+
+1. Install Supabase CLI:
+```bash
+npm install -g supabase
+```
+
+2. Start local Supabase instance:
+```bash
+supabase start
+```
+
+3. Set up environment variables in `.env.local`:
+```
+NEXT_PUBLIC_SUPABASE_URL=http://localhost:54321
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+4. Initialize database with schemas:
+```bash
+supabase db push
+```
+
+5. Migrate to production (Cloudflare deployment):
+```bash
+# When ready for production
+supabase db dump -f schema.sql
+# Then import schema to production database
+```
+
+## Page Structure
+
+The application will include the following pages:
+
+### Core Pages
+1. **Landing Page** (`/`) - Marketing page explaining the service
+2. **Dashboard** (`/dashboard`) - Main user dashboard showing connected sites and listings
+3. **Login/Signup** (`/login`, `/signup`) - Authentication pages using Clerk
+4. **Account Settings** (`/settings`) - User profile and account settings
+5. **Subscription** (`/subscription`) - Subscription management page
+
+### Listing Management
+6. **My Listings** (`/listings`) - Overview of all listings across platforms
+7. **Create Listing** (`/listings/create`) - Create new listing to publish across sites
+8. **Edit Listing** (`/listings/[id]/edit`) - Edit existing listing
+9. **Listing Details** (`/listings/[id]`) - View single listing details
+
+### Site Connections
+10. **Connected Sites** (`/sites`) - Manage connected listing platforms
+11. **Add Site** (`/sites/connect`) - Connect new listing site
+12. **Site Settings** (`/sites/[id]`) - Individual site connection settings
+
+### Help and Support
+13. **Documentation** (`/docs`) - Usage documentation
+14. **FAQ** (`/faq`) - Frequently asked questions
+15. **Support** (`/support`) - Contact and support options
+
+## UI/UX Design Guidelines
+
+### Modern UI Elements
+
+1. **Icon System** - Use Lucide React icons for consistent, modern UI:
+```typescript
+// src/components/ui/icon.tsx
+import { LucideIcon } from 'lucide-react';
+
+interface IconProps {
+  icon: LucideIcon;
+  size?: number;
+  className?: string;
+}
+
+export function Icon({ icon: LucideIcon, size = 24, className }: IconProps) {
+  return <LucideIcon size={size} className={className} />;
+}
+```
+
+2. **Dashboard Cards** - Use visually distinct cards with icons for each section:
+```typescript
+// Example dashboard section
+<section>
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <DashboardCard 
+      title="Connected Sites" 
+      count={connectedSites.length}
+      icon={<Link2 className="text-primary h-5 w-5" />}
+      href="/sites"
+    />
+    <DashboardCard 
+      title="Active Listings" 
+      count={listings.length}
+      icon={<ShoppingBag className="text-primary h-5 w-5" />}
+      href="/listings"
+    />
+    <DashboardCard 
+      title="Subscription" 
+      status={isPro ? "Pro Plan" : "Free Plan"}
+      icon={<CreditCard className="text-primary h-5 w-5" />}
+      href="/subscription"
+    />
+  </div>
+</section>
+```
+
+3. **Interactive Elements** - Use micro-interactions for better UX:
+```typescript
+// src/components/ui/button.tsx
+// Add hover effects, loading states and transitions
+
+export const Button = React.forwardRef<
+  HTMLButtonElement,
+  ButtonProps
+>(({ className, variant, size, asChild = false, loading, children, ...props }, ref) => {
+  const Comp = asChild ? Slot : "button";
+  return (
+    <Comp
+      className={cn(
+        "relative inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50",
+        buttonVariants({ variant, size, className })
+      )}
+      ref={ref}
+      disabled={loading || props.disabled}
+      {...props}
+    >
+      {loading && (
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+      )}
+      {children}
+    </Comp>
+  );
+});
+```
+
+### Navigation and Layout
+
+1. **Modern Sidebar** - Use a responsive sidebar with collapsible sections:
+```typescript
+// src/components/layout/sidebar.tsx
+export function Sidebar() {
+  const [collapsed, setCollapsed] = useState(false);
+  
+  return (
+    <aside className={cn(
+      "h-screen fixed left-0 top-0 z-40 bg-background border-r transition-all duration-300",
+      collapsed ? "w-16" : "w-64"
+    )}>
+      <div className="flex items-center justify-between p-4 border-b">
+        {!collapsed && <Logo />}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          {collapsed ? <ChevronRight /> : <ChevronLeft />}
+        </Button>
+      </div>
+      
+      <nav className="p-2">
+        <SidebarNavItem 
+          href="/dashboard" 
+          icon={<LayoutDashboard />} 
+          label={collapsed ? "" : "Dashboard"} 
+        />
+        <SidebarNavItem 
+          href="/listings" 
+          icon={<ListFilter />} 
+          label={collapsed ? "" : "Listings"} 
+        />
+        {/* Add other navigation items */}
+      </nav>
+    </aside>
+  );
+}
+```
+
+2. **App Shell** - Implement a consistent app shell layout:
+```typescript
+// src/components/layout/app-shell.tsx
+export function AppShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex min-h-screen bg-muted/10">
+      <Sidebar />
+      <div className="flex-1 ml-[var(--sidebar-width)]">
+        <TopBar />
+        <main className="p-6">
+          {children}
+        </main>
+        <Footer />
+      </div>
+    </div>
+  );
+}
+```
+
+## Themed Components
+
+Use a cohesive color scheme and themed components:
+
+```typescript
+// src/components/ui/theme-provider.tsx
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      themes={['light', 'dark', 'modern']}
+    >
+      {children}
+    </NextThemesProvider>
+  );
+}
+```
+
+## Progressive Loading States
+
+Implement skeleton loaders for better perceived performance:
+
+```typescript
+// src/components/ui/listing-skeleton.tsx
+export function ListingSkeleton() {
+  return (
+    <div className="border rounded-lg p-4 animate-pulse">
+      <div className="h-6 bg-muted rounded-md w-3/4 mb-4"></div>
+      <div className="space-y-2">
+        <div className="h-4 bg-muted rounded-md w-full"></div>
+        <div className="h-4 bg-muted rounded-md w-5/6"></div>
+        <div className="h-4 bg-muted rounded-md w-4/6"></div>
+      </div>
+      <div className="flex items-center justify-between mt-6">
+        <div className="h-8 bg-muted rounded-md w-24"></div>
+        <div className="h-8 bg-muted rounded-md w-16"></div>
+      </div>
+    </div>
+  );
+}
+```
+
+## Chrome Extension Implementation
+
+The Chrome extension will need to be implemented separately with the following structure:
+
+```
+extension/
+├── manifest.json       # Extension configuration
+├── background.js       # Background service worker
+├── content-scripts/    # Scripts injected into sites
+│   └── capture-auth.js # Capture authentication data
+├── popup/              # Extension popup UI
+│   ├── popup.html
+│   ├── popup.js
+│   └── popup.css
+└── utils/              # Shared utilities
+    ├── api.js          # Communication with main app
+    └── storage.js      # Secure storage helpers
+```
+
+The extension will detect when a user logs into a supported listing site, securely capture authentication tokens (not passwords), and communicate this to the main application.
