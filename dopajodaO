@@ -1,0 +1,249 @@
+[33mcommit cf31fbbd429d3f34d4d931a004e3e341b16d4d49[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: buyyabuyyabuyya <buyyav1@gmail.com>
+Date:   Thu May 8 22:24:34 2025 -0700
+
+    went back before the vaunbil updates
+
+[33mcommit 31fa5f3dc72f23f063b1e087869e96604fc15592[m
+Author: buyyabuyyabuyya <buyyav1@gmail.com>
+Date:   Thu May 8 22:23:55 2025 -0700
+
+    went back before the vaunbil updates
+
+[33mcommit 90a550489ef9fe30fab1d2ba833c845ba285780e[m
+Author: buyyabuyyabuyya <buyya32659@gmail.com>
+Date:   Mon Apr 21 17:49:13 2025 -0700
+
+    updared number t o 170
+
+[33mcommit b9d626f9f7b3a2164252d19a4f1d5f0d4ea19827[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sat Apr 5 08:19:22 2025 -0700
+
+    vercel anys
+
+[33mcommit 145b7ce039289166db09272d51a5104d3f868aa5[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sat Apr 5 07:31:02 2025 -0700
+
+    google adsence code txt update
+
+[33mcommit 69fb67e751ace706532ac878b1134e5a0dfa0f66[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sat Apr 5 07:27:28 2025 -0700
+
+    google adsence code
+
+[33mcommit e8e852ff617ebc986a017ae2e438ae89f336ac07[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Fri Apr 4 12:19:58 2025 -0700
+
+    changed the front page numbers to 100+
+
+[33mcommit 673c86f336bdf5f74f9f02dc738db25fcd1ee1a1[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Wed Apr 2 19:28:10 2025 -0700
+
+    fix for the SIGNIN and SIGNUP redirect URLS to the PROD new ones from clerk
+
+[33mcommit 0261695aaf8148a57d9514b5a695001e4647e14b[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Wed Apr 2 19:20:55 2025 -0700
+
+    fixed the signup and signin Redirect page URLs  account.devappshowcase.signin2
+
+[33mcommit 1db505dedd2b6d388243f8435f88780cf75b35d6[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Wed Apr 2 19:03:58 2025 -0700
+
+    fixed the signup and signin Redirect page URLs  2
+
+[33mcommit 7714ea6f720e453e4dd89bfd36911db2c49b369e[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Wed Apr 2 19:00:03 2025 -0700
+
+    fixed the signup and signin Redirect page URLs
+
+[33mcommit c85e1bb6c1328289161b5a4af28253f7cd372689[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Tue Apr 1 11:29:13 2025 -0700
+
+    this is the push for the images compressestions method 2
+
+[33mcommit 7f31f3e5da904d94aa6a0dc5aafa057afb54b0c3[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Tue Apr 1 11:17:51 2025 -0700
+
+    this is the push for the images compressestions method
+
+[33mcommit 7417773da5d6f791c7771573934a9872c3d7fe3d[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Mon Mar 31 23:56:47 2025 -0700
+
+    change the free images to 3MB
+
+[33mcommit 19383c329743dfc5b815d4aeb6c2bde23c365371[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sun Mar 30 22:21:27 2025 -0700
+
+    filter update for types ALL
+
+[33mcommit 60fbcef0d615b548e7ac19fa360573d99634ed4a[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sun Mar 30 22:15:15 2025 -0700
+
+    filter update for types
+
+[33mcommit ecefc9ea261da8cc0f5eec2cb585db9674903ce3[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sun Mar 30 19:23:53 2025 -0700
+
+    APP images update and for PRO users 3MB max ujpdate and show error massage
+
+[33mcommit 318349cbe554bc0667bf59a26dc2b3d214e6d177[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sun Mar 30 19:17:21 2025 -0700
+
+    push revert
+
+[33mcommit 00d505a06934b5b982ecaa336c07e3695cc8e022[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sun Mar 30 18:46:39 2025 -0700
+
+    revert from the drag and drop push to before that one
+
+[33mcommit 88874b13e26186758c6f0cfbbdc3ba8dde27caf6[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Wed Mar 26 16:02:30 2025 -0700
+
+    this is the push to change the STERIPE to prod links and keys
+
+[33mcommit beca02c31d3ff5fd0c99c29ce537b170ac154ec2[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Wed Mar 26 15:49:22 2025 -0700
+
+    update for the feedback edit and delete methods
+
+[33mcommit 92934794bf20a22991274d4c6f584c9a0fae18df[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Wed Mar 26 01:44:08 2025 -0700
+
+    subscriptionExpiresAt update webpage error (fix)   2
+
+[33mcommit b567048b3ac6ed9f6b6fbaf9e7a13d5fe4a825b1[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Wed Mar 26 01:38:42 2025 -0700
+
+    subscriptionExpiresAt update webpage error (fix)
+
+[33mcommit 239f5d58a6abe380c4b6c0bd93f05fbb2878a466[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Wed Mar 26 01:20:49 2025 -0700
+
+    this is the test to see if the stripe TEST payment links is working properly   2
+
+[33mcommit 02d3cd41aa097ccb49e9e46bb699de19730d7224[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Wed Mar 26 01:09:44 2025 -0700
+
+    this is the test to see if the stripe TEST payment links is working properly
+
+[33mcommit 45260beef05512768fc697677ada6ce61840b217[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Tue Mar 25 12:39:50 2025 -0700
+
+    push for stripe URL update
+
+[33mcommit 7bddee2982a2a6334c8d9154501ff4af97ad100c[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Mon Mar 24 23:39:25 2025 -0700
+
+    update to new nextjs version because of the expolit lol
+
+[33mcommit 175a58718eb48ebf00476ff7a42556bfe694eac3[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Mon Mar 24 17:56:42 2025 -0700
+
+    added feedback message fit in the box area
+
+[33mcommit e0035ec2f920ae82833f8ce151ac91890174e3d2[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Mon Mar 24 17:43:45 2025 -0700
+
+    added the character limit in the edit tba
+
+[33mcommit e3548888fa05f7f794cde076db4125ef01563219[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Mon Mar 24 17:36:44 2025 -0700
+
+    added consloe logs for the update application button   3
+
+[33mcommit b841afbaf17c94448723d73d0d3bd14e4cd2d8b2[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Mon Mar 24 17:31:47 2025 -0700
+
+    added consloe logs for the update application button
+
+[33mcommit 2f295dfc572a0e58668bebc870269b05a99bf3ab[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Mon Mar 24 17:15:27 2025 -0700
+
+    added consloe logs for the update application button
+
+[33mcommit fbc0bbd166ff8747aec67af2a7ea7e5092540a5f[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Mon Mar 24 00:57:49 2025 -0700
+
+    might now owrk for the edit 1 time error  fix
+
+[33mcommit 31907503963105970e72350fc745180aa8ec4884[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Mon Mar 24 00:35:22 2025 -0700
+
+    rating update (real working)
+
+[33mcommit 6e39c501d140a54df4ac7dc6bd952ce1b52719a8[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sun Mar 23 23:49:16 2025 -0700
+
+    rating update (real working)
+
+[33mcommit 9a7dd723ae9436aebb37fdb4fdc89b0e6baba336[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sun Mar 23 23:44:52 2025 -0700
+
+    rating update
+
+[33mcommit b6e7a2851dddb6279c0ce403272d8fb1924c029b[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sun Mar 23 18:07:57 2025 -0700
+
+    rating update
+
+[33mcommit 0c64ab0e44c0707ddd33f26b3f832fa2024023d1[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sat Mar 22 04:58:40 2025 -0700
+
+    fixed the ID not being in the firebase documnet
+
+[33mcommit b093a0c76faf51394b05c9d443fb8d17045ed277[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sat Mar 22 04:54:23 2025 -0700
+
+    fixed the ID not being in the firebase documnet
+
+[33mcommit 6769a1695a5f3f627f78925573f5e257f014da0f[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sat Mar 22 04:43:05 2025 -0700
+
+    fixed the ID not being in the firebase documnet
+
+[33mcommit 85b766882cfd51c46414a8818e787ce946e5988a[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sat Mar 22 04:27:02 2025 -0700
+
+    fixed the ID not being in the firebase documnet
+
+[33mcommit d4adfc8081d9ebcacdf1c6c24ee641d01f1b40e1[m
+Author: buyyabuyyabuyya <ayyubalhasan@gmail.com>
+Date:   Sat Mar 22 03:46:20 2

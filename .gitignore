@@ -17,6 +17,23 @@
 /.next/
 /out/
 
+# Unrelated folders to exclude
+/scanner-website/
+/scanner-website/**
+/www.inspective.dev/
+/www.inspective.dev/**
+/"www.inspective.dev (2)"/
+/www.inspective.dev (2)/
+/www.inspective.dev (2)/**
+/scanner/
+/scanner/**
+/inspective/
+/inspective/**
+
+/Vanilbilters.txt
+
+
+
 # production
 /build
 
@@ -40,3 +57,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# misc
+Vanilbilters.txt
+
