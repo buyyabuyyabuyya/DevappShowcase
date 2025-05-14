@@ -12,7 +12,19 @@ import './globals.css'
 import Script from "next/script";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
-
+// Import for server-side only
+import { headers } from 'next/headers';
+/*
+ Environment validation in development only
+if (process.env.NODE_ENV === 'development') {
+  // Dynamic import to avoid bundling with client code
+  import('@/lib/env-validator').then(({ validateEnvVariables }) => {
+    validateEnvVariables();
+  }).catch((err) => {
+    console.error('Failed to load environment validator:', err);
+  });
+}
+*/
 const inter = Inter({ subsets: ["latin"] });
 
 export const viewport: Viewport = {
@@ -62,6 +74,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <head>
+          <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
           <Script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6382423704016281"
