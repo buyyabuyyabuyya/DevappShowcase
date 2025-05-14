@@ -14,6 +14,8 @@ export default authMiddleware({
     "/cdn-cgi/(.*)",
     "/favicon.ico",
     "/favicon.png",
+    "/apple-touch-icon.png",
+    "/apple-touch-icon-precomposed.png",
     "/sign-in(.*)",
     "/sign-up(.*)"
   ],
