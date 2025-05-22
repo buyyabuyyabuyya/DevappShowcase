@@ -15,13 +15,15 @@ export async function rateApp({ appId, type, rating }: RatingInput) {
   try {
     console.log("[RatingAction] Starting with appId:", appId, "type:", type, "rating:", rating);
     const session = await auth();
+    
+    if (!session?.userId) {
+      return { success: false, error: "Unauthorized" };
+    }
   
-  if (!session?.userId) {
-    return { success: false, error: "Unauthorized" };
-  }
-  
-  const userId = session.userId;
-    if (!session?.userId) if (!userId) throw new Error("Unauthorized");
+    const userId = session.userId;
+    if (!userId) {
+      throw new Error("Unauthorized");
+    }
 
     // Convert to the format expected by Firestore implementation
     const result = await firestoreRateApp({
@@ -61,7 +63,6 @@ export async function provideFeedback({
   }
   
   const userId = session.userId;
-  if (!session?.userId) if (!userId) throw new Error("Unauthorized");
 
   try {
     // Use Firestore implementation

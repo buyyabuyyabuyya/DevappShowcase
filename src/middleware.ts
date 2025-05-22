@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getCacheControlHeaders } from "@/lib/utils";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
+
 export async function middleware(request: NextRequest) {
   // Get the auth state using Clerk's auth helper
-  const { userId } = await getAuth(request);
+  const session = await auth();
+  const userId = session?.userId;
   const isAuthenticated = !!userId;
   
   // Public routes that don't require authentication

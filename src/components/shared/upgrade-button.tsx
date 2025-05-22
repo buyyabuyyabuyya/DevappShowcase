@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Loader2 } from "lucide-react";
-import { upgradeToProUser } from "@/lib/firestore/users";
+import { upgradeToProUser } from "@/lib/firestore/users-client";
 import { useProStatus } from "@/context/pro-status-provider";
 import { useRouter } from "next/navigation";
 

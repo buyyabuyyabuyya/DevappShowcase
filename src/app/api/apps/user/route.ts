@@ -6,14 +6,10 @@ export async function GET() {
   const session = await auth();
   
   if (!session?.userId) {
-    return { success: false, error: "Unauthorized" };
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   
   const userId = session.userId;
-  
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
 
   try {
     const response = await getUserApps(userId);

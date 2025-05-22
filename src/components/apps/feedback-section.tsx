@@ -8,12 +8,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@clerk/nextjs";
 import { toast } from "@/components/ui/use-toast";
 import { formatDistanceToNow } from "date-fns";
-import { provideFeedback } from "@/app/actions/rating";
+import { provideFeedback } from "@/app/actions/rating-client";
 import Image from "next/image";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { editFeedbackAction, deleteFeedbackAction } from "@/app/actions/feedback-actions";
+import { editFeedbackAction, deleteFeedbackAction } from "@/app/actions/feedback-actions-client";
 import { useToast } from "@/components/ui/use-toast";
 import { getAppFeedback } from "@/lib/firestore/ratings-client";
 

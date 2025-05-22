@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { getUserByClerkId } from '@/lib/firestore/users';
-import { clerkClient } from '@clerk/nextjs';
+import { clerkClient } from '@clerk/nextjs/server';
 import { createUser } from '@/lib/firestore/users';
 
 export async function GET(request: NextRequest) {
@@ -30,7 +30,12 @@ export async function GET(request: NextRequest) {
       console.log("User not found, attempting to create user from Clerk data");
       try {
         // Get user data from Clerk
-        const clerkUser = await clerkClient.users.getUser(session.userId);
+        const clerk = await clerkClient();
+        const clerkUser = await clerk.users.getUser(session.userId);
+        
+        if (!clerkUser) {
+          throw new Error('User not found in Clerk');
+        }
         
         // Create user in Firestore
         const userData = {
