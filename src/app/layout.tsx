@@ -75,7 +75,6 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <head>
-        <meta httpEquiv="Content-Security-Policy"content="upgrade-insecure-requests; default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com https://*.clerk.accounts.dev https://*.clerk.com https://clerk.devappshowcase.com; connect-src 'self' https://* wss://*; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src 'self' https://* https://pagead2.googlesyndication.com;"/>
 
           <Script
             async
