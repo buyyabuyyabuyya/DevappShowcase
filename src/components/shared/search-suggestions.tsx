@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useDebounce } from "@/lib/hooks/use-debounce";
-import { searchApps } from "@/lib/firestore/apps";
+import { searchApps } from "@/lib/firestore/apps-client";
 
 interface SearchSuggestionsProps {
   searchTerm: string;
