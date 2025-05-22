@@ -75,7 +75,8 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <head>
-          <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://*.clerk.accounts.dev https://*.clerk.com; connect-src 'self' https://* wss://*; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src 'self' https://* https://pagead2.googlesyndication.com;" />
+        <meta httpEquiv="Content-Security-Policy"content="upgrade-insecure-requests; default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com https://*.clerk.accounts.dev https://*.clerk.com https://clerk.devappshowcase.com; connect-src 'self' https://* wss://*; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src 'self' https://* https://pagead2.googlesyndication.com;"/>
+
           <Script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6382423704016281"
