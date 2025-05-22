@@ -11,7 +11,7 @@ export default async function SettingsPage() {
   const userProfile = await getUserProfile();
   
   if (!session?.userId) {
-    redirect("/sign-in");
+    redirect("https://accounts.devappshowcase.com/sign-in");
   }
 
   return (

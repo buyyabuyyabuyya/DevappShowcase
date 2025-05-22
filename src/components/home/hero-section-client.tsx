@@ -54,7 +54,7 @@ export function HeroSectionClient({ initialIsPro = false }) {
                 )}
               </>
             ) : (
-              <Link href="/sign-in">
+              <Link href="https://accounts.devappshowcase.com/sign-in">
                 <Button size="lg" variant="outline">
                   Sign In
                 </Button>
