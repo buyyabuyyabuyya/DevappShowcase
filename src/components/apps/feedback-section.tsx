@@ -15,7 +15,7 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { editFeedbackAction, deleteFeedbackAction } from "@/app/actions/feedback-actions";
 import { useToast } from "@/components/ui/use-toast";
-import { getAppFeedback } from "@/lib/firestore/ratings";
+import { getAppFeedback } from "@/lib/firestore/ratings-client";
 
 // Define interface for feedback with ID
 interface FeedbackWithUserData {

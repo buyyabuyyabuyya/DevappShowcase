@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Star } from "lucide-react";
-import { rateApp, provideFeedback } from "@/app/actions/rating";
+import { rateApp, provideFeedback } from "@/app/actions/rating-client";
 import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 
