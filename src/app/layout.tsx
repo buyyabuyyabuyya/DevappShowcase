@@ -63,12 +63,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const { userId } = auth();
+  const session = await auth();
+  const userId = session?.userId || null;
 
   return (
     <ClerkProvider>

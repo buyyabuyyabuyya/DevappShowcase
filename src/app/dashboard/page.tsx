@@ -5,11 +5,13 @@ import { DashboardShell } from "@/components/dashboard/shell";
 import { AppList } from "@/components/dashboard/app-list";
 
 export default async function DashboardPage() {
-  const { userId } = auth();
+  const session = await auth();
   
-  if (!userId) {
+  if (!session?.userId) {
     redirect("/sign-in");
   }
+  
+  const userId = session.userId;
 
   return (
     <DashboardShell>

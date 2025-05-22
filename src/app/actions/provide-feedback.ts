@@ -12,7 +12,13 @@ export async function provideFeedback({
   appId: string; 
   comment: string 
 }) {
-  const { userId } = auth();
+  const session = await auth();
+  
+  if (!session?.userId) {
+    return { success: false, error: "Unauthorized" };
+  }
+  
+  const userId = session.userId;
   
   if (!userId) {
     return { success: false, error: "Unauthorized" };

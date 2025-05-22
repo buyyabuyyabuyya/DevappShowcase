@@ -5,11 +5,13 @@ import { likeApp as firestoreLikeApp } from "@/lib/firestore/apps";
 import { revalidatePath } from "next/cache";
 
 export async function likeApp(appId: string) {
-  const { userId } = auth();
+  const session = await auth();
   
-  if (!userId) {
+  if (!session?.userId) {
     return { success: false, error: "Unauthorized" };
   }
+  
+  const userId = session.userId;
   
   // Call Firestore function with userId explicitly
   const result = await firestoreLikeApp(appId, userId);

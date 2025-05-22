@@ -5,11 +5,13 @@ import { createApp as firestoreCreateApp } from "@/lib/firestore/apps";
 import { revalidatePath } from "next/cache";
 
 export async function createApp(formData: FormData | Record<string, any>) {
-  const { userId } = auth();
+  const session = await auth();
   
-  if (!userId) {
+  if (!session?.userId) {
     return { success: false, error: "Unauthorized" };
   }
+  
+  const userId = session.userId;
   
   let data: Record<string, any>;
   

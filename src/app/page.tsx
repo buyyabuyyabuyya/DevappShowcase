@@ -20,7 +20,8 @@ const appTypeColors: Record<string, string> = {
 };
 
 export default async function HomePage({ searchParams }: { searchParams: { sort?: string } }) {
-  const { userId } = auth();
+  const session = await auth();
+  const userId = session?.userId || null;
   const { sort = "recent" } = searchParams;
   const result = await getApps({ sort });
   

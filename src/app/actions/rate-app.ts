@@ -15,11 +15,13 @@ export async function rateApp({
   productRating: number | null;
   provideFeedback: boolean;
 }) {
-  const { userId } = auth();
+  const session = await auth();
   
-  if (!userId) {
+  if (!session?.userId) {
     return { success: false, error: "Unauthorized" };
   }
+  
+  const userId = session.userId;
   
   try {
     // Call Firestore function

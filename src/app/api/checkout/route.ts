@@ -8,18 +8,20 @@ const PRO_PRICE_ID = "prod_RwJKcifWtNr3nc"; // Replace with your actual Stripe p
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId } = auth();
-    
-    if (!userId) {
+    const authSession = await auth();
+
+    if (!authSession?.userId) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       );
     }
-    
+
+    const userId = authSession.userId;
+
     // Get user data to include in metadata
     const userResult = await getUserByClerkId(userId);
-    
+
     if (!userResult.success || !userResult.user) {
       return NextResponse.json(
         { error: "User not found" },
@@ -38,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Create checkout session with metadata and email
-    const session = await stripe.checkout.sessions.create({
+    const checkoutSession = await stripe.checkout.sessions.create({
       line_items: [
         {
           price: PRO_PRICE_ID,
@@ -56,7 +58,7 @@ export async function POST(request: NextRequest) {
       customer: userResult.user.stripeCustomerId || undefined,
     });
     
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ url: checkoutSession.url });
   } catch (error) {
     console.error("Checkout error:", error);
     return NextResponse.json(

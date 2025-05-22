@@ -3,7 +3,13 @@ import { NextResponse } from "next/server";
 import { getUserApps } from "@/lib/firestore/apps";
 
 export async function GET() {
-  const { userId } = auth();
+  const session = await auth();
+  
+  if (!session?.userId) {
+    return { success: false, error: "Unauthorized" };
+  }
+  
+  const userId = session.userId;
   
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

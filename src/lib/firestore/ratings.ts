@@ -19,11 +19,13 @@ export async function rateApp({
   productRating: number | null;
   provideFeedback: boolean;
 }) {
-  const { userId } = auth();
+  const session = await auth();
   
-  if (!userId) {
+  if (!session?.userId) {
     return { success: false, error: "Unauthorized" };
   }
+  
+  const userId = session.userId;
   
   try {
     // Get the app document
@@ -132,10 +134,12 @@ export async function provideFeedback({
   appId: string;
   comment: string;
 }) {
-  const { userId } = auth();
-  if (!userId) {
+  const session = await auth();
+  if (!session?.userId) {
     return { success: false, error: "Unauthorized" };
   }
+  
+  const userId = session.userId;
 
   try {
     // Enforce character limit on the server side

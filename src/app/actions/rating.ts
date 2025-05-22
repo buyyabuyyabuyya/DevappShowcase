@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from "@clerk/nextjs/server";
-import { clerkClient } from "@clerk/nextjs";
+import { clerkClient } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { 
   rateApp as firestoreRateApp, 
@@ -17,8 +17,10 @@ interface RatingInput {
 
 export async function rateApp({ appId, type, rating }: RatingInput) {
   try {
-    const { userId } = auth();
-    if (!userId) throw new Error("Unauthorized");
+    const session = await auth();
+    if (!session?.userId) throw new Error("Unauthorized");
+    
+    const userId = session.userId;
 
     // Convert to the format expected by Firestore implementation
     const result = await firestoreRateApp({
@@ -49,8 +51,10 @@ export async function provideFeedback({
   appId: string; 
   comment: string 
 }) {
-  const { userId } = auth();
-  if (!userId) throw new Error("Unauthorized");
+  const session = await auth();
+  if (!session?.userId) throw new Error("Unauthorized");
+  
+  const userId = session.userId;
 
   try {
     // Use Firestore implementation

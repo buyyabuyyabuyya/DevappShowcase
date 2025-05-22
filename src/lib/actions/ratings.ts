@@ -2,7 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from 'next/cache';
-import { clerkClient } from "@clerk/nextjs";
+import { clerkClient } from "@clerk/nextjs/server";
 import { rateApp as firestoreRateApp, provideFeedback as firestoreProvideFeedback, getAppFeedback } from '@/lib/firestore/ratings';
 
 interface RatingInput {
@@ -14,8 +14,14 @@ interface RatingInput {
 export async function rateApp({ appId, type, rating }: RatingInput) {
   try {
     console.log("[RatingAction] Starting with appId:", appId, "type:", type, "rating:", rating);
-    const { userId } = auth();
-    if (!userId) throw new Error("Unauthorized");
+    const session = await auth();
+  
+  if (!session?.userId) {
+    return { success: false, error: "Unauthorized" };
+  }
+  
+  const userId = session.userId;
+    if (!session?.userId) if (!userId) throw new Error("Unauthorized");
 
     // Convert to the format expected by Firestore implementation
     const result = await firestoreRateApp({
@@ -48,8 +54,14 @@ export async function provideFeedback({
   appId: string; 
   comment: string 
 }) {
-  const { userId } = auth();
-  if (!userId) throw new Error("Unauthorized");
+  const session = await auth();
+  
+  if (!session?.userId) {
+    return { success: false, error: "Unauthorized" };
+  }
+  
+  const userId = session.userId;
+  if (!session?.userId) if (!userId) throw new Error("Unauthorized");
 
   try {
     // Use Firestore implementation

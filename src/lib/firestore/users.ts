@@ -121,10 +121,13 @@ export async function deleteUser(clerkId: string) {
 
 export async function getUserStatus() {
   try {
-    const { userId } = auth();
-    if (!userId) {
+    const session = await auth();
+    
+    if (!session?.userId) {
       return { isPro: false };
     }
+    
+    const userId = session.userId;
 
     const userDoc = await getDoc(doc(db, 'users', userId));
     
@@ -201,10 +204,13 @@ export async function upgradeToProUser(userId: string) {
 
 export async function getUserProfile() {
   try {
-    const { userId } = auth();
-    if (!userId) {
-      return { success: false, error: "User not authenticated" };
+    const session = await auth();
+    
+    if (!session?.userId) {
+      return { success: false, error: "Unauthorized" };
     }
+    
+    const userId = session.userId;
     
     return await getUserByClerkId(userId);
   } catch (error) {

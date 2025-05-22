@@ -37,7 +37,13 @@ export async function updateApp(appId: string, formData: FormData | Record<strin
   try {
     console.log("[ServerAction] Starting update for appId:", appId);
     
-    const { userId } = auth();
+    const session = await auth();
+  
+  if (!session?.userId) {
+    return { success: false, error: "Unauthorized" };
+  }
+  
+  const userId = session.userId;
     console.log("[ServerAction] User ID:", userId);
     
     if (!userId) {

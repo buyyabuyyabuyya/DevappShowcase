@@ -9,7 +9,8 @@ const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
 
 export async function HeroSection() {
   // Get current user authentication status
-  const { userId } = auth();
+  const session = await auth();
+  const userId = session?.userId || null;
   
   // Initialize isPro as false
   let isPro = false;

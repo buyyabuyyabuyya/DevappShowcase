@@ -5,11 +5,13 @@ import { deleteApp as firestoreDeleteApp } from "@/lib/firestore/apps";
 import { revalidatePath } from "next/cache";
 
 export async function deleteApp(appId: string) {
-  const { userId } = auth();
+  const session = await auth();
   
-  if (!userId) {
+  if (!session?.userId) {
     return { success: false, error: "Unauthorized" };
   }
+  
+  const userId = session.userId;
   
   try {
     // Call Firestore function with just the appId

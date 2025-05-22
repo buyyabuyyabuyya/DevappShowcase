@@ -9,7 +9,13 @@ export async function editFeedbackAction(
   text: string
 ) {
   try {
-    const { userId } = auth();
+    const session = await auth();
+  
+  if (!session?.userId) {
+    return { success: false, error: "Unauthorized" };
+  }
+  
+  const userId = session.userId;
     
     if (!userId) {
       console.error("No user ID found in session");
@@ -37,7 +43,13 @@ export async function deleteFeedbackAction(
   feedbackId: string
 ) {
   try {
-    const { userId } = auth();
+    const session = await auth();
+  
+  if (!session?.userId) {
+    return { success: false, error: "Unauthorized" };
+  }
+  
+  const userId = session.userId;
     
     if (!userId) {
       console.error("No user ID found in session");

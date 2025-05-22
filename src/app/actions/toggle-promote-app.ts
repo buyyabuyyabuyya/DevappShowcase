@@ -5,12 +5,14 @@ import { togglePromoteApp as firestoreTogglePromoteApp } from "@/lib/firestore/a
 import { revalidatePath } from "next/cache";
 
 export async function togglePromoteApp(appId: string) {
-  const { userId } = auth();
+  const session = await auth();
   
-  if (!userId) {
+  if (!session?.userId) {
     return { success: false, error: "Unauthorized" };
   }
   
+  const userId = session.userId;
+
   try {
     // Call Firestore function - it only expects one argument
     const result = await firestoreTogglePromoteApp(appId);

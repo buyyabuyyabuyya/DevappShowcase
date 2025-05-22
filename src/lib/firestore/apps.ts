@@ -78,7 +78,12 @@ export async function createApp(formData: any, userId?: string) {
   console.log('Server action createApp started', { formData });
   
   // Allow userId to be passed as parameter for server-side calls
-  const currentUserId = userId || auth()?.userId;
+  let currentUserId = userId;
+  
+  if (!currentUserId) {
+    const session = await auth();
+    currentUserId = session?.userId || undefined;
+  }
   
   if (!currentUserId) {
     return { success: false, error: "Unauthorized" };
@@ -174,7 +179,12 @@ export async function createApp(formData: any, userId?: string) {
 export async function updateApp(id: string, formData: any, userId?: string) {
   try {
     // Allow userId to be passed as parameter for client-side calls
-    const currentUserId = userId || auth()?.userId;
+    let currentUserId = userId;
+    
+    if (!currentUserId) {
+      const session = await auth();
+      currentUserId = session?.userId || undefined;
+    }
     
     if (!currentUserId) {
       return { success: false, error: "Unauthorized" };
@@ -256,10 +266,13 @@ export async function updateApp(id: string, formData: any, userId?: string) {
 
 export async function deleteApp(id: string) {
   try {
-    const { userId } = auth();
-    if (!userId) {
+    const session = await auth();
+    
+    if (!session?.userId) {
       return { success: false, error: "Unauthorized" };
     }
+    
+    const userId = session.userId;
     
     // Verify ownership
     const appDoc = await getDoc(doc(db, 'apps', id));
@@ -294,7 +307,12 @@ export async function deleteApp(id: string) {
 export async function likeApp(id: string, userId?: string) {
   try {
     // Use passed userId or get from auth()
-    const currentUserId = userId || auth()?.userId;
+    let currentUserId = userId;
+    
+    if (!currentUserId) {
+      const session = await auth();
+      currentUserId = session?.userId || undefined;
+    }
     
     if (!currentUserId) {
       return { success: false, error: "Unauthorized" };
@@ -342,7 +360,13 @@ export async function likeApp(id: string, userId?: string) {
 
 export async function togglePromoteApp(id: string) {
   try {
-    const { userId } = auth();
+    const session = await auth();
+  
+  if (!session?.userId) {
+    return { success: false, error: "Unauthorized" };
+  }
+  
+  const userId = session.userId;
     if (!userId) {
       return { success: false, error: "Unauthorized" };
     }
