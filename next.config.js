@@ -1,7 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['res.cloudinary.com'], // Add any image domains you'll use
+    domains: [
+      'res.cloudinary.com', 
+      'img.clerk.com',
+      'images.clerk.dev',
+      'uploadthing.com',
+      'utfs.io',
+      'utfs.io/f/images.clerk.dev',
+    ], // Include Clerk domains for user images
   },
   experimental: {
     serverActions: {
