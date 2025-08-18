@@ -20,7 +20,7 @@ const APP_LIMITS = {
     DESCRIPTION_MAX_LENGTH: 2000
   }
 };
-
+//push 
 export async function getApps(options: { sort?: string } = {}) {
   try {
     const appsRef = collection(db, 'apps');
