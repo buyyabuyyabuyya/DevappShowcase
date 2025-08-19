@@ -1,7 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
-import Link from "next/link";
-import { Suspense } from "react";
-import { Button } from "@/components/ui/button";
 import { AppFilters } from "@/components/apps/app-filters";
 import { getApps } from "@/lib/firestore/apps";
 import { AppCategorySection } from "@/components/apps/app-category-section";
@@ -19,32 +15,43 @@ const appTypeColors: Record<string, string> = {
   extension: "bg-cyan-50 dark:bg-cyan-950/30 border-cyan-200 dark:border-cyan-800"
 };
 
-export default async function HomePage({ searchParams }: { searchParams: { sort?: string } }) {
-  const session = await auth();
-  const userId = session?.userId || null;
-  const { sort = "recent" } = searchParams;
-  const result = await getApps({ sort });
-  
-  // Safely handle apps, ensuring it's always an array
-  const apps = Array.isArray(result.apps) ? result.apps : [];
-  
-  // Organize apps by type and promotion status
+export default async function HomePage() {
+  // Fetch minimal data needed for the landing page in parallel
   const appTypes = ['website', 'mobile', 'desktop', 'api', 'ai', 'extension'];
-  const organizedApps = appTypes.reduce((acc, type) => {
-    const typeApps = apps.filter((app: any) => app.appType === type);
+
+  // Fetch promoted apps first (these should always be shown)
+  const [featuredResult, promotedResult, ...typeResults] = await Promise.all([
+    getApps({ isPromoted: true, limitCount: 6 }),
+    getApps({ isPromoted: true, limitCount: 100 }), // Get more promoted apps to distribute across types
+    ...appTypes.map(type => getApps({ appType: type, limitCount: 50 })) // Increased from 12 to 50
+  ]);
+
+  const featuredApps = (featuredResult.success && Array.isArray(featuredResult.apps)) ? featuredResult.apps : [];
+  const allPromotedApps = (promotedResult.success && Array.isArray(promotedResult.apps)) ? promotedResult.apps : [];
+
+  // Organize per-type results and ensure promoted apps are only shown in Featured section
+  const organizedApps = appTypes.reduce((acc, type, idx) => {
+    const res = typeResults[idx];
+    const list = (res && res.success && Array.isArray(res.apps)) ? res.apps : [];
+    
+    // Get promoted apps for this specific type (for Featured section only)
+    const typePromoted = allPromotedApps.filter((app: any) => app.appType === type);
+    
+    // Regular apps only (exclude promoted ones to avoid duplication)
+    const regularApps = list.filter((app: any) => !app.isPromoted);
     
     acc[type] = {
-      promoted: typeApps.filter((app: any) => app.isPromoted),
-      regular: typeApps.filter((app: any) => !app.isPromoted)
+      promoted: typePromoted,
+      regular: regularApps,
+      all: regularApps // Only show regular apps in "All" section
     };
-    
     return acc;
-  }, {} as Record<string, { promoted: any[], regular: any[] }>);
+  }, {} as Record<string, { promoted: any[], regular: any[], all: any[] }>);
 
   return (
     <main>
       <HeroSection />
-      <FeaturedApps />
+      <FeaturedApps initialApps={featuredApps} />
       <main className="container mx-auto px-4 py-8">
         <div className="space-y-12">
           <div className="text-center">
@@ -52,58 +59,44 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
             <p className="text-lg text-muted-foreground mb-8">
               Discover amazing developer projects and applications
             </p>
-            
-            {!userId && (
-              <div className="flex gap-4 justify-center mb-8">
-                <Button asChild>
-                  <Link href="https://accounts.devappshowcase.com/sign-in">Sign In</Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <Link href="https://accounts.devappshowcase.com/sign-up">Sign Up</Link>
-                </Button>
-              </div>
-            )}
           </div>
-          
+
           <AppFilters />
-          
+
           {appTypes.map(type => (
-            <div 
-              key={type} 
+            <div
+              key={type}
               className={cn(
-                "mb-16 pt-6 pb-8 px-6 rounded-lg border", 
+                "mb-16 pt-6 pb-8 px-6 rounded-lg border",
                 appTypeColors[type]
               )}
             >
               <div className="flex items-center mb-6">
                 <h2 className="text-3xl font-bold capitalize">
-                  {type} 
+                  {type}
                   <span className="text-muted-foreground ml-2 text-lg font-normal">
                     Apps
                   </span>
                 </h2>
                 <div className="ml-3 h-1 w-full rounded-full bg-muted"></div>
               </div>
-              
+
               {organizedApps[type].promoted.length > 0 && (
-                <AppCategorySection 
+                <AppCategorySection
                   title="Featured"
                   apps={organizedApps[type].promoted}
                   viewAllHref={`/apps?type=${type}&featured=true`}
                   isPromoted
                 />
               )}
-              
-              {organizedApps[type].regular.length > 0 && (
-                <AppCategorySection 
+
+              {organizedApps[type].all.length > 0 ? (
+                <AppCategorySection
                   title="All"
-                  apps={organizedApps[type].regular}
+                  apps={organizedApps[type].all}
                   viewAllHref={`/apps?type=${type}`}
                 />
-              )}
-              
-              {organizedApps[type].promoted.length === 0 && 
-               organizedApps[type].regular.length === 0 && (
+              ) : (
                 <div className="text-center py-10 text-muted-foreground">
                   No {type} apps available yet
                 </div>

@@ -8,9 +8,11 @@ import { Button } from "@/components/ui/button";
 interface AppGridProps {
   apps: App[];
   sort?: string;
+  page?: number;
+  appsPerPage?: number;
 }
 
-export function AppGrid({ apps, sort = 'recent' }: AppGridProps) {
+export function AppGrid({ apps, sort = 'recent', page = 1, appsPerPage = 10 }: AppGridProps) {
   // Sort apps to show promoted ones first, then by specified sort method
   const sortedApps = [...apps].sort((a, b) => {
     // Promoted apps come first
@@ -30,11 +32,16 @@ export function AppGrid({ apps, sort = 'recent' }: AppGridProps) {
     }
   });
 
+  // Get apps for current page
+  const startIndex = (page - 1) * appsPerPage;
+  const endIndex = startIndex + appsPerPage;
+  const currentPageApps = sortedApps.slice(startIndex, endIndex);
+
   return (
     <div className="w-full max-w-7xl mx-auto space-y-4">
-      {sortedApps.map((app) => (
+      {currentPageApps.map((app) => (
         <div 
-          key={app._id} 
+          key={app.id} 
           className={`w-full bg-card rounded-lg border hover:shadow-lg transition-shadow ${
             app.isPromoted ? "border-primary/30 bg-primary/5" : ""
           }`}
@@ -88,7 +95,7 @@ export function AppGrid({ apps, sort = 'recent' }: AppGridProps) {
                 <span>{app.likes?.count || 0}</span>
               </div>
               <Button asChild variant="outline" size="sm">
-                <Link href={`/apps/${app.appId || app.id || app._id}`}>
+                <Link href={`/apps/${app.id}`}>
                   View Details
                 </Link>
               </Button>

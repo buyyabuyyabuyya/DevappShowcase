@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 interface AppVerticalCardProps {
   app: {
-    _id: string;
+    id: string;
     name: string;
     description: string;
     appType: string;
@@ -23,8 +23,6 @@ interface AppVerticalCardProps {
       users: string[];
     };
     isPromoted?: boolean;
-    appId?: string;
-    id?: string;
   };
   isPromoted?: boolean;
   children?: React.ReactNode;
@@ -102,7 +100,7 @@ export function AppVerticalCard({ app, isPromoted, children }: AppVerticalCardPr
         <div className="flex gap-2 w-full">
           {!children && (
             <Button size="sm" className="w-full text-xs" asChild>
-              <Link href={`/apps/${app.appId || app.id || app._id}`}>
+              <Link href={`/apps/${app.id}`}>
                 View Details
               </Link>
             </Button>

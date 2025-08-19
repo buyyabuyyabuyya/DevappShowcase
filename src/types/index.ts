@@ -1,18 +1,38 @@
-import { Timestamp } from 'firebase/firestore';
-
 export interface App {
-  id?: string;
-  iconUrl: any;
+  id: string;
+  iconUrl?: string;
   name: string;
   description: string;
   appType: 'website' | 'mobile' | 'desktop' | 'extension' | 'api' | 'ai';
-  url: string;
-  images: string[];
+  liveUrl?: string;
+  imageUrls?: string[];
   userId: string;
   isPromoted: boolean;
-  promotionEndDate?: Timestamp;
-  createdAt: Timestamp;
+  promotionEndDate?: string;
+  createdAt: string;
+  updatedAt?: string;
   category?: string;
+  pricingModel?: string;
+  repoUrl?: string;
+  youtubeUrl?: string;
+  likes: {
+    count: number;
+    users: string[];
+  };
+  ratings: {
+    idea: {
+      total: number;
+      count: number;
+    };
+    product: {
+      total: number;
+      count: number;
+    };
+    feedback: {
+      count: number;
+    };
+    userRatings: any[];
+  };
 }
 
 export interface FeedbackEntry {
@@ -21,7 +41,7 @@ export interface FeedbackEntry {
   userName: string;
   userImage?: string;
   comment: string;
-  createdAt: Timestamp;
+  createdAt: string;
   appId: string;
 }
 
@@ -30,5 +50,5 @@ export interface Rating {
   userId: string;
   ideaRating: number;
   productRating: number;
-  createdAt: Timestamp;
+  createdAt: string;
 } 

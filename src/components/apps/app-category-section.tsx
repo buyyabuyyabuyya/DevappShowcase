@@ -16,8 +16,8 @@ export function AppCategorySection({
   viewAllHref,
   isPromoted
 }: AppCategorySectionProps) {
-  // Only show up to 6 apps in the preview
-  const displayApps = apps.slice(0, 6);
+  // Show up to 12 apps in the preview (increased from 6)
+  const displayApps = apps.slice(0, 12);
   
   return (
     <div className="mb-8">
@@ -39,7 +39,7 @@ export function AppCategorySection({
       
       <div className="grid grid-flow-col auto-cols-max gap-4 overflow-x-auto pb-4 snap-x scrollbar-thin">
         {displayApps.map(app => (
-          <div key={app._id} className="snap-start">
+          <div key={app.id} className="snap-start">
             <AppVerticalCard app={app} isPromoted={isPromoted} />
           </div>
         ))}

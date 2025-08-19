@@ -3,7 +3,7 @@ import {
   collection, doc, addDoc, getDoc, getDocs, 
   updateDoc, deleteDoc, query, where, orderBy, 
   limit, startAfter, serverTimestamp, increment,
-  DocumentData, Timestamp
+  DocumentData, Timestamp, QueryConstraint
 } from 'firebase/firestore';
 import { getUserByClerkId } from './users';
 import { auth } from '@clerk/nextjs/server';
@@ -21,16 +21,45 @@ const APP_LIMITS = {
   }
 };
 //push 
-export async function getApps(options: { sort?: string } = {}) {
+export async function getApps(options: { sort?: string; appType?: string; isPromoted?: boolean; limitCount?: number } = {}) {
   try {
+    const { appType, isPromoted, limitCount } = options;
     const appsRef = collection(db, 'apps');
-    const q = query(appsRef, orderBy('createdAt', 'desc'));
+
+    const constraints: QueryConstraint[] = [];
+
+    if (appType) {
+      constraints.push(where('appType', '==', appType));
+    }
+    if (typeof isPromoted === 'boolean') {
+      constraints.push(where('isPromoted', '==', isPromoted));
+    }
+
+    // Always sort newest first
+    constraints.push(orderBy('createdAt', 'desc'));
+
+    if (limitCount && limitCount > 0) {
+      constraints.push(limit(limitCount));
+    }
+
+    const q = query(appsRef, ...constraints);
     const querySnapshot = await getDocs(q);
     
-    const apps = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const apps = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      // Serialize Timestamp objects to ISO strings for Client Components
+      const serializedData = Object.entries(data).reduce<Record<string, any>>((obj, [key, value]) => {
+        if (value instanceof Timestamp) {
+          return { ...obj, [key]: value.toDate().toISOString() };
+        }
+        return { ...obj, [key]: value };
+      }, {});
+      
+      return {
+        id: doc.id,
+        ...serializedData
+      };
+    });
     
     return { success: true, apps };
   } catch (error) {
@@ -44,9 +73,18 @@ export async function getAppById(id: string) {
     const appDoc = await getDoc(doc(db, 'apps', id));
     
     if (appDoc.exists()) {
+      const data = appDoc.data();
+      // Serialize Timestamp objects to ISO strings for Client Components
+      const serializedData = Object.entries(data).reduce<Record<string, any>>((obj, [key, value]) => {
+        if (value instanceof Timestamp) {
+          return { ...obj, [key]: value.toDate().toISOString() };
+        }
+        return { ...obj, [key]: value };
+      }, {});
+      
       return { 
         success: true, 
-        app: { id: appDoc.id, ...appDoc.data() } 
+        app: { id: appDoc.id, ...serializedData } 
       };
     }
     return { success: false, error: "App not found" };
@@ -62,10 +100,21 @@ export async function getUserApps(userId: string) {
     const q = query(appsRef, where("userId", "==", userId), orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
     
-    const apps = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const apps = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      // Serialize Timestamp objects to ISO strings for Client Components
+      const serializedData = Object.entries(data).reduce<Record<string, any>>((obj, [key, value]) => {
+        if (value instanceof Timestamp) {
+          return { ...obj, [key]: value.toDate().toISOString() };
+        }
+        return { ...obj, [key]: value };
+      }, {});
+      
+      return {
+        id: doc.id,
+        ...serializedData
+      };
+    });
     
     return { success: true, apps };
   } catch (error) {
@@ -426,10 +475,21 @@ export async function searchApps(searchTerm: string) {
     const querySnapshot = await getDocs(appsRef);
     
     const results = querySnapshot.docs
-      .map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }))
+      .map(doc => {
+        const data = doc.data();
+        // Serialize Timestamp objects to ISO strings for Client Components
+        const serializedData = Object.entries(data).reduce<Record<string, any>>((obj, [key, value]) => {
+          if (value instanceof Timestamp) {
+            return { ...obj, [key]: value.toDate().toISOString() };
+          }
+          return { ...obj, [key]: value };
+        }, {});
+        
+        return {
+          id: doc.id,
+          ...serializedData
+        };
+      })
       .filter(app => {
         // Use type assertion and optional chaining for safer property access
         const appData = app as Record<string, any>;
