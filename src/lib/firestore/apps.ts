@@ -38,7 +38,7 @@ export async function getApps(options: { sort?: string } = {}) {
     return { success: false, error: "Failed to fetch apps" };
   }
 }
-
+//push
 export async function getAppById(id: string) {
   try {
     const appDoc = await getDoc(doc(db, 'apps', id));
