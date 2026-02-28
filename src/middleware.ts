@@ -21,7 +21,12 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
 
 export const config = {
   matcher: [
-    '/((?!api/webhooks|_next/static|_next/image|favicon\\.ico|favicon\\.png|apple-touch-icon\\.png|apple-touch-icon-precomposed\\.png|public).*)',
-    '/',
+    '/dashboard/:path*',
+    '/settings/:path*',
+    '/apps/:path*/edit',
+    '/api/apps/user',
+    '/api/user-status',
+    '/api/db/user-status',
+    '/api/checkout',
   ],
 };

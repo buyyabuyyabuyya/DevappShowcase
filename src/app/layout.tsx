@@ -4,16 +4,9 @@ import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AppHeader } from "@/components/shared/app-header";
-import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import './globals.css'
 import Script from "next/script";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
-// Import for server-side only
-import { headers } from 'next/headers';
 /*
  Environment validation in development only
 if (process.env.NODE_ENV === 'development') {
@@ -68,9 +61,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await auth();
-  const userId = session?.userId || null;
-
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>

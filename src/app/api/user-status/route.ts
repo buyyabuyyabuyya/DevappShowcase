@@ -4,6 +4,8 @@ import { getUserByClerkId } from '@/lib/firestore/users';
 import { clerkClient } from '@clerk/nextjs/server';
 import { createUser } from '@/lib/firestore/users';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     console.log("User status API called");

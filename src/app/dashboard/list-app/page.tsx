@@ -1,6 +1,8 @@
 import { ListAppForm } from "@/components/dashboard/list-app-form";
 import { DashboardShell } from "@/components/dashboard/shell";
 
+export const dynamic = 'force-dynamic';
+
 export default function ListAppPage() {
   return (
     <DashboardShell>

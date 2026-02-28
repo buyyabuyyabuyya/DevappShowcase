@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useDebounce } from "@/lib/hooks/use-debounce";
-import { searchApps } from "@/lib/firestore/apps-client";
 
 interface SearchSuggestionsProps {
   searchTerm: string;
@@ -30,8 +29,13 @@ export function SearchSuggestions({
       
       setIsLoading(true);
       try {
-        const data = await searchApps(debouncedSearchTerm);
-        setResults(data.slice(0, 5)); // Limit to 5 suggestions
+        const response = await fetch(`/api/search?q=${encodeURIComponent(debouncedSearchTerm)}`);
+        if (!response.ok) {
+          throw new Error(`Search request failed (${response.status})`);
+        }
+
+        const data = await response.json();
+        setResults(Array.isArray(data?.results) ? data.results : []);
       } catch (error) {
         console.error("Search error:", error);
       } finally {

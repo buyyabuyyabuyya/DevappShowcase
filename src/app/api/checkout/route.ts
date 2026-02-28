@@ -3,6 +3,8 @@ import { auth } from "@clerk/nextjs/server";
 import { getUserByClerkId } from "@/lib/firestore/users";
 import { stripe } from "@/lib/stripe";
 
+export const dynamic = 'force-dynamic';
+
 // Define the price ID for your Pro subscription
 const PRO_PRICE_ID = "prod_RwJKcifWtNr3nc"; // Replace with your actual Stripe price ID
 

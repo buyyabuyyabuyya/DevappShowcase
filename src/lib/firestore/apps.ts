@@ -20,6 +20,33 @@ const APP_LIMITS = {
     DESCRIPTION_MAX_LENGTH: 2000
   }
 };
+
+function normalizeSearchValue(value: unknown): string {
+  if (typeof value !== 'string') return '';
+  return value.trim().toLowerCase();
+}
+
+function serializeFirestoreValue(value: any): any {
+  if (value instanceof Timestamp) {
+    return value.toDate().toISOString();
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => serializeFirestoreValue(item));
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, nestedValue]) => [key, serializeFirestoreValue(nestedValue)])
+    );
+  }
+
+  return value;
+}
+
+function serializeDocData(data: Record<string, any>) {
+  return serializeFirestoreValue(data);
+}
 //push 
 export async function getApps(options: { sort?: string; appType?: string; isPromoted?: boolean; limitCount?: number } = {}) {
   try {
@@ -45,21 +72,10 @@ export async function getApps(options: { sort?: string; appType?: string; isProm
     const q = query(appsRef, ...constraints);
     const querySnapshot = await getDocs(q);
     
-    const apps = querySnapshot.docs.map(doc => {
-      const data = doc.data();
-      // Serialize Timestamp objects to ISO strings for Client Components
-      const serializedData = Object.entries(data).reduce<Record<string, any>>((obj, [key, value]) => {
-        if (value instanceof Timestamp) {
-          return { ...obj, [key]: value.toDate().toISOString() };
-        }
-        return { ...obj, [key]: value };
-      }, {});
-      
-      return {
-        id: doc.id,
-        ...serializedData
-      };
-    });
+    const apps = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...serializeDocData(doc.data())
+    }));
     
     return { success: true, apps };
   } catch (error) {
@@ -74,13 +90,7 @@ export async function getAppById(id: string) {
     
     if (appDoc.exists()) {
       const data = appDoc.data();
-      // Serialize Timestamp objects to ISO strings for Client Components
-      const serializedData = Object.entries(data).reduce<Record<string, any>>((obj, [key, value]) => {
-        if (value instanceof Timestamp) {
-          return { ...obj, [key]: value.toDate().toISOString() };
-        }
-        return { ...obj, [key]: value };
-      }, {});
+      const serializedData = serializeDocData(data);
       
       return { 
         success: true, 
@@ -100,21 +110,10 @@ export async function getUserApps(userId: string) {
     const q = query(appsRef, where("userId", "==", userId), orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
     
-    const apps = querySnapshot.docs.map(doc => {
-      const data = doc.data();
-      // Serialize Timestamp objects to ISO strings for Client Components
-      const serializedData = Object.entries(data).reduce<Record<string, any>>((obj, [key, value]) => {
-        if (value instanceof Timestamp) {
-          return { ...obj, [key]: value.toDate().toISOString() };
-        }
-        return { ...obj, [key]: value };
-      }, {});
-      
-      return {
-        id: doc.id,
-        ...serializedData
-      };
-    });
+    const apps = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...serializeDocData(doc.data())
+    }));
     
     return { success: true, apps };
   } catch (error) {
@@ -168,6 +167,7 @@ export async function createApp(formData: any, userId?: string) {
     
     const appData = {
       ...formData,
+      nameLower: normalizeSearchValue(formData.name),
       userId: currentUserId,
       likes: {
         count: 0,
@@ -261,7 +261,11 @@ export async function updateApp(id: string, formData: any, userId?: string) {
     // Filter and sanitize the update data
     const sanitizedUpdates = Object.entries(formData)
       .filter(([key]) => allowedFields.includes(key))
-      .reduce((obj, [key, value]) => ({...obj, [key]: value}), {});
+      .reduce<Record<string, any>>((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+
+    if (typeof sanitizedUpdates.name === 'string') {
+      sanitizedUpdates.nameLower = normalizeSearchValue(sanitizedUpdates.name);
+    }
 
     // Create the update object that preserves existing data
     const updateData: DocumentData = {
@@ -463,44 +467,46 @@ export async function togglePromoteApp(id: string) {
   }
 }
 
-export async function searchApps(searchTerm: string) {
+export async function searchApps(searchTerm: string, limitCount = 5) {
   try {
-    if (!searchTerm || searchTerm.trim().length < 2) {
+    const normalizedTerm = normalizeSearchValue(searchTerm);
+    if (!normalizedTerm || normalizedTerm.length < 2) {
       return [];
     }
-    
-    // We need to perform a client-side filtering since Firestore doesn't support
-    // partial text search natively without additional setup (like Algolia)
+
     const appsRef = collection(db, 'apps');
-    const querySnapshot = await getDocs(appsRef);
-    
-    const results = querySnapshot.docs
-      .map(doc => {
-        const data = doc.data();
-        // Serialize Timestamp objects to ISO strings for Client Components
-        const serializedData = Object.entries(data).reduce<Record<string, any>>((obj, [key, value]) => {
-          if (value instanceof Timestamp) {
-            return { ...obj, [key]: value.toDate().toISOString() };
-          }
-          return { ...obj, [key]: value };
-        }, {});
-        
-        return {
+
+    try {
+      // Primary path: indexed prefix query using nameLower.
+      const indexedQuery = query(
+        appsRef,
+        where('nameLower', '>=', normalizedTerm),
+        where('nameLower', '<=', `${normalizedTerm}\uf8ff`),
+        orderBy('nameLower'),
+        limit(limitCount)
+      );
+
+      const indexedSnapshot = await getDocs(indexedQuery);
+      if (!indexedSnapshot.empty) {
+        return indexedSnapshot.docs.map(doc => ({
           id: doc.id,
-          ...serializedData
-        };
-      })
-      .filter(app => {
-        // Use type assertion and optional chaining for safer property access
-        const appData = app as Record<string, any>;
-        const name = (appData.name || '').toLowerCase();
-        const description = (appData.description || '').toLowerCase();
-        const term = searchTerm.toLowerCase();
-        
-        return name.includes(term) || description.includes(term);
-      });
-    
-    return results;
+          ...serializeDocData(doc.data())
+        }));
+      }
+    } catch (indexedError) {
+      // Missing index / new field rollout should not break search suggestions.
+      console.warn("Indexed search unavailable, using fallback scan:", indexedError);
+    }
+
+    // Fallback for older docs that may not have nameLower yet.
+    const fallbackSnapshot = await getDocs(query(appsRef, orderBy('createdAt', 'desc'), limit(100)));
+    return fallbackSnapshot.docs
+      .map(doc => ({
+        id: doc.id,
+        ...serializeDocData(doc.data())
+      }))
+      .filter(app => normalizeSearchValue((app as Record<string, any>).name).includes(normalizedTerm))
+      .slice(0, limitCount);
   } catch (error) {
     console.error("Error searching apps:", error);
     return [];

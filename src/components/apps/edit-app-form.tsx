@@ -192,7 +192,7 @@ export function EditAppForm({ app }: EditAppFormProps) {
     if (totalSize > FIRESTORE_DOC_LIMIT * 0.8) {
       console.warn(`[DocSize] WARNING: Document size is approaching Firestore limit (${percentOfLimit}%)`);
     }
-  }, [iconPreview, imagePreviews, form]);
+  }, [iconPreview, imagePreviews, form, FIRESTORE_DOC_LIMIT]);
 
   function handleIconChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
@@ -708,7 +708,7 @@ export function EditAppForm({ app }: EditAppFormProps) {
                 <Input placeholder="https://github.com/username/repo" {...field} />
               </FormControl>
               <FormDescription>
-                Link to your project's source code
+                Link to your project&apos;s source code
               </FormDescription>
               <FormMessage />
             </FormItem>

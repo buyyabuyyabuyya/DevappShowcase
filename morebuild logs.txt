@@ -1,0 +1,28 @@
+PS E:\DevappShowcase-main\DevappShowcase-main> npm run build
+
+> devapp-showcase@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.25
+  - Environments: .env
+
+   Creating an optimized production build ...
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (121kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+Browserslist: browsers data (caniuse-lite) is 12 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled successfully
+   Linting and checking validity of types  . ⨯ ESLint: Failed to load config "next/typescript" to extend from. Referenced from: E:\DevappShowcase-main\DevappShowcase-main\.eslintrc.json
+   Linting and checking validity of types  ..Failed to compile.
+
+./scanner-website/src/app/api/scan/route.ts:2:10
+Type error: Module '"@/types"' has no exported member 'ScanOptions'.
+
+  1 | import { NextRequest, NextResponse } from 'next/server';
+> 2 | import { ScanOptions, ScanResult, NetworkRequest, Vulnerability } from '@/types';
+    |          ^
+  3 | import { sensitivePatterns } from '@/lib/sensitive-patterns';
+  4 | import { checkSecurityHeaders, detectSensitiveDataServer } from '@/lib/server-utils';
+  5 |
+Next.js build worker exited with code: 1 and signal: null
+PS E:\DevappShowcase-main\DevappShowcase-main>

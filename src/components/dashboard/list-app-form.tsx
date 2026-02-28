@@ -125,7 +125,7 @@ export function ListAppForm() {
       }
     }
     checkUserStatus();
-  }, []);
+  }, [form]);
 
   useEffect(() => {
     // Calculate total document size whenever image previews change
@@ -165,7 +165,7 @@ export function ListAppForm() {
     if (totalSize > FIRESTORE_DOC_LIMIT * 0.8) {
       console.warn(`[DocSize] WARNING: Document size is approaching Firestore limit (${percentOfLimit}%)`);
     }
-  }, [iconPreview, imagePreviews, form]);
+  }, [iconPreview, imagePreviews, form, FIRESTORE_DOC_LIMIT]);
 
   async function convertFileToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {

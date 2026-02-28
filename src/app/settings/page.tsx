@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { getUserProfile } from "@/lib/firestore/users";
 import { SettingsClient } from "./settings-client";
 
+export const dynamic = 'force-dynamic';
+
 export default async function SettingsPage() {
   const session = await auth();
   const user = await currentUser();

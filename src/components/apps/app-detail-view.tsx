@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   ExternalLink, 
@@ -41,12 +42,13 @@ import { db } from "@/lib/firebase";
 
 interface AppDetailViewProps {
   app: any;
-  isOwner: boolean;
-  isProUser: boolean;
 }
 
-export function AppDetailView({ app, isOwner, isProUser }: AppDetailViewProps) {
+export function AppDetailView({ app }: AppDetailViewProps) {
   const router = useRouter();
+  const { isLoaded, userId } = useAuth();
+  const isOwner = isLoaded && !!userId && userId === app.userId;
+  const [isProUser, setIsProUser] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(app.likes?.count || 0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -68,6 +70,44 @@ export function AppDetailView({ app, isOwner, isProUser }: AppDetailViewProps) {
       );
     }
   };
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadProStatus() {
+      if (!isOwner) {
+        setIsProUser(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/user-status', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          cache: 'no-store'
+        });
+
+        if (!response.ok) return;
+        const data = await response.json();
+
+        if (!cancelled) {
+          setIsProUser(!!data.isPro);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setIsProUser(false);
+        }
+      }
+    }
+
+    if (isLoaded) {
+      loadProStatus();
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isLoaded, isOwner]);
 
   async function handleDelete() {
     try {

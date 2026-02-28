@@ -2,6 +2,9 @@ import { getApps } from "@/lib/firestore/apps";
 import { AppGrid } from "@/components/shared/app-grid";
 import { AppFilters } from "@/components/apps/app-filters";
 import { LoadMoreButton } from "@/components/shared/load-more-button";
+import { Suspense } from "react";
+
+export const revalidate = 300;
 
 interface AppsPageProps {
   searchParams: {
@@ -56,7 +59,9 @@ export default async function AppsPage({ searchParams }: AppsPageProps) {
         {type && ` - ${type.charAt(0).toUpperCase() + type.slice(1)}`}
       </h1>
 
-      <AppFilters />
+      <Suspense fallback={null}>
+        <AppFilters />
+      </Suspense>
 
       <AppGrid 
         apps={filteredApps} 

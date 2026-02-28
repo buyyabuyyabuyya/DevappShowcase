@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { useCallback } from "react";
 
 interface ProStatusContextType {
   isPro: boolean;
@@ -28,7 +29,7 @@ export function ProStatusProvider({
   const [subscriptionExpiresAt, setSubscriptionExpiresAt] = useState<Date | null>(null);
   const [hasFetched, setHasFetched] = useState(false);
 
-  const refreshProStatus = async () => {
+  const refreshProStatus = useCallback(async () => {
     if (hasFetched) return; // Prevent multiple fetches
     
     try {
@@ -74,11 +75,11 @@ export function ProStatusProvider({
       setIsLoading(false);
       setHasFetched(true);
     }
-  };
+  }, [hasFetched]);
 
   useEffect(() => {
     refreshProStatus();
-  }, []); // Only run once on mount
+  }, [refreshProStatus]);
 
   return (
     <ProStatusContext.Provider 

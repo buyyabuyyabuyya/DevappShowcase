@@ -129,7 +129,7 @@ export function PromotionCard({ appId, isProUser = false, isAppPromoted = false 
           {userIsPro && (
             <div className="rounded-lg bg-muted p-4">
               <p className="text-sm mb-2">
-                <strong>Pro benefit:</strong> All your apps are automatically promoted to the top of search results with a "Promoted" badge.
+                <strong>Pro benefit:</strong> All your apps are automatically promoted to the top of search results with a &quot;Promoted&quot; badge.
               </p>
             </div>
           )}

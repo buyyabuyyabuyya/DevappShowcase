@@ -1,0 +1,1046 @@
+PS E:\DevappShowcase-main\DevappShowcase-main> npm run dev
+
+> devapp-showcase@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.25
+  - Local:        http://localhost:3000
+  - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 1449ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1372ms (1572 modules)
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 27, lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 96000000}, provideFeedback: ..., userName: ..., userImage: ..., productRating: ..., ideaRating: ..., updatedAt: ..., userId: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, userName: ..., userImage: ..., productRating: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 240000000}, userId: ...}
+                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 438000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 25, lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 831000000}, ideaRating: ..., createdAt: ..., provideFeedback: ...}
+                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., userId: ..., updatedAt: ..., ideaRating: ..., createdAt: {seconds: ..., nanoseconds: 522000000}, provideFeedback: ...}
+                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 963000000}, ideaRating: ..., updatedAt: ..., userId: ..., userName: ..., userImage: ..., productRating: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 741000000}, userId: ..., userName: ..., userImage: ..., productRating: ...}
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 557000000}, provideFeedback: ..., userName: ..., productRating: ..., userImage: ..., ideaRating: ..., userId: ..., updatedAt: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, userName: ..., productRating: ..., userImage: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 839000000}}
+                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 27, users: ..., lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 168000000}, provideFeedback: ..., userName: ..., userImage: ..., productRating: ..., ideaRating: ..., userId: ..., updatedAt: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, userName: ..., userImage: ..., productRating: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 996000000}}
+                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: {seconds: ..., nanoseconds: 326000000}, userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: ...}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: ..., userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 14000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 25, lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: {seconds: ..., nanoseconds: 288000000}, userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: ...}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: ..., userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 567000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 556000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 20, users: [], lastUpdated: {seconds: ..., nanoseconds: 556000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: {seconds: ..., nanoseconds: 105000000}, ideaRating: ..., userImage: ..., productRating: ..., userName: ..., provideFeedback: ..., createdAt: ...}
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 604000000}}
+                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 19, lastUpdated: {seconds: ..., nanoseconds: 556000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 556000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 556000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 770000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 438000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 770000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 438000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 510000000}, userId: ..., updatedAt: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 377000000}, ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 25, lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 860000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: {seconds: ..., nanoseconds: 548000000}, userId: ..., userName: ..., productRating: ..., userImage: ..., provideFeedback: ..., createdAt: ...}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: ..., userId: ..., userName: ..., productRating: ..., userImage: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 129000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 19, lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 21, lastUpdated: {seconds: ..., nanoseconds: 956000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 267000000}, ideaRating: ..., userId: ..., updatedAt: ..., userName: ..., userImage: ..., productRating: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 422000000}, userName: ..., userImage: ..., productRating: ...}
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 20, lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 134000000}, updatedAt: ..., userId: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., updatedAt: {seconds: ..., nanoseconds: 878000000}, userId: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 23, users: [], lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 770000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 24, lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: {seconds: ..., nanoseconds: 531000000}, ideaRating: ..., productRating: ..., userImage: ..., userName: ..., provideFeedback: ..., createdAt: ...}
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 521000000}}
+                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 18, lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 860000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 38, users: [], lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 860000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 21, users: ..., lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 214000000}, provideFeedback: ..., userName: ..., productRating: ..., userImage: ..., ideaRating: ..., updatedAt: ..., userId: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, userName: ..., productRating: ..., userImage: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 397000000}, userId: ...}
+                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 24, lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 27000000}, provideFeedback: ..., productRating: ..., userImage: ..., userName: ..., updatedAt: ..., userId: ..., ideaRating: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, productRating: ..., userImage: ..., userName: ..., updatedAt: {seconds: ..., nanoseconds: 372000000}, userId: ..., ideaRating: ...}
+                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., updatedAt: {seconds: ..., nanoseconds: 667000000}, userId: ..., ideaRating: ..., createdAt: ..., provideFeedback: ...}
+                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., updatedAt: ..., userId: ..., ideaRating: ..., createdAt: {seconds: ..., nanoseconds: 691000000}, provideFeedback: ...}
+                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 239000000}, ideaRating: ..., userId: ..., updatedAt: ..., userName: ..., userImage: ..., productRating: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 308000000}, userName: ..., userImage: ..., productRating: ...}
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: {seconds: ..., nanoseconds: 712000000}, userId: ..., userName: ..., productRating: ..., userImage: ..., provideFeedback: ..., createdAt: ...}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: ..., userId: ..., userName: ..., productRating: ..., userImage: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 899000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 20, users: ..., lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 956000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 69000000}, provideFeedback: ..., userName: ..., productRating: ..., userImage: ..., ideaRating: ..., userId: ..., updatedAt: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, userName: ..., productRating: ..., userImage: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 592000000}}
+                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userName: "Stefano", productRating: 5, userImage: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 895000000}, userId: ..., createdAt: ..., provideFeedback: ...}
+                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userName: "Stefano", productRating: 5, userImage: ..., ideaRating: ..., updatedAt: ..., userId: ..., createdAt: {seconds: ..., nanoseconds: 394000000}, provideFeedback: ...}
+                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 756000000}, userId: ..., updatedAt: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 639000000}, ideaRating: ..., userImage: ..., productRating: ..., userName: ...}
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 24, lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, userId: ..., updatedAt: {seconds: ..., nanoseconds: 77000000}, userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: ...}
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, userId: ..., updatedAt: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 519000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 802000000}, provideFeedback: ..., productRating: ..., userImage: ..., userName: ..., userId: ..., updatedAt: ..., ideaRating: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, productRating: ..., userImage: ..., userName: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 611000000}, ideaRating: ...}
+                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 18, lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 393000000}, updatedAt: ..., userId: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., updatedAt: {seconds: ..., nanoseconds: 618000000}, userId: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 860000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userName: ..., productRating: 5, userImage: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 54000000}, userId: ..., createdAt: ..., provideFeedback: ...}
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userName: ..., productRating: 5, userImage: ..., ideaRating: ..., updatedAt: ..., userId: ..., createdAt: {seconds: ..., nanoseconds: 543000000}, provideFeedback: ...}
+                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 22, users: [], lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 22, lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 365000000}, userId: ..., updatedAt: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 409000000}, ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 24, lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 754000000}, userId: ..., updatedAt: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 517000000}, ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 438000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 22, users: [], lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 13000000}, updatedAt: ..., userId: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., updatedAt: {seconds: ..., nanoseconds: 398000000}, userId: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 14, users: ..., lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 632000000}, updatedAt: ..., userId: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., updatedAt: {seconds: ..., nanoseconds: 428000000}, userId: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ...}
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userName: ..., productRating: 5, userImage: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 631000000}, userId: ..., createdAt: ..., provideFeedback: ...}
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userName: ..., productRating: 5, userImage: ..., ideaRating: ..., updatedAt: ..., userId: ..., createdAt: {seconds: ..., nanoseconds: 853000000}, provideFeedback: ...}
+                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 16, lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 955000000}, ideaRating: ..., createdAt: ..., provideFeedback: ...}
+                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., userId: ..., updatedAt: ..., ideaRating: ..., createdAt: {seconds: ..., nanoseconds: 75000000}, provideFeedback: ...}
+                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 666000000}, ideaRating: ..., userId: ..., updatedAt: ..., userName: ..., productRating: ..., userImage: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 622000000}, userName: ..., productRating: ..., userImage: ...}
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 619000000}, ideaRating: ..., updatedAt: ..., userId: ..., userName: ..., userImage: ..., productRating: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 514000000}, userId: ..., userName: ..., userImage: ..., productRating: ...}
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 956000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: {seconds: ..., nanoseconds: 218000000}, userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: ...}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: ..., userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 685000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 21, lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 917000000}, ideaRating: ..., createdAt: ..., provideFeedback: ...}
+                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., userId: ..., updatedAt: ..., ideaRating: ..., createdAt: {seconds: ..., nanoseconds: 676000000}, provideFeedback: ...}
+                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 20, lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 408000000}, provideFeedback: ..., productRating: ..., userImage: ..., userName: ..., updatedAt: ..., userId: ..., ideaRating: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, productRating: ..., userImage: ..., userName: ..., updatedAt: {seconds: ..., nanoseconds: 474000000}, userId: ..., ideaRating: ...}
+                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: {seconds: ..., nanoseconds: 724000000}, ideaRating: ..., productRating: ..., userImage: ..., userName: ..., provideFeedback: ..., createdAt: ...}
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 778000000}}
+                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 770000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, userId: ..., updatedAt: {seconds: ..., nanoseconds: 519000000}, userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: ...}
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, userId: ..., updatedAt: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 662000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {updatedAt: {seconds: ..., nanoseconds: 779000000}, userId: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ..., provideFeedback: ..., createdAt: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {updatedAt: ..., userId: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 179000000}}
+                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 25, users: ..., lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: {seconds: ..., nanoseconds: 688000000}, ideaRating: ..., productRating: ..., userImage: ..., userName: ..., provideFeedback: ..., createdAt: ...}
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 472000000}}
+                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 770000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 21, users: [], lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 16, users: [...], lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 20, users: [...], lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 225000000}, provideFeedback: ..., userName: ..., productRating: ..., userImage: ..., ideaRating: ..., userId: ..., updatedAt: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, userName: ..., productRating: ..., userImage: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 598000000}}
+                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 596000000}, ideaRating: ..., updatedAt: ..., userId: ..., userName: ..., productRating: ..., userImage: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 921000000}, userId: ..., userName: ..., productRating: ..., userImage: ...}
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 19, lastUpdated: {seconds: ..., nanoseconds: 956000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 19, lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 17, lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 25, lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 25, lastUpdated: {seconds: ..., nanoseconds: 956000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: {seconds: ..., nanoseconds: 266000000}, userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: ...}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: ..., userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 202000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 770000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 438000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 25, lastUpdated: {seconds: ..., nanoseconds: 956000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 26, lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: {seconds: ..., nanoseconds: 372000000}, ideaRating: ..., userImage: ..., productRating: ..., userName: ..., provideFeedback: ..., createdAt: ...}
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 786000000}}
+                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 18, lastUpdated: {seconds: ..., nanoseconds: 556000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 16, users: [], lastUpdated: {seconds: ..., nanoseconds: 556000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 17, lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 777000000}, ideaRating: ..., userId: ..., updatedAt: ..., userName: ..., userImage: ..., productRating: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 660000000}, userName: ..., userImage: ..., productRating: ...}
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 24, lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 860000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 19, lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 20, lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 20, users: [], lastUpdated: {seconds: ..., nanoseconds: 956000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 25, users: [], lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 17, lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 27, lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 96000000}, provideFeedback: ..., userName: ..., userImage: ..., productRating: ..., ideaRating: ..., updatedAt: ..., userId: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, userName: ..., userImage: ..., productRating: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 240000000}, userId: ...}
+                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 438000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 25, lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 831000000}, ideaRating: ..., createdAt: ..., provideFeedback: ...}
+                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., userId: ..., updatedAt: ..., ideaRating: ..., createdAt: {seconds: ..., nanoseconds: 522000000}, provideFeedback: ...}
+                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 963000000}, ideaRating: ..., updatedAt: ..., userId: ..., userName: ..., userImage: ..., productRating: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 741000000}, userId: ..., userName: ..., userImage: ..., productRating: ...}
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 557000000}, provideFeedback: ..., userName: ..., productRating: ..., userImage: ..., ideaRating: ..., userId: ..., updatedAt: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, userName: ..., productRating: ..., userImage: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 839000000}}
+                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 27, users: ..., lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 168000000}, provideFeedback: ..., userName: ..., userImage: ..., productRating: ..., ideaRating: ..., userId: ..., updatedAt: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, userName: ..., userImage: ..., productRating: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 996000000}}
+                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: {seconds: ..., nanoseconds: 326000000}, userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: ...}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: ..., userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 14000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 25, lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: {seconds: ..., nanoseconds: 288000000}, userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: ...}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: ..., userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 567000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 556000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 20, users: [], lastUpdated: {seconds: ..., nanoseconds: 556000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: {seconds: ..., nanoseconds: 105000000}, ideaRating: ..., userImage: ..., productRating: ..., userName: ..., provideFeedback: ..., createdAt: ...}
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 604000000}}
+                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 19, lastUpdated: {seconds: ..., nanoseconds: 556000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 556000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 556000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 770000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 438000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 770000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 438000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 510000000}, userId: ..., updatedAt: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 377000000}, ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 25, lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 860000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: {seconds: ..., nanoseconds: 548000000}, userId: ..., userName: ..., productRating: ..., userImage: ..., provideFeedback: ..., createdAt: ...}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: ..., userId: ..., userName: ..., productRating: ..., userImage: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 129000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 19, lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 21, lastUpdated: {seconds: ..., nanoseconds: 956000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 267000000}, ideaRating: ..., userId: ..., updatedAt: ..., userName: ..., userImage: ..., productRating: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 422000000}, userName: ..., userImage: ..., productRating: ...}
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 20, lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 134000000}, updatedAt: ..., userId: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., updatedAt: {seconds: ..., nanoseconds: 878000000}, userId: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 23, users: [], lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 770000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 24, lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: {seconds: ..., nanoseconds: 531000000}, ideaRating: ..., productRating: ..., userImage: ..., userName: ..., provideFeedback: ..., createdAt: ...}
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 521000000}}
+                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 18, lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 860000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 38, users: [], lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 860000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 21, users: ..., lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 214000000}, provideFeedback: ..., userName: ..., productRating: ..., userImage: ..., ideaRating: ..., updatedAt: ..., userId: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, userName: ..., productRating: ..., userImage: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 397000000}, userId: ...}
+                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 24, lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 27000000}, provideFeedback: ..., productRating: ..., userImage: ..., userName: ..., updatedAt: ..., userId: ..., ideaRating: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, productRating: ..., userImage: ..., userName: ..., updatedAt: {seconds: ..., nanoseconds: 372000000}, userId: ..., ideaRating: ...}
+                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., updatedAt: {seconds: ..., nanoseconds: 667000000}, userId: ..., ideaRating: ..., createdAt: ..., provideFeedback: ...}
+                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., updatedAt: ..., userId: ..., ideaRating: ..., createdAt: {seconds: ..., nanoseconds: 691000000}, provideFeedback: ...}
+                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 239000000}, ideaRating: ..., userId: ..., updatedAt: ..., userName: ..., userImage: ..., productRating: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 308000000}, userName: ..., userImage: ..., productRating: ...}
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: {seconds: ..., nanoseconds: 712000000}, userId: ..., userName: ..., productRating: ..., userImage: ..., provideFeedback: ..., createdAt: ...}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: ..., userId: ..., userName: ..., productRating: ..., userImage: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 899000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 20, users: ..., lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 956000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 69000000}, provideFeedback: ..., userName: ..., productRating: ..., userImage: ..., ideaRating: ..., userId: ..., updatedAt: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, userName: ..., productRating: ..., userImage: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 592000000}}
+                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userName: "Stefano", productRating: 5, userImage: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 895000000}, userId: ..., createdAt: ..., provideFeedback: ...}
+                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userName: "Stefano", productRating: 5, userImage: ..., ideaRating: ..., updatedAt: ..., userId: ..., createdAt: {seconds: ..., nanoseconds: 394000000}, provideFeedback: ...}
+                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 756000000}, userId: ..., updatedAt: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 639000000}, ideaRating: ..., userImage: ..., productRating: ..., userName: ...}
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 24, lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, userId: ..., updatedAt: {seconds: ..., nanoseconds: 77000000}, userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: ...}
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, userId: ..., updatedAt: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 519000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 802000000}, provideFeedback: ..., productRating: ..., userImage: ..., userName: ..., userId: ..., updatedAt: ..., ideaRating: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, productRating: ..., userImage: ..., userName: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 611000000}, ideaRating: ...}
+                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 18, lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 393000000}, updatedAt: ..., userId: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., updatedAt: {seconds: ..., nanoseconds: 618000000}, userId: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 860000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userName: ..., productRating: 5, userImage: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 54000000}, userId: ..., createdAt: ..., provideFeedback: ...}
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userName: ..., productRating: 5, userImage: ..., ideaRating: ..., updatedAt: ..., userId: ..., createdAt: {seconds: ..., nanoseconds: 543000000}, provideFeedback: ...}
+                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 22, users: [], lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 22, lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 365000000}, userId: ..., updatedAt: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 409000000}, ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 24, lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 754000000}, userId: ..., updatedAt: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 517000000}, ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 438000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 22, users: [], lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 13000000}, updatedAt: ..., userId: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., updatedAt: {seconds: ..., nanoseconds: 398000000}, userId: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ...}
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 14, users: ..., lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 632000000}, updatedAt: ..., userId: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., updatedAt: {seconds: ..., nanoseconds: 428000000}, userId: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ...}
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userName: ..., productRating: 5, userImage: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 631000000}, userId: ..., createdAt: ..., provideFeedback: ...}
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userName: ..., productRating: 5, userImage: ..., ideaRating: ..., updatedAt: ..., userId: ..., createdAt: {seconds: ..., nanoseconds: 853000000}, provideFeedback: ...}
+                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 16, lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 955000000}, ideaRating: ..., createdAt: ..., provideFeedback: ...}
+                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., userId: ..., updatedAt: ..., ideaRating: ..., createdAt: {seconds: ..., nanoseconds: 75000000}, provideFeedback: ...}
+                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 666000000}, ideaRating: ..., userId: ..., updatedAt: ..., userName: ..., productRating: ..., userImage: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 622000000}, userName: ..., productRating: ..., userImage: ...}
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 619000000}, ideaRating: ..., updatedAt: ..., userId: ..., userName: ..., userImage: ..., productRating: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 514000000}, userId: ..., userName: ..., userImage: ..., productRating: ...}
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 956000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: {seconds: ..., nanoseconds: 218000000}, userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: ...}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: ..., userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 685000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 357000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 21, lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 917000000}, ideaRating: ..., createdAt: ..., provideFeedback: ...}
+                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {productRating: 5, userImage: ..., userName: ..., userId: ..., updatedAt: ..., ideaRating: ..., createdAt: {seconds: ..., nanoseconds: 676000000}, provideFeedback: ...}
+                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: ..., count: 20, lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 408000000}, provideFeedback: ..., productRating: ..., userImage: ..., userName: ..., updatedAt: ..., userId: ..., ideaRating: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, productRating: ..., userImage: ..., userName: ..., updatedAt: {seconds: ..., nanoseconds: 474000000}, userId: ..., ideaRating: ...}
+                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: {seconds: ..., nanoseconds: 724000000}, ideaRating: ..., productRating: ..., userImage: ..., userName: ..., provideFeedback: ..., createdAt: ...}
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 778000000}}
+                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 770000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, userId: ..., updatedAt: {seconds: ..., nanoseconds: 519000000}, userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: ...}
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, userId: ..., updatedAt: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 662000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {updatedAt: {seconds: ..., nanoseconds: 779000000}, userId: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ..., provideFeedback: ..., createdAt: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {updatedAt: ..., userId: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 179000000}}
+                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 25, users: ..., lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: {seconds: ..., nanoseconds: 688000000}, ideaRating: ..., productRating: ..., userImage: ..., userName: ..., provideFeedback: ..., createdAt: ...}
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: ..., ideaRating: ..., productRating: ..., userImage: ..., userName: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 472000000}}
+                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 770000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 21, users: [], lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 16, users: [...], lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 20, users: [...], lastUpdated: {seconds: ..., nanoseconds: 770000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: {seconds: ..., nanoseconds: 225000000}, provideFeedback: ..., userName: ..., productRating: ..., userImage: ..., ideaRating: ..., userId: ..., updatedAt: ...}
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {createdAt: ..., provideFeedback: false, userName: ..., productRating: ..., userImage: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 598000000}}
+                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 596000000}, ideaRating: ..., updatedAt: ..., userId: ..., userName: ..., productRating: ..., userImage: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., updatedAt: {seconds: ..., nanoseconds: 921000000}, userId: ..., userName: ..., productRating: ..., userImage: ...}
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 19, lastUpdated: {seconds: ..., nanoseconds: 956000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 19, lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 17, lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 25, lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 25, lastUpdated: {seconds: ..., nanoseconds: 956000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: {seconds: ..., nanoseconds: 266000000}, userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: ...}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {ideaRating: 5, updatedAt: ..., userId: ..., userName: ..., userImage: ..., productRating: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 202000000}}
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 770000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 438000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 25, lastUpdated: {seconds: ..., nanoseconds: 956000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 26, lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: {seconds: ..., nanoseconds: 372000000}, ideaRating: ..., userImage: ..., productRating: ..., userName: ..., provideFeedback: ..., createdAt: ...}
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {userId: ..., updatedAt: ..., ideaRating: ..., userImage: ..., productRating: ..., userName: ..., provideFeedback: ..., createdAt: {seconds: ..., nanoseconds: 786000000}}
+                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 18, lastUpdated: {seconds: ..., nanoseconds: 556000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 16, users: [], lastUpdated: {seconds: ..., nanoseconds: 556000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 17, lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: {seconds: ..., nanoseconds: 777000000}, ideaRating: ..., userId: ..., updatedAt: ..., userName: ..., userImage: ..., productRating: ...}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {provideFeedback: false, createdAt: ..., ideaRating: ..., userId: ..., updatedAt: {seconds: ..., nanoseconds: 660000000}, userName: ..., userImage: ..., productRating: ...}
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 24, lastUpdated: {seconds: ..., nanoseconds: 733000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 733000000}, users: ..., count: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {lastUpdated: {seconds: ..., nanoseconds: 860000000}, count: ..., users: ...}
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 19, lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [], count: 20, lastUpdated: {seconds: ..., nanoseconds: 357000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 20, users: [], lastUpdated: {seconds: ..., nanoseconds: 956000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {count: 25, users: [], lastUpdated: {seconds: ..., nanoseconds: 438000000}}
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: Only plain objects can be passed to Client Components from Server Components. Objects with toJSON methods are not supported. Convert it manually to a simple value before passing it to props.
+  {users: [...], count: 17, lastUpdated: {seconds: ..., nanoseconds: 860000000}}
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ GET / 200 in 15257ms

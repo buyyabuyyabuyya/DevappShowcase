@@ -4,6 +4,9 @@ import { AppCategorySection } from "@/components/apps/app-category-section";
 import { cn } from "@/lib/utils";
 import { HeroSection } from "@/components/home/hero-section";
 import { FeaturedApps } from "@/components/home/featured-apps";
+import { Suspense } from "react";
+
+export const revalidate = 300;
 
 // App type colors for visual distinction
 const appTypeColors: Record<string, string> = {
@@ -16,18 +19,18 @@ const appTypeColors: Record<string, string> = {
 };
 
 export default async function HomePage() {
-  // Fetch minimal data needed for the landing page in parallel
   const appTypes = ['website', 'mobile', 'desktop', 'api', 'ai', 'extension'];
+  const sectionLimit = 12;
+  const promotedPoolLimit = 24;
 
-  // Fetch promoted apps first (these should always be shown)
-  const [featuredResult, promotedResult, ...typeResults] = await Promise.all([
-    getApps({ isPromoted: true, limitCount: 6 }),
-    getApps({ isPromoted: true, limitCount: 100 }), // Get more promoted apps to distribute across types
-    ...appTypes.map(type => getApps({ appType: type, limitCount: 50 })) // Increased from 12 to 50
+  // Keep homepage reads small to avoid slow origin responses and Firestore overfetch.
+  const [promotedResult, ...typeResults] = await Promise.all([
+    getApps({ isPromoted: true, limitCount: promotedPoolLimit }),
+    ...appTypes.map(type => getApps({ appType: type, limitCount: sectionLimit }))
   ]);
 
-  const featuredApps = (featuredResult.success && Array.isArray(featuredResult.apps)) ? featuredResult.apps : [];
   const allPromotedApps = (promotedResult.success && Array.isArray(promotedResult.apps)) ? promotedResult.apps : [];
+  const featuredApps = allPromotedApps.slice(0, 6);
 
   // Organize per-type results and ensure promoted apps are only shown in Featured section
   const organizedApps = appTypes.reduce((acc, type, idx) => {
@@ -35,7 +38,9 @@ export default async function HomePage() {
     const list = (res && res.success && Array.isArray(res.apps)) ? res.apps : [];
     
     // Get promoted apps for this specific type (for Featured section only)
-    const typePromoted = allPromotedApps.filter((app: any) => app.appType === type);
+    const typePromoted = allPromotedApps
+      .filter((app: any) => app.appType === type)
+      .slice(0, 6);
     
     // Regular apps only (exclude promoted ones to avoid duplication)
     const regularApps = list.filter((app: any) => !app.isPromoted);
@@ -43,7 +48,7 @@ export default async function HomePage() {
     acc[type] = {
       promoted: typePromoted,
       regular: regularApps,
-      all: regularApps // Only show regular apps in "All" section
+      all: regularApps.slice(0, sectionLimit) // Only show regular apps in "All" section
     };
     return acc;
   }, {} as Record<string, { promoted: any[], regular: any[], all: any[] }>);
@@ -61,7 +66,9 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <AppFilters />
+          <Suspense fallback={null}>
+            <AppFilters />
+          </Suspense>
 
           {appTypes.map(type => (
             <div

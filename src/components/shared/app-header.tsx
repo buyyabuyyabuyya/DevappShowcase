@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { UserButton, useAuth, useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import { Suspense } from "react";
 import { SearchBar } from "@/components/shared/search-bar";
 
 export function AppHeader() {
@@ -36,11 +37,15 @@ export function AppHeader() {
           <Link href="/" className="font-semibold text-xl">
             DevApp Showcase
           </Link>
-          <SearchBar className="hidden md:block" />
+          <Suspense fallback={null}>
+            <SearchBar className="hidden md:block" />
+          </Suspense>
         </div>
         
         <div className="flex gap-4 items-center">
-          <SearchBar className="md:hidden" />
+          <Suspense fallback={null}>
+            <SearchBar className="md:hidden" />
+          </Suspense>
           
           {!userId ? (
             <>

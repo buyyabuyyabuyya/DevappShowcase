@@ -4,6 +4,8 @@ import { DashboardHeader } from "@/components/dashboard/header";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { AppList } from "@/components/dashboard/app-list";
 
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
   const session = await auth();
   

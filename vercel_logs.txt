@@ -1,0 +1,90 @@
+Exceeded free resources
+Fast Origin Transfer
+18.56 GB / 10 GB
+100 GB
+Fast Data Transfer
+10.5 GB / 100 GB
+1 TB
+Function Duration
+9.4 GB-Hrs / 100 GB-Hrs
+1,000 GB-Hrs
+Fluid Active CPU
+19m 5s / 4h
+16h
+Edge Requests
+17K / 1M
+10M
+Function Invocations
+13K / 1M
+Fluid Provisioned Memory
+0.51 GB-Hrs / 360 GB-Hrs
+1,440 GB-Hrs
+Edge Request CPU Duration
+1s / 1h
+Web Analytics Events
+7 / 50K
+100K
+Microfrontends Routing
+0 / 50K
+
+
+
+
+
+
+
+
+
+
+
+
+NameSpace:
+devappshowcase.com 
+Domain Products Sharing & Transfer Advanced DNS
+Status & Validityalert
+Active
+Feb 28, 2025 - Feb 28, 2027
+
+
+Auto-Renew
+Add Years
+DomainPrivacy
+alert
+
+PROTECTION
+Feb 28, 2025 - Feb 28, 2027
+
+
+Auto-Renew
+Add Years
+SHOW DETAILS
+
+PremiumDNS
+alert
+Enable PremiumDNS protection in order to switch your domain to our PremiumDNS platform. With our PremiumDNS platform, you get 100% DNS uptime and DDoS protection at the DNS level.
+
+Buy Now
+NameserversALERT
+
+itzel.ns.cloudflare.com
+
+wells.ns.cloudflare.com
+
+ADD NAMESERVER
+
+Redirect Domainalert
+You can create redirects via your DNS provider or your Namecheap account. To perform this function from your account, you must first change your nameservers to Namecheap default. Learn How →
+
+Redirect Emailalert
+You can create redirects via your DNS provider or your Namecheap account. To perform this function from your account, you must first change your nameservers to Namecheap default. Learn How →
+
+Private Email
+Communicate like a pro with you@yourdomain email addresses. Private Email is a secure, efficient solution with powerful productivity tools. Build trust, stay organized, and grow your business on any device.
+
+Buy Now
+Domain Contacts
+Each domain registered must include contact details. These are stored in a public WHOIS database so that the domain owner can be contacted, as needed. We call them “Domain Contacts” (aka. Whois Contacts). Customers have the ability to edit them. Learn more about personal domain contacts
+
+
+
+
