@@ -1,5 +1,5 @@
 import { AppFilters } from "@/components/apps/app-filters";
-import { getApps } from "@/lib/firestore/apps";
+import { getApps, getAppsCount } from "@/lib/firestore/apps";
 import { AppCategorySection } from "@/components/apps/app-category-section";
 import { cn } from "@/lib/utils";
 import { HeroSection } from "@/components/home/hero-section";
@@ -30,10 +30,12 @@ export default async function HomePage() {
   const appTypes = ['website', 'mobile', 'desktop', 'api', 'ai', 'extension'];
   const sectionLimit = 8;
 
-  const [featuredResult, promotedByType, regularByType] = await Promise.all([
+  const [featuredResult, promotedByType, regularByType, promotedCountsByType, regularCountsByType] = await Promise.all([
     getApps({ isPromoted: true, limitCount: sectionLimit }),
     Promise.all(appTypes.map((type) => getApps({ appType: type, isPromoted: true, limitCount: sectionLimit }))),
     Promise.all(appTypes.map((type) => getApps({ appType: type, isPromoted: false, limitCount: sectionLimit }))),
+    Promise.all(appTypes.map((type) => getAppsCount({ appType: type, isPromoted: true }))),
+    Promise.all(appTypes.map((type) => getAppsCount({ appType: type, isPromoted: false }))),
   ]);
 
   const featuredApps = (featuredResult.success && Array.isArray(featuredResult.apps))
@@ -43,20 +45,26 @@ export default async function HomePage() {
   const organizedApps = appTypes.reduce((acc, type, idx) => {
     const promotedResult = promotedByType[idx];
     const regularResult = regularByType[idx];
+    const promotedCountResult = promotedCountsByType[idx];
+    const regularCountResult = regularCountsByType[idx];
     const promotedApps = (promotedResult.success && Array.isArray(promotedResult.apps))
       ? sortByPromotionRecency(promotedResult.apps)
       : [];
     const regularApps = (regularResult.success && Array.isArray(regularResult.apps))
       ? regularResult.apps
       : [];
+    const promotedTotal = promotedCountResult.success ? promotedCountResult.count : promotedApps.length;
+    const regularTotal = regularCountResult.success ? regularCountResult.count : regularApps.length;
 
     acc[type] = {
       promoted: promotedApps,
       regular: regularApps,
       all: regularApps,
+      promotedTotal,
+      regularTotal,
     };
     return acc;
-  }, {} as Record<string, { promoted: any[], regular: any[], all: any[] }>);
+  }, {} as Record<string, { promoted: any[], regular: any[], all: any[], promotedTotal: number, regularTotal: number }>);
 
   return (
     <main>
@@ -97,6 +105,7 @@ export default async function HomePage() {
                 <AppCategorySection
                   title="Featured"
                   apps={organizedApps[type].promoted}
+                  totalCount={organizedApps[type].promotedTotal}
                   viewAllHref={`/apps?type=${type}&featured=true`}
                   isPromoted
                 />
@@ -106,6 +115,7 @@ export default async function HomePage() {
                 <AppCategorySection
                   title="All"
                   apps={organizedApps[type].all}
+                  totalCount={organizedApps[type].regularTotal}
                   viewAllHref={`/apps?type=${type}`}
                 />
               ) : (

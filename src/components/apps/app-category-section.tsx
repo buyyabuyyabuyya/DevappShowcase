@@ -8,15 +8,18 @@ interface AppCategorySectionProps {
   apps: any[];
   viewAllHref: string;
   isPromoted?: boolean;
+  totalCount?: number;
 }
 
 export function AppCategorySection({ 
   title, 
   apps, 
   viewAllHref,
-  isPromoted
+  isPromoted,
+  totalCount
 }: AppCategorySectionProps) {
   const displayApps = apps.slice(0, 8);
+  const shownCount = typeof totalCount === "number" ? totalCount : apps.length;
   
   return (
     <div className="mb-8">
@@ -24,7 +27,7 @@ export function AppCategorySection({
         <h3 className="text-xl font-medium flex items-center">
           {title}
           <span className="text-muted-foreground ml-2 text-sm">
-            ({apps.length})
+            ({shownCount})
           </span>
         </h3>
         
