@@ -31,6 +31,14 @@ const placeholderApps = [
   }
 ];
 
+function sortByPromotionRecency<T extends Record<string, any>>(apps: T[]) {
+  return [...apps].sort((a, b) => {
+    const dateA = new Date(a.promotedAt || a.updatedAt || a.createdAt || 0).getTime();
+    const dateB = new Date(b.promotedAt || b.updatedAt || b.createdAt || 0).getTime();
+    return dateB - dateA;
+  });
+}
+
 export async function FeaturedApps({ initialApps = [] }: { initialApps?: any[] }) {
   // Use apps passed from the page when available to avoid duplicate fetching
   let apps = Array.isArray(initialApps) ? initialApps : [];
@@ -45,7 +53,7 @@ export async function FeaturedApps({ initialApps = [] }: { initialApps?: any[] }
   
   // Use real promoted apps if available, otherwise fallback to placeholders
   const displayApps = promotedApps.length > 0 ? 
-    promotedApps.slice(0, 6) : // Show at most 6 featured apps
+    sortByPromotionRecency(promotedApps).slice(0, 6) : // Show at most 6 featured apps
     placeholderApps;
 
   return (

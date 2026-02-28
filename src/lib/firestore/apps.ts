@@ -2,7 +2,7 @@ import { db } from '../firebase';
 import { 
   collection, doc, addDoc, getDoc, getDocs, 
   updateDoc, deleteDoc, query, where, orderBy, 
-  limit, startAfter, serverTimestamp, increment, getCountFromServer,
+  limit, startAfter, serverTimestamp, increment, getCountFromServer, deleteField,
   DocumentData, Timestamp, QueryConstraint
 } from 'firebase/firestore';
 import { getUserByClerkId } from './users';
@@ -69,6 +69,8 @@ function serializeDocData(data: Record<string, any>) {
 //push 
 function serializeListApp(docId: string, data: Record<string, any>) {
   const createdAt = data.createdAt instanceof Timestamp ? data.createdAt.toDate().toISOString() : data.createdAt;
+  const updatedAt = data.updatedAt instanceof Timestamp ? data.updatedAt.toDate().toISOString() : data.updatedAt;
+  const promotedAt = data.promotedAt instanceof Timestamp ? data.promotedAt.toDate().toISOString() : data.promotedAt;
   const description = typeof data.description === 'string'
     ? data.description.slice(0, 260)
     : '';
@@ -85,6 +87,8 @@ function serializeListApp(docId: string, data: Record<string, any>) {
     iconUrl: data.iconUrl || '',
     isPromoted: !!data.isPromoted,
     createdAt,
+    updatedAt,
+    promotedAt,
     likes: {
       count: data.likes?.count || 0
     }
@@ -495,10 +499,19 @@ export async function togglePromoteApp(id: string) {
     
     // Toggle promotion status
     const isCurrentlyPromoted = appData.isPromoted || false;
-    await updateDoc(appRef, {
-      isPromoted: !isCurrentlyPromoted,
-      updatedAt: serverTimestamp()
-    });
+    if (isCurrentlyPromoted) {
+      await updateDoc(appRef, {
+        isPromoted: false,
+        promotedAt: deleteField(),
+        updatedAt: serverTimestamp()
+      });
+    } else {
+      await updateDoc(appRef, {
+        isPromoted: true,
+        promotedAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+    }
     
     revalidatePath(`/apps/${id}`);
     revalidatePath('/dashboard');

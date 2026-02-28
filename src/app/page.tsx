@@ -8,6 +8,14 @@ import { Suspense } from "react";
 
 export const revalidate = 300;
 
+function sortByPromotionRecency<T extends Record<string, any>>(apps: T[]) {
+  return [...apps].sort((a, b) => {
+    const dateA = new Date(a.promotedAt || a.updatedAt || a.createdAt || 0).getTime();
+    const dateB = new Date(b.promotedAt || b.updatedAt || b.createdAt || 0).getTime();
+    return dateB - dateA;
+  });
+}
+
 // App type colors for visual distinction
 const appTypeColors: Record<string, string> = {
   website: "bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800",
@@ -29,14 +37,14 @@ export default async function HomePage() {
   ]);
 
   const featuredApps = (featuredResult.success && Array.isArray(featuredResult.apps))
-    ? featuredResult.apps.slice(0, sectionLimit)
+    ? sortByPromotionRecency(featuredResult.apps).slice(0, sectionLimit)
     : [];
 
   const organizedApps = appTypes.reduce((acc, type, idx) => {
     const promotedResult = promotedByType[idx];
     const regularResult = regularByType[idx];
     const promotedApps = (promotedResult.success && Array.isArray(promotedResult.apps))
-      ? promotedResult.apps
+      ? sortByPromotionRecency(promotedResult.apps)
       : [];
     const regularApps = (regularResult.success && Array.isArray(regularResult.apps))
       ? regularResult.apps
