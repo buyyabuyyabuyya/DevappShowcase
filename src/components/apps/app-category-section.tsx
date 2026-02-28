@@ -16,8 +16,7 @@ export function AppCategorySection({
   viewAllHref,
   isPromoted
 }: AppCategorySectionProps) {
-  // Show up to 12 apps in the preview (increased from 6)
-  const displayApps = apps.slice(0, 12);
+  const displayApps = apps.slice(0, 8);
   
   return (
     <div className="mb-8">

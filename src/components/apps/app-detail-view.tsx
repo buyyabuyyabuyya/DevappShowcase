@@ -37,8 +37,6 @@ import {
 import { RatingSection } from "./rating-section";
 import { FeedbackSection } from "./feedback-section";
 import { PromotionCard } from "./promotion-card";
-import { doc, updateDoc, increment, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 
 interface AppDetailViewProps {
   app: any;
@@ -49,6 +47,7 @@ export function AppDetailView({ app }: AppDetailViewProps) {
   const { isLoaded, userId } = useAuth();
   const isOwner = isLoaded && !!userId && userId === app.userId;
   const [isProUser, setIsProUser] = useState(false);
+  const [proStatusLoaded, setProStatusLoaded] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(app.likes?.count || 0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -77,6 +76,7 @@ export function AppDetailView({ app }: AppDetailViewProps) {
     async function loadProStatus() {
       if (!isOwner) {
         setIsProUser(false);
+        setProStatusLoaded(true);
         return;
       }
 
@@ -87,15 +87,20 @@ export function AppDetailView({ app }: AppDetailViewProps) {
           cache: 'no-store'
         });
 
-        if (!response.ok) return;
+        if (!response.ok) {
+          if (!cancelled) setProStatusLoaded(true);
+          return;
+        }
         const data = await response.json();
 
         if (!cancelled) {
           setIsProUser(!!data.isPro);
+          setProStatusLoaded(true);
         }
       } catch (error) {
         if (!cancelled) {
           setIsProUser(false);
+          setProStatusLoaded(true);
         }
       }
     }
@@ -411,7 +416,7 @@ export function AppDetailView({ app }: AppDetailViewProps) {
       />
 
       {/* Only show promotion card to the app owner */}
-      {isOwner && (
+      {isOwner && proStatusLoaded && (
         <PromotionCard 
           appId={app.id}
           isProUser={isProUser}

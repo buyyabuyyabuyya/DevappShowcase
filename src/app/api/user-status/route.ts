@@ -6,6 +6,20 @@ import { createUser } from '@/lib/firestore/users';
 
 export const dynamic = 'force-dynamic';
 
+function toDateValue(value: any): Date | null {
+  if (!value) return null;
+  if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
+  if (typeof value?.toDate === 'function') {
+    const parsed = value.toDate();
+    return parsed instanceof Date && !isNaN(parsed.getTime()) ? parsed : null;
+  }
+  if (typeof value === 'string' || typeof value === 'number') {
+    const parsed = new Date(value);
+    return isNaN(parsed.getTime()) ? null : parsed;
+  }
+  return null;
+}
+
 export async function GET(request: NextRequest) {
   try {
     console.log("User status API called");
@@ -66,9 +80,13 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    const expiryDate = toDateValue(user.user?.subscriptionExpiresAt);
+    const isPro = expiryDate
+      ? expiryDate > new Date()
+      : !!user.user?.isPro;
     const response = {
-      isPro: user.user?.isPro ?? false,
-      subscriptionExpiresAt: user.user?.subscriptionExpiresAt ?? null
+      isPro,
+      subscriptionExpiresAt: expiryDate ? expiryDate.toISOString() : null
     };
     console.log("Sending response:", response);
     

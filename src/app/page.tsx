@@ -21,34 +21,31 @@ const appTypeColors: Record<string, string> = {
 export default async function HomePage() {
   const appTypes = ['website', 'mobile', 'desktop', 'api', 'ai', 'extension'];
   const sectionLimit = 8;
-  const promotedPoolLimit = 12;
 
-  // Keep homepage reads small to avoid slow origin responses and Firestore overfetch.
-  const [promotedResult, ...typeResults] = await Promise.all([
-    getApps({ isPromoted: true, limitCount: promotedPoolLimit }),
-    ...appTypes.map(type => getApps({ appType: type, limitCount: sectionLimit }))
+  const [featuredResult, promotedByType, regularByType] = await Promise.all([
+    getApps({ isPromoted: true, limitCount: sectionLimit }),
+    Promise.all(appTypes.map((type) => getApps({ appType: type, isPromoted: true, limitCount: sectionLimit }))),
+    Promise.all(appTypes.map((type) => getApps({ appType: type, isPromoted: false, limitCount: sectionLimit }))),
   ]);
 
-  const allPromotedApps = (promotedResult.success && Array.isArray(promotedResult.apps)) ? promotedResult.apps : [];
-  const featuredApps = allPromotedApps.slice(0, 6);
+  const featuredApps = (featuredResult.success && Array.isArray(featuredResult.apps))
+    ? featuredResult.apps.slice(0, sectionLimit)
+    : [];
 
-  // Organize per-type results and ensure promoted apps are only shown in Featured section
   const organizedApps = appTypes.reduce((acc, type, idx) => {
-    const res = typeResults[idx];
-    const list = (res && res.success && Array.isArray(res.apps)) ? res.apps : [];
-    
-    // Get promoted apps for this specific type (for Featured section only)
-    const typePromoted = allPromotedApps
-      .filter((app: any) => app.appType === type)
-      .slice(0, 6);
-    
-    // Regular apps only (exclude promoted ones to avoid duplication)
-    const regularApps = list.filter((app: any) => !app.isPromoted);
-    
+    const promotedResult = promotedByType[idx];
+    const regularResult = regularByType[idx];
+    const promotedApps = (promotedResult.success && Array.isArray(promotedResult.apps))
+      ? promotedResult.apps
+      : [];
+    const regularApps = (regularResult.success && Array.isArray(regularResult.apps))
+      ? regularResult.apps
+      : [];
+
     acc[type] = {
-      promoted: typePromoted,
+      promoted: promotedApps,
       regular: regularApps,
-      all: regularApps.slice(0, sectionLimit) // Only show regular apps in "All" section
+      all: regularApps,
     };
     return acc;
   }, {} as Record<string, { promoted: any[], regular: any[], all: any[] }>);

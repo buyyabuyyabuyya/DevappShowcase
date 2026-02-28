@@ -2,7 +2,7 @@ import { db } from '../firebase';
 import { 
   collection, doc, addDoc, getDoc, getDocs, 
   updateDoc, deleteDoc, query, where, orderBy, 
-  limit, startAfter, serverTimestamp, increment,
+  limit, startAfter, serverTimestamp, increment, getCountFromServer,
   DocumentData, Timestamp, QueryConstraint
 } from 'firebase/firestore';
 import { getUserByClerkId } from './users';
@@ -24,6 +24,28 @@ const APP_LIMITS = {
 function normalizeSearchValue(value: unknown): string {
   if (typeof value !== 'string') return '';
   return value.trim().toLowerCase();
+}
+
+function toDateValue(value: any): Date | null {
+  if (!value) return null;
+  if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
+  if (typeof value?.toDate === 'function') {
+    const parsed = value.toDate();
+    return parsed instanceof Date && !isNaN(parsed.getTime()) ? parsed : null;
+  }
+  if (typeof value === 'string' || typeof value === 'number') {
+    const parsed = new Date(value);
+    return isNaN(parsed.getTime()) ? null : parsed;
+  }
+  return null;
+}
+
+function hasActivePro(user: any): boolean {
+  const expiry = toDateValue(user?.subscriptionExpiresAt);
+  if (expiry) {
+    return expiry > new Date();
+  }
+  return !!user?.isPro;
 }
 
 function serializeFirestoreValue(value: any): any {
@@ -49,20 +71,21 @@ function serializeDocData(data: Record<string, any>) {
 }
 //push 
 function serializeListApp(docId: string, data: Record<string, any>) {
-  const iconUrl = typeof data.iconUrl === 'string' && !data.iconUrl.startsWith('data:') ? data.iconUrl : undefined;
   const createdAt = data.createdAt instanceof Timestamp ? data.createdAt.toDate().toISOString() : data.createdAt;
+  const description = typeof data.description === 'string'
+    ? data.description.slice(0, 260)
+    : '';
 
   return {
     id: docId,
     appId: data.appId || docId,
     name: data.name || '',
-    description: data.description || '',
+    description,
     appType: data.appType || '',
     category: data.category || '',
     pricingModel: data.pricingModel || '',
     liveUrl: data.liveUrl || '',
-    repoUrl: data.repoUrl || '',
-    iconUrl,
+    iconUrl: data.iconUrl || '',
     isPromoted: !!data.isPromoted,
     createdAt,
     likes: {
@@ -170,14 +193,14 @@ export async function createApp(formData: any, userId?: string) {
     // Check app limit
     const userApps = await getUserApps(currentUserId);
     const appCount = userApps.success && userApps.apps ? userApps.apps.length : 0;
-    const maxApps = user.isPro ? APP_LIMITS.PRO_USER.MAX_APPS : APP_LIMITS.FREE_USER.MAX_APPS;
+    const maxApps = hasActivePro(user) ? APP_LIMITS.PRO_USER.MAX_APPS : APP_LIMITS.FREE_USER.MAX_APPS;
 
     if (appCount >= maxApps) {
       return { success: false, error: 'MAX_APPS_REACHED' };
     }
     
     // Check description length
-    const maxLength = user.isPro 
+    const maxLength = hasActivePro(user) 
       ? APP_LIMITS.PRO_USER.DESCRIPTION_MAX_LENGTH 
       : APP_LIMITS.FREE_USER.DESCRIPTION_MAX_LENGTH;
       
@@ -468,8 +491,8 @@ export async function togglePromoteApp(id: string) {
       return { success: false, error: "Failed to get user profile" };
     }
     
-    // Only Pro users can promote apps
-    if (!user.isPro) {
+    // Only active Pro users can promote apps.
+    if (!hasActivePro(user)) {
       return { success: false, error: "Pro subscription required" };
     }
     
@@ -527,5 +550,27 @@ export async function searchApps(searchTerm: string, limitCount = 5) {
   } catch (error) {
     console.error("Error searching apps:", error);
     return [];
+  }
+}
+
+export async function getAppsCount(options: { appType?: string; isPromoted?: boolean } = {}) {
+  try {
+    const { appType, isPromoted } = options;
+    const appsRef = collection(db, 'apps');
+    const constraints: QueryConstraint[] = [];
+
+    if (appType) {
+      constraints.push(where('appType', '==', appType));
+    }
+    if (typeof isPromoted === 'boolean') {
+      constraints.push(where('isPromoted', '==', isPromoted));
+    }
+
+    const countQuery = query(appsRef, ...constraints);
+    const snapshot = await getCountFromServer(countQuery);
+    return { success: true, count: snapshot.data().count };
+  } catch (error) {
+    console.error("Error counting apps:", error);
+    return { success: false, count: 0 };
   }
 }

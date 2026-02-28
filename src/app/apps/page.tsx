@@ -1,8 +1,9 @@
-import { getApps } from "@/lib/firestore/apps";
+import { getApps, getAppsCount } from "@/lib/firestore/apps";
 import { AppGrid } from "@/components/shared/app-grid";
 import { AppFilters } from "@/components/apps/app-filters";
-import { LoadMoreButton } from "@/components/shared/load-more-button";
 import { Suspense } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export const revalidate = 300;
 
@@ -20,15 +21,21 @@ interface AppsPageProps {
 export default async function AppsPage({ searchParams }: AppsPageProps) {
   const { type, featured, category, search, sort = 'recent', page = '1' } = searchParams;
   const currentPage = parseInt(page) || 1;
-  const appsPerPage = 10;
+  const appsPerPage = 8;
 
   // Build constraints for server-side query to avoid fetching entire collection
   const isPromoted = featured === 'true' ? true : undefined;
-  const initialResult = await getApps({
-    appType: type,
-    isPromoted,
-    limitCount: currentPage * appsPerPage, // Fetch enough apps for current page
-  });
+  const [initialResult, countResult] = await Promise.all([
+    getApps({
+      appType: type,
+      isPromoted,
+      limitCount: currentPage * appsPerPage, // Fetch enough apps for current page
+    }),
+    getAppsCount({
+      appType: type,
+      isPromoted,
+    }),
+  ]);
 
   const apps = initialResult.success ? initialResult.apps || [] : [];
 
@@ -48,9 +55,30 @@ export default async function AppsPage({ searchParams }: AppsPageProps) {
   }
 
   // Calculate pagination info
-  const totalApps = filteredApps.length;
-  const hasMore = totalApps > currentPage * appsPerPage;
-  const nextPage = currentPage + 1;
+  const totalApps =
+    category || search
+      ? filteredApps.length
+      : (countResult.success ? countResult.count : filteredApps.length);
+  const totalPages = Math.max(1, Math.ceil(totalApps / appsPerPage));
+  const safeCurrentPage = Math.min(Math.max(currentPage, 1), totalPages);
+
+  const buildPageHref = (targetPage: number) => {
+    const params = new URLSearchParams();
+    if (type) params.set('type', type);
+    if (featured) params.set('featured', featured);
+    if (category) params.set('category', category);
+    if (search) params.set('search', search);
+    if (sort && sort !== 'recent') params.set('sort', sort);
+    if (targetPage > 1) params.set('page', String(targetPage));
+    const queryString = params.toString();
+    return queryString ? `/apps?${queryString}` : '/apps';
+  };
+
+  const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1).filter((pageNumber) => (
+    pageNumber === 1 ||
+    pageNumber === totalPages ||
+    Math.abs(pageNumber - safeCurrentPage) <= 2
+  ));
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -66,17 +94,45 @@ export default async function AppsPage({ searchParams }: AppsPageProps) {
       <AppGrid 
         apps={filteredApps} 
         sort={sort} 
-        page={currentPage}
+        page={safeCurrentPage}
         appsPerPage={appsPerPage}
       />
 
-      {hasMore && (
-        <div className="mt-8 text-center">
-          <LoadMoreButton 
-            currentPage={currentPage}
-            nextPage={nextPage}
-            searchParams={searchParams}
-          />
+      {totalPages > 1 && (
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+          {safeCurrentPage <= 1 ? (
+            <Button variant="outline" size="sm" disabled>Previous</Button>
+          ) : (
+            <Button variant="outline" size="sm" asChild>
+              <Link href={buildPageHref(safeCurrentPage - 1)}>Previous</Link>
+            </Button>
+          )}
+
+          {pageNumbers.map((pageNumber, idx) => {
+            const previous = pageNumbers[idx - 1];
+            const showEllipsis = previous && pageNumber - previous > 1;
+
+            return (
+              <div key={pageNumber} className="flex items-center gap-2">
+                {showEllipsis && <span className="text-muted-foreground">...</span>}
+                <Button
+                  size="sm"
+                  variant={pageNumber === safeCurrentPage ? "default" : "outline"}
+                  asChild
+                >
+                  <Link href={buildPageHref(pageNumber)}>{pageNumber}</Link>
+                </Button>
+              </div>
+            );
+          })}
+
+          {safeCurrentPage >= totalPages ? (
+            <Button variant="outline" size="sm" disabled>Next</Button>
+          ) : (
+            <Button variant="outline" size="sm" asChild>
+              <Link href={buildPageHref(safeCurrentPage + 1)}>Next</Link>
+            </Button>
+          )}
         </div>
       )}
 

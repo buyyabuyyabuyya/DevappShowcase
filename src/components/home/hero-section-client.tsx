@@ -12,11 +12,50 @@ const STRIPE_URL = "https://buy.stripe.com/28o29Q2Zg1W19tmcMO";
 export function HeroSectionClient({ initialIsPro = false }) {
   const { isSignedIn, user } = useUser();
   const [isPro, setIsPro] = useState(initialIsPro);
+  const [statusLoaded, setStatusLoaded] = useState(false);
   
   useEffect(() => {
-    // You could optionally fetch the user's pro status from an API here
-    // if it might change during the session
-  }, [user?.id]);
+    let cancelled = false;
+
+    async function loadProStatus() {
+      if (!isSignedIn) {
+        if (!cancelled) {
+          setIsPro(false);
+          setStatusLoaded(true);
+        }
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/user-status', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          cache: 'no-store',
+        });
+
+        if (!response.ok) {
+          if (!cancelled) setStatusLoaded(true);
+          return;
+        }
+
+        const data = await response.json();
+        if (!cancelled) {
+          setIsPro(!!data.isPro);
+          setStatusLoaded(true);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setStatusLoaded(true);
+        }
+      }
+    }
+
+    loadProStatus();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isSignedIn, user?.id]);
   
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-950">
@@ -44,7 +83,7 @@ export function HeroSectionClient({ initialIsPro = false }) {
                     My Dashboard
                   </Button>
                 </Link>
-                {!isPro && (
+                {statusLoaded && !isPro && (
                   <Link href={STRIPE_URL} target="_blank">
                     <Button size="lg" variant="outline" className="bg-gradient-to-r from-pink-500 to-yellow-500 text-white border-none hover:from-pink-600 hover:to-yellow-600">
                       <Sparkles className="mr-2 h-4 w-4" />
