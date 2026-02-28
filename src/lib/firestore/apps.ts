@@ -42,10 +42,7 @@ function toDateValue(value: any): Date | null {
 
 function hasActivePro(user: any): boolean {
   const expiry = toDateValue(user?.subscriptionExpiresAt);
-  if (expiry) {
-    return expiry > new Date();
-  }
-  return !!user?.isPro;
+  return !!user?.isPro || (!!expiry && expiry > new Date());
 }
 
 function serializeFirestoreValue(value: any): any {

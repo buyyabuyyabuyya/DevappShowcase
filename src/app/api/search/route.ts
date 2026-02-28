@@ -5,7 +5,12 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const searchTerm = request.nextUrl.searchParams.get("q") || "";
+    const rawQuery = request.nextUrl.searchParams.get("q") || "";
+    const searchTerm = rawQuery.trim().slice(0, 64);
+    if (/[\u0000-\u001F]/.test(searchTerm)) {
+      return NextResponse.json({ results: [] }, { status: 400 });
+    }
+
     const results = await searchApps(searchTerm, 5);
 
     return NextResponse.json(

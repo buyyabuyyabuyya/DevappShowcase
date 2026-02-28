@@ -22,12 +22,9 @@ function toDateValue(value: any): Date | null {
 
 export async function GET(request: NextRequest) {
   try {
-    console.log("User status API called");
     const session = await auth();
-    console.log("Auth session:", session?.userId);
     
     if (!session?.userId) {
-      console.log("No user ID found in session");
       return NextResponse.json(
         { isPro: false, message: 'Unauthorized' },
         { 
@@ -40,10 +37,8 @@ export async function GET(request: NextRequest) {
     }
     
     const user = await getUserByClerkId(session.userId);
-    console.log("User profile response:", user);
     
     if (!user.success) {
-      console.log("User not found, attempting to create user from Clerk data");
       try {
         // Get user data from Clerk
         const clerk = await clerkClient();
@@ -65,13 +60,12 @@ export async function GET(request: NextRequest) {
         const newUser = await createUser(userData);
         
         if (newUser.success) {
-          console.log("Created new user:", newUser.user);
           return NextResponse.json({
             isPro: false,
             subscriptionExpiresAt: null
           }, {
             headers: {
-              'Cache-Control': 'private, max-age=30, must-revalidate'
+              'Cache-Control': 'no-store'
             }
           });
         }
@@ -81,20 +75,17 @@ export async function GET(request: NextRequest) {
     }
 
     const expiryDate = toDateValue(user.user?.subscriptionExpiresAt);
-    const isPro = expiryDate
-      ? expiryDate > new Date()
-      : !!user.user?.isPro;
+    const isPro = !!user.user?.isPro || (!!expiryDate && expiryDate > new Date());
     const response = {
       isPro,
       subscriptionExpiresAt: expiryDate ? expiryDate.toISOString() : null
     };
-    console.log("Sending response:", response);
     
     // For authenticated user data, allow short-term caching (30 seconds)
     // but require revalidation for fresh data
     return NextResponse.json(response, {
       headers: {
-        'Cache-Control': 'private, max-age=30, must-revalidate'
+        'Cache-Control': 'no-store'
       }
     });
   } catch (error) {

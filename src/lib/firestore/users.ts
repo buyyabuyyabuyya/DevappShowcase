@@ -133,9 +133,10 @@ export async function getUserStatus() {
     
     if (userDoc.exists()) {
       const userData = userDoc.data();
-      const isSubscriptionActive = userData.isPro && 
-        userData.subscriptionExpiresAt && 
+      const hasFutureExpiry = userData.subscriptionExpiresAt &&
+        userData.subscriptionExpiresAt.toDate &&
         userData.subscriptionExpiresAt.toDate() > new Date();
+      const isSubscriptionActive = !!userData.isPro || !!hasFutureExpiry;
       
       return { 
         isPro: isSubscriptionActive, 

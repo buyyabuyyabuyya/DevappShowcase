@@ -22,7 +22,11 @@ export async function GET() {
       );
     }
     
-    return NextResponse.json(response.apps);
+    return NextResponse.json(response.apps, {
+      headers: {
+        'Cache-Control': 'no-store'
+      }
+    });
   } catch (error) {
     console.error('Error fetching user apps:', error);
     return NextResponse.json(

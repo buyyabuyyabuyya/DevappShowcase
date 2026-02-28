@@ -4,9 +4,37 @@ import { getUserByClerkId } from "@/lib/firestore/users";
 import { stripe } from "@/lib/stripe";
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 // Define the price ID for your Pro subscription
 const PRO_PRICE_ID = "prod_RwJKcifWtNr3nc"; // Replace with your actual Stripe price ID
+
+function resolveAppBaseUrl(request: NextRequest) {
+  const configuredBaseUrl = process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL;
+  if (configuredBaseUrl) {
+    return configuredBaseUrl.replace(/\/+$/, "");
+  }
+
+  const host = request.headers.get("x-forwarded-host") || request.headers.get("host");
+  const proto = request.headers.get("x-forwarded-proto") || "https";
+  if (!host) {
+    throw new Error("Missing host header");
+  }
+  return `${proto}://${host}`;
+}
+
+function isTrustedOrigin(request: NextRequest, baseUrl: string) {
+  const origin = request.headers.get("origin");
+  if (!origin) return true; // Allow non-browser clients.
+
+  try {
+    const originUrl = new URL(origin);
+    const base = new URL(baseUrl);
+    return originUrl.host === base.host;
+  } catch {
+    return false;
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,6 +48,14 @@ export async function POST(request: NextRequest) {
     }
 
     const userId = authSession.userId;
+    const appBaseUrl = resolveAppBaseUrl(request);
+
+    if (!isTrustedOrigin(request, appBaseUrl)) {
+      return NextResponse.json(
+        { error: "Untrusted origin" },
+        { status: 403 }
+      );
+    }
 
     // Get user data to include in metadata
     const userResult = await getUserByClerkId(userId);
@@ -50,8 +86,8 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: "subscription",
-      success_url: `${request.headers.get("origin")}/settings?success=true`,
-      cancel_url: `${request.headers.get("origin")}/settings?canceled=true`,
+      success_url: `${appBaseUrl}/settings?success=true`,
+      cancel_url: `${appBaseUrl}/settings?canceled=true`,
       metadata: {
         clerkId: userId,
       },
@@ -60,7 +96,14 @@ export async function POST(request: NextRequest) {
       customer: userResult.user.stripeCustomerId || undefined,
     });
     
-    return NextResponse.json({ url: checkoutSession.url });
+    return NextResponse.json(
+      { url: checkoutSession.url },
+      {
+        headers: {
+          'Cache-Control': 'no-store'
+        }
+      }
+    );
   } catch (error) {
     console.error("Checkout error:", error);
     return NextResponse.json(

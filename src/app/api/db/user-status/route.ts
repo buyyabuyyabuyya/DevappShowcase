@@ -11,6 +11,20 @@ interface UserResult {
   error?: string;
 }
 
+function toDateValue(value: any): Date | null {
+  if (!value) return null;
+  if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
+  if (typeof value?.toDate === 'function') {
+    const parsed = value.toDate();
+    return parsed instanceof Date && !isNaN(parsed.getTime()) ? parsed : null;
+  }
+  if (typeof value === 'string' || typeof value === 'number') {
+    const parsed = new Date(value);
+    return isNaN(parsed.getTime()) ? null : parsed;
+  }
+  return null;
+}
+
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
@@ -18,7 +32,12 @@ export async function GET(request: NextRequest) {
     if (!session?.userId) {
       return NextResponse.json(
         { isPro: false, message: 'Unauthorized' },
-        { status: 401 }
+        {
+          status: 401,
+          headers: {
+            'Cache-Control': 'no-store'
+          }
+        }
       );
     }
     
@@ -27,22 +46,40 @@ export async function GET(request: NextRequest) {
     if (!result || !result.success) {
       return NextResponse.json(
         { isPro: false, message: 'User not found' },
-        { status: 404 }
+        {
+          status: 404,
+          headers: {
+            'Cache-Control': 'no-store'
+          }
+        }
       );
     }
 
     // At this point we know result.success is true and result.user exists
     const userData = result.user as DocumentData;
 
-    return NextResponse.json({
-      isPro: !!userData?.isPro,
-      subscriptionExpiresAt: userData?.subscriptionExpiresAt || null
-    });
+    const expiryDate = toDateValue(userData?.subscriptionExpiresAt);
+    return NextResponse.json(
+      {
+        isPro: !!userData?.isPro || (!!expiryDate && expiryDate > new Date()),
+        subscriptionExpiresAt: expiryDate ? expiryDate.toISOString() : null
+      },
+      {
+        headers: {
+          'Cache-Control': 'no-store'
+        }
+      }
+    );
   } catch (error) {
     console.error('Error fetching user status:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          'Cache-Control': 'no-store'
+        }
+      }
     );
   }
 }
