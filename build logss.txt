@@ -1,226 +1,30 @@
-appCount
-20
-(number)
-
-
-clerkId
-"user_2uqWlbM6M9wmTc62zzITpBJSPMY"
-(string)
-
-
-createdAt
-March 26, 2025 at 1:12:18 AM UTC-7
-(timestamp)
-
-
-email
-"ayyubalhasan@gmail.com"
-(string)
-
-
-firstName
-null
-(null)
-
-
-imageUrl
-"https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18ydGdESDlCTHd1a0N5cGhYSm82UzBvRWFXQ0IiLCJyaWQiOiJ1c2VyXzJ1cVdsYk02TTl3bVRjNjJ6eklUcEJKU1BNWSJ9"
-(string)
-
-
-isPro
-true
-(boolean)
-
-
-lastName
-null
-(null)
-
-
-stripeCustomerId
-"cus_S0qwqKtBk0RVH2"
-(string)
-
-
-subscriptionExpiresAt
-April 26, 2025 at 1:22:38 AM UTC-7
-(timestamp)
-
-
-subscriptionId
-"sub_1R6pEQL87qk6jQqg9txAkBff"
-(string)
-
-
-updatedAt
-March 30, 2025 at 7:45:23 PM UTC-7
-
-
-
-
-consloe log showing that IsPro is False when in the DB its set to TRUE:
-subscription:1 
-        
-        
-       GET https://static.cloudflareinsights.com/beacon.min.js/v67327c56f0bb4ef8b305cae61679db8f1769101564043 net::ERR_BLOCKED_BY_CLIENT
-pro-status-provider.tsx:37 Fetching user status...
-pro-status-provider.tsx:37 Fetching user status...
-generic.ts:89 
-        
-        
-       GET https://www.devappshowcase.com/_vercel/insights/script.js net::ERR_BLOCKED_BY_CLIENT
-(anonymous) @ generic.ts:89
-(anonymous) @ generic.ts:90
-aW @ react-dom.production.min.js:212
-oe @ react-dom.production.min.js:240
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:244
-or @ react-dom.production.min.js:242
-ol @ react-dom.production.min.js:243
-id @ react-dom.production.min.js:271
-nb @ react-dom.production.min.js:77
-(anonymous) @ react-dom.production.min.js:270
-is @ react-dom.production.min.js:270
-o1 @ react-dom.production.min.js:255
-oZ @ react-dom.production.min.js:254
-T @ scheduler.production.min.js:14
-Show 96 more frames
-Show less
-generic.ts:80 [Vercel Web Analytics] Failed to load script from /_vercel/insights/script.js. Be sure to enable Web Analytics for your project and deploy again. See https://vercel.com/docs/analytics/quickstart for more information.
-clerk.browser.js:19 Clerk: The prop "afterSignInUrl" is deprecated and should be replaced with the new "fallbackRedirectUrl" or "forceRedirectUrl" props instead. Learn more: https://clerk.com/docs/guides/custom-redirects#redirect-url-props
-warnOnce @ clerk.browser.js:19
-r @ clerk.browser.js:5
-load @ clerk.browser.js:5
-loadClerkJS @ index.mjs:2109
-await in loadClerkJS
-e @ index.mjs:1982
-getOrCreateInstance @ index.mjs:2008
-(anonymous) @ index.mjs:2268
-useMemo @ react-dom.production.min.js:132
-(anonymous) @ react.production.min.js:28
-eL @ index.mjs:2268
-ez @ index.mjs:2205
-rE @ react-dom.production.min.js:108
-iZ @ react-dom.production.min.js:276
-ia @ react-dom.production.min.js:264
-(anonymous) @ react-dom.production.min.js:264
-(anonymous) @ react-dom.production.min.js:264
-oZ @ react-dom.production.min.js:264
-T @ scheduler.production.min.js:14
-Show 15 more frames
-Show less
-subscription:1 <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes">
-pro-status-provider.tsx:53 User status data: {isPro: false, subscriptionExpiresAt: '2025-04-26T08:22:38.000Z'}isPro: falsesubscriptionExpiresAt: "2025-04-26T08:22:38.000Z"[[Prototype]]: Object
-pro-status-provider.tsx:53 User status data: {isPro: false, subscriptionExpiresAt: '2025-04-26T08:22:38.000Z'}isPro: falsesubscriptionExpiresAt: "2025-04-26T08:22:38.000Z"[[Prototype]]: Objectconstructor: ƒ Object()hasOwnProperty: ƒ hasOwnProperty()isPrototypeOf: ƒ isPrototypeOf()propertyIsEnumerable: ƒ propertyIsEnumerable()toLocaleString: ƒ toLocaleString()toString: ƒ toString()valueOf: ƒ valueOf()__defineGetter__: ƒ __defineGetter__()__defineSetter__: ƒ __defineSetter__()__lookupGetter__: ƒ __lookupGetter__()__lookupSetter__: ƒ __lookupSetter__()__proto__: (...)get __proto__: ƒ __proto__()set __proto__: ƒ __proto__()
-
-
-
-
-Network requets also showing that its False:
-Request URL:
-https://www.devappshowcase.com/api/user-status
-Request Method:
-GET
-Status Code:
-200 OK
-Remote Address:
-[2606:4700:3032::6815:2846]:443
-Referrer Policy:
-strict-origin-when-cross-origin
-
-
-
-
-{"isPro":false,"subscriptionExpiresAt":"2025-04-26T08:22:38.000Z"}
+Failed to load resource: the server responded with a status of 500 ()
+app-index.tsx:25 Error: An error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the nature of the error.
 
 
 
 
 
+Log from Vercel wheni  pressed on Promote App"
+Error: Clerk: auth() was called but Clerk can't detect usage of clerkMiddleware(). Please ensure the following:
+- Your Middleware exists at ./middleware.(ts|js)
+- clerkMiddleware() is used in your Next.js Middleware.
+- Your Middleware matcher is configured to match this route or page.
+- If you are using the src directory, make sure the Middleware file is inside of it.
 
+For more details, see https://clerk.com/docs/quickstarts/nextjs
+
+    at iw (/var/task/.next/server/chunks/561.js:16:164)
+    at /var/task/.next/server/chunks/561.js:16:1434
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async iV (/var/task/.next/server/chunks/561.js:18:258)
+    at async o (/var/task/.next/server/app/apps/[id]/page.js:24:46134)
+    at async /var/task/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:418
+    at async rE (/var/task/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:15:8148)
+    at async r7 (/var/task/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:18:1144)
+    at async en (/var/task/node_modules/next/dist/compiled/next-server/server.runtime.prod.js:16:26375)
+    at async ea.responseCache.get.routeKind (/var/task/node_modules/next/dist/compiled/next-server/server.runtime.prod.js:17:1028) {
+  digest: '3921183705'
+}
 
 

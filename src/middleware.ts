@@ -23,7 +23,7 @@ export const config = {
   matcher: [
     '/dashboard/:path*',
     '/settings/:path*',
-    '/apps/:path*/edit',
+    '/apps/:path*',
     '/api/apps/user',
     '/api/user-status',
     '/api/db/user-status',
