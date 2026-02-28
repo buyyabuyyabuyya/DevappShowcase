@@ -48,9 +48,32 @@ function serializeDocData(data: Record<string, any>) {
   return serializeFirestoreValue(data);
 }
 //push 
-export async function getApps(options: { sort?: string; appType?: string; isPromoted?: boolean; limitCount?: number } = {}) {
+function serializeListApp(docId: string, data: Record<string, any>) {
+  const iconUrl = typeof data.iconUrl === 'string' && !data.iconUrl.startsWith('data:') ? data.iconUrl : undefined;
+  const createdAt = data.createdAt instanceof Timestamp ? data.createdAt.toDate().toISOString() : data.createdAt;
+
+  return {
+    id: docId,
+    appId: data.appId || docId,
+    name: data.name || '',
+    description: data.description || '',
+    appType: data.appType || '',
+    category: data.category || '',
+    pricingModel: data.pricingModel || '',
+    liveUrl: data.liveUrl || '',
+    repoUrl: data.repoUrl || '',
+    iconUrl,
+    isPromoted: !!data.isPromoted,
+    createdAt,
+    likes: {
+      count: data.likes?.count || 0
+    }
+  };
+}
+
+export async function getApps(options: { sort?: string; appType?: string; isPromoted?: boolean; limitCount?: number; lightweight?: boolean } = {}) {
   try {
-    const { appType, isPromoted, limitCount } = options;
+    const { appType, isPromoted, limitCount, lightweight = true } = options;
     const appsRef = collection(db, 'apps');
 
     const constraints: QueryConstraint[] = [];
@@ -72,10 +95,13 @@ export async function getApps(options: { sort?: string; appType?: string; isProm
     const q = query(appsRef, ...constraints);
     const querySnapshot = await getDocs(q);
     
-    const apps = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...serializeDocData(doc.data())
-    }));
+    const apps = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      if (lightweight) {
+        return serializeListApp(doc.id, data);
+      }
+      return { id: doc.id, ...serializeDocData(data) };
+    });
     
     return { success: true, apps };
   } catch (error) {
@@ -110,10 +136,7 @@ export async function getUserApps(userId: string) {
     const q = query(appsRef, where("userId", "==", userId), orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
     
-    const apps = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...serializeDocData(doc.data())
-    }));
+    const apps = querySnapshot.docs.map(doc => serializeListApp(doc.id, doc.data()));
     
     return { success: true, apps };
   } catch (error) {
@@ -488,10 +511,7 @@ export async function searchApps(searchTerm: string, limitCount = 5) {
 
       const indexedSnapshot = await getDocs(indexedQuery);
       if (!indexedSnapshot.empty) {
-        return indexedSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...serializeDocData(doc.data())
-        }));
+        return indexedSnapshot.docs.map(doc => serializeListApp(doc.id, doc.data()));
       }
     } catch (indexedError) {
       // Missing index / new field rollout should not break search suggestions.
@@ -501,10 +521,7 @@ export async function searchApps(searchTerm: string, limitCount = 5) {
     // Fallback for older docs that may not have nameLower yet.
     const fallbackSnapshot = await getDocs(query(appsRef, orderBy('createdAt', 'desc'), limit(100)));
     return fallbackSnapshot.docs
-      .map(doc => ({
-        id: doc.id,
-        ...serializeDocData(doc.data())
-      }))
+      .map(doc => serializeListApp(doc.id, doc.data()))
       .filter(app => normalizeSearchValue((app as Record<string, any>).name).includes(normalizedTerm))
       .slice(0, limitCount);
   } catch (error) {

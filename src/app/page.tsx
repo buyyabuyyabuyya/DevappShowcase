@@ -20,8 +20,8 @@ const appTypeColors: Record<string, string> = {
 
 export default async function HomePage() {
   const appTypes = ['website', 'mobile', 'desktop', 'api', 'ai', 'extension'];
-  const sectionLimit = 12;
-  const promotedPoolLimit = 24;
+  const sectionLimit = 8;
+  const promotedPoolLimit = 12;
 
   // Keep homepage reads small to avoid slow origin responses and Firestore overfetch.
   const [promotedResult, ...typeResults] = await Promise.all([
